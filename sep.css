@@ -44,9 +44,165 @@
         box-shadow: none !important;
     }
 
+    /* ============================================================
+       FLOATING PILL HEADER — transparent container, frosted pill
+       ============================================================ */
+
     #header-wrapper {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 900 !important;
+        background: transparent !important;
         background-image: none !important;
-        border-bottom-color: var(--sep-border) !important;
+        border-bottom: none !important;
+        padding: 10px 20px !important;
+        pointer-events: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* On article pages: bare logo mark, no pill, no static search */
+    body:has(#toc) #header-wrapper {
+        position: static !important;  /* scrolls with page instead of sticking over content */
+        justify-content: center !important;
+        padding-left: 0 !important;
+    }
+
+    body:has(#toc) #header {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        max-width: none !important;
+        height: auto !important;
+        padding: 0.25em !important;
+        /* Strip pill styling */
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    body:has(#toc) #search {
+        display: none !important;
+    }
+
+    body:has(#toc) #site-title::after {
+        display: none !important;
+    }
+
+    body:has(#toc) #site-logo,
+    body:has(#toc) #site-title img {
+        height: 2em !important;
+        opacity: 0.7;
+        transition: opacity 0.15s ease !important;
+    }
+
+    body:has(#toc) #site-logo:hover,
+    body:has(#toc) #site-title img:hover {
+        opacity: 1;
+    }
+
+    #header {
+        display: flex !important;
+        align-items: center !important;
+        height: 44px !important;
+        padding: 0 10px 0 14px !important;
+        gap: 8px !important;
+        flex: 1 !important;
+        max-width: 580px !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        text-align: left !important;
+        /* Frosted glass pill */
+        background: rgba(28, 28, 28, 0.62) !important;
+        backdrop-filter: blur(16px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+        border: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 999px !important;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35) !important;
+        pointer-events: auto !important;
+    }
+
+    /* Logo icon only — hide the long title text to save pill space */
+    #site-title {
+        display: flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+
+    #site-logo,
+    #site-title img {
+        height: 22px !important;
+        width: auto !important;
+        display: block !important;
+    }
+
+    #site-title h1,
+    #site-title .pagetitle,
+    #site-title > a,
+    #site-title > span {
+        display: none !important;
+    }
+
+    /* Divider between logo and search */
+    #site-title::after {
+        content: '';
+        display: block;
+        width: 1px;
+        height: 18px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0 10px;
+        flex-shrink: 0;
+    }
+
+    /* Search — fills the pill */
+    #search {
+        flex: 1 !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+    }
+
+    #search form,
+    #search .input-append,
+    #search .input-prepend {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    #search input[type="search"] {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        color: var(--sep-text) !important;
+        padding: 0 6px !important;
+        height: 38px !important;
+    }
+
+    #search input[type="search"]:focus {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Search submit button */
+    #search .btn {
+        border-radius: 999px !important;
+        border: none !important;
+        background: rgba(123, 164, 255, 0.12) !important;
+        color: var(--sep-accent) !important;
+        box-shadow: none !important;
+        padding: 4px 10px !important;
+    }
+
+    #search .btn:hover {
+        background: rgba(123, 164, 255, 0.22) !important;
     }
 
     #article {
@@ -221,33 +377,6 @@
 
     .result_url a {
         color: var(--sep-accent) !important;
-    }
-
-    #search {
-        width: 100% !important;
-        max-width: 520px !important;
-        min-width: 200px !important;
-    }
-
-    #search form,
-    #search .input-append,
-    #search .input-prepend {
-        width: 100% !important;
-    }
-
-    #search input[type="search"] {
-        background: var(--sep-bg-raised) !important;
-        border-color: var(--sep-border-mid) !important;
-        color: var(--sep-text) !important;
-        width: 100% !important;
-        min-width: 0 !important;
-        box-sizing: border-box !important;
-    }
-
-    #search input[type="search"]:focus {
-        border-color: var(--sep-accent) !important;
-        box-shadow: 0 0 0 3px rgb(var(--sep-accent-rgb) / 0.2) !important;
-        color: var(--sep-text-soft) !important;
     }
 
     #search-switch {
@@ -556,6 +685,8 @@
         width: calc(100% - 260px) !important;
         max-width: calc(100% - 260px) !important;
         box-sizing: border-box !important;
+        padding-top: 1em !important;
+        border: none !important;  /* remove sidebar divider line */
     }
 
     /* Make the TOC fixed in the sidebar area */
@@ -664,21 +795,52 @@
         background: var(--sep-border-mid);
     }
 
-    /* On very narrow screens (tablet/phone) */
-    @media (max-width: 768px) {
+    /* ---- Mobile / touch devices: bottom-sheet TOC, full-width article ---- */
+    @media (max-width: 768px), (max-width: 1024px) and (hover: none) {
 
-        /* TOC is managed entirely by JS on mobile — no static overrides here */
+        /* Override the desktop body:has(#toc) layout rules — must match specificity */
+        body:has(#toc) #article {
+            margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow: visible !important;
+        }
 
-        /* Hide the default Entry Navigation entirely — replaced by JS TOC toggle */
-        #article-nav .nav {
+        body:has(#toc) #header-wrapper {
+            padding-left: 20px !important;
+            justify-content: center !important;
+        }
+
+        /* TOC becomes a bottom sheet — hidden off-screen via transform by default */
+        #toc {
+            bottom: 0 !important;
+            top: auto !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            max-height: 70vh !important;
+            padding: 20px 16px 32px !important;
+            border-radius: 16px 16px 0 0 !important;
+            z-index: 1004 !important;
+            transform: translateY(105%) !important;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        /* JS adds .toc-open to slide it into view */
+        #toc.toc-open {
+            transform: translateY(0) !important;
+        }
+
+        /* Hide desktop-only controls */
+        #sep-toc-toggle {
             display: none !important;
         }
 
+        /* Hide default SEP navigation chrome */
+        #article-nav,
+        #article-nav .nav,
         #article-sidebar .btn-navbar {
-            display: none !important;
-        }
-
-        #article-nav {
             display: none !important;
         }
 
@@ -698,7 +860,6 @@
             font-size: 1.25rem !important;
         }
 
-        /* Ensure body can scroll */
         body,
         html {
             overflow-x: hidden !important;
@@ -711,62 +872,10 @@
             max-width: 100% !important;
         }
 
-        #article {
-            margin-left: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow: visible !important;
-        }
-
-        /* Tables must scroll horizontally, not break layout */
         table {
             display: block !important;
             overflow-x: auto !important;
             max-width: 100% !important;
-        }
-
-        #sep-toc-toggle {
-            display: none !important;
-        }
-
-        /* Mobile TOC toggle (built by JS) */
-        #sep-mobile-toc-btn {
-            display: flex !important;
-        }
-
-        #sep-mobile-toc-panel {
-            display: block !important;
-        }
-    }
-
-    /* Also catch touch devices in landscape / wider tablets */
-    @media (max-width: 1024px) and (hover: none) {
-        /* TOC managed by JS on touch devices */
-
-        #article {
-            margin-left: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-
-        #article-nav .nav {
-            display: none !important;
-        }
-
-        #article-nav {
-            display: none !important;
-        }
-
-        #article-sidebar .btn-navbar {
-            display: none !important;
-        }
-
-        #sep-mobile-toc-btn {
-            display: flex !important;
-        }
-
-        #sep-mobile-toc-panel {
-            display: block !important;
         }
     }
 
@@ -825,6 +934,27 @@
     select,
     textarea {
         transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease !important;
+    }
+
+    /* Floating search bar — kill all focus rings */
+    #sep-floating-search,
+    #sep-floating-search:focus,
+    #sep-floating-search:focus-within {
+        outline: none !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    #sep-floating-search input[type="search"] {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    #sep-floating-search input[type="search"]:focus {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 
 

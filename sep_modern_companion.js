@@ -13,6 +13,14 @@
 
 (() => {
 
+    // Ensure mobile media queries fire correctly — SEP has no viewport meta tag
+    if (!document.querySelector('meta[name="viewport"]')) {
+        const vp = document.createElement('meta');
+        vp.name = 'viewport';
+        vp.content = 'width=device-width, initial-scale=1';
+        document.head.appendChild(vp);
+    }
+
     // =============================================
     // STYLES
     // =============================================
@@ -34,7 +42,7 @@
 
         /* Back to top button */
         #sep-top-btn {
-            position: fixed; top: 60px; left: 20px; z-index: 9998;
+            position: fixed; top: 3.75em; left: 20px; z-index: 9998;
             width: 22px; height: 22px; border-radius: 4px;
             background: #1a1a1a; border: 1px solid #333; color: #888;
             font-size: 11px; cursor: pointer; display: none;
@@ -48,18 +56,18 @@
 
         /* Reading time badge */
         #sep-reading-time {
-            display: inline-block; font-size: 13px; color: #666;
+            display: inline-block; font-size: 0.8em; color: #666;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin-top: 6px; padding: 4px 10px; background: #1a1a1a;
-            border-radius: 4px; border: 1px solid #2a2a2a;
+            margin-top: 0.375em; padding: 0.25em 0.625em; background: #1a1a1a;
+            border-radius: 0.25em; border: 1px solid #2a2a2a;
         }
 
         /* Footnote popup */
         #sep-footnote-popup {
-            position: absolute; z-index: 9999; max-width: 420px;
-            background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
-            padding: 14px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            font-size: 13.5px; line-height: 1.65; color: #c0c0c0;
+            position: absolute; z-index: 9999; max-width: 26em;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 0.5em;
+            padding: 0.875em 1em; box-shadow: 0 0.25em 1.25em rgba(0,0,0,0.5);
+            font-size: 0.85em; line-height: 1.65; color: #c0c0c0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             pointer-events: none; opacity: 0; transition: opacity 0.15s ease;
         }
@@ -68,7 +76,7 @@
 
         /* Section anchor links (on hover) */
         .sep-anchor-link {
-            opacity: 0; margin-left: 8px; color: #555 !important;
+            opacity: 0; margin-left: 0.5em; color: #555 !important;
             text-decoration: none !important; font-size: 0.7em;
             transition: opacity 0.15s ease; cursor: pointer;
             font-weight: 400 !important; vertical-align: middle;
@@ -81,16 +89,16 @@
 
         /* Keyboard nav hint */
         #sep-kb-hint {
-            position: fixed; bottom: 28px; left: 28px; z-index: 9998;
-            font-size: 11px; color: #444; padding: 6px 10px;
-            background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px;
+            position: fixed; bottom: 1.75em; left: 1.75em; z-index: 9998;
+            font-size: 0.7em; color: #444; padding: 0.375em 0.625em;
+            background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 0.375em;
             font-family: -apple-system, sans-serif; opacity: 0;
             transition: opacity 0.3s ease; pointer-events: none;
         }
         #sep-kb-hint.visible { opacity: 1; }
         #sep-kb-hint kbd {
-            display: inline-block; padding: 1px 5px; background: #252525;
-            border: 1px solid #333; border-radius: 3px; font-size: 10px;
+            display: inline-block; padding: 0.1em 0.3em; background: #252525;
+            border: 1px solid #333; border-radius: 0.2em; font-size: 0.9em;
             font-family: -apple-system, sans-serif; color: #888;
         }
 
@@ -107,17 +115,17 @@
         /* TOC scroll spy */
         #toc a.toc-active {
             color: #7ba4ff !important; font-weight: 600 !important;
-            border-left: 2px solid #7ba4ff; padding-left: 6px; margin-left: -8px;
+            border-left: 2px solid #7ba4ff; padding-left: 0.375em; margin-left: -0.5em;
         }
 
         /* Mobile TOC: hamburger button */
         #sep-toc-hamburger {
-            position: fixed; bottom: 24px; right: 24px; z-index: 1005;
-            width: 44px; height: 44px; border-radius: 10px;
+            position: fixed; bottom: 1.5em; right: 1.5em; z-index: 1005;
+            width: 2.75em; height: 2.75em; border-radius: 0.625em;
             background: #1e1e1e; border: 1px solid #333; color: #aaa;
-            font-size: 18px; cursor: pointer;
+            font-size: 1em; cursor: pointer;
             display: none; align-items: center; justify-content: center;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            box-shadow: 0 0.125em 0.75em rgba(0,0,0,0.4);
             transition: color 0.15s ease, border-color 0.15s ease;
         }
         #sep-toc-hamburger:hover { color: #7ba4ff; border-color: #7ba4ff; }
@@ -135,39 +143,57 @@
             #sep-toc-toggle { display: none !important; }
             #sep-top-btn { display: none !important; }
 
-            #toc.toc-mobile {
-                top: auto !important; bottom: 0 !important;
-                left: 0 !important; right: 0 !important;
-                width: 100% !important; max-width: 100% !important;
-                max-height: 70vh !important;
-                transform: translateY(105%);
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                border-radius: 16px 16px 0 0 !important;
-                z-index: 1004 !important;
-                padding: 20px 16px 32px !important;
-                display: block !important;
-            }
-            #toc.toc-mobile.toc-open { transform: translateY(0) !important; }
-            #toc.toc-mobile::before {
-                content: ''; display: block; width: 36px; height: 4px;
-                background: #444; border-radius: 2px; margin: 0 auto 16px;
+            /* Grip handle drawn above TOC content */
+            #toc::before {
+                content: ''; display: block; width: 2.25em; height: 0.25em;
+                background: #444; border-radius: 0.125em; margin: 0 auto 1em;
             }
         }
 
+        /* Floating search bar (appears on scroll-up) */
+        #sep-floating-search {
+            position: fixed; top: -3.5em; left: 50%; transform: translateX(-50%);
+            z-index: 9990; width: min(35em, calc(100% - 2rem));
+            height: 2.75em;
+            display: flex; align-items: center; gap: 0.5em;
+            background: rgba(28, 28, 28, 0.62);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 0.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            padding: 0 0.875em;
+            box-shadow: 0 0.125em 1.25em rgba(0, 0, 0, 0.35);
+            transition: top 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+            opacity: 0; pointer-events: none;
+        }
+        #sep-floating-search.visible { top: 0.875em; opacity: 1; pointer-events: auto; }
+        #sep-floating-search:focus-within { outline: none; border-color: rgba(255,255,255,0.08); }
+        #sep-floating-search .sep-fs-icon { color: #555; flex-shrink: 0; display: flex; align-items: center; }
+        #sep-floating-search input[type="search"] {
+            flex: 1; background: transparent; border: none; outline: none;
+            color: #d6d6d6; font-size: 0.9em; line-height: 1;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-appearance: none; align-self: center;
+            padding: 2px 0; margin-top: 1px;
+        }
+        #sep-floating-search input[type="search"]::placeholder { color: #444; }
+        #sep-floating-search input[type="search"]:focus::placeholder { color: transparent; }
+        #sep-floating-search input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+
         /* Citation popup */
         #sep-cite-popup {
-            position: absolute; z-index: 9999; max-width: 480px; min-width: 280px;
-            background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
-            padding: 14px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            font-size: 13.5px; line-height: 1.65; color: #c0c0c0;
+            position: absolute; z-index: 9999; max-width: 30em; min-width: 17.5em;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 0.5em;
+            padding: 0.875em 1em; box-shadow: 0 0.25em 1.25em rgba(0,0,0,0.5);
+            font-size: 0.85em; line-height: 1.65; color: #c0c0c0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             pointer-events: none; opacity: 0; transition: opacity 0.15s ease;
         }
         #sep-cite-popup.visible { opacity: 1; pointer-events: auto; }
         #sep-cite-popup a { color: #7ba4ff !important; }
         #sep-cite-popup .sep-cite-label {
-            font-size: 11px; color: #555; text-transform: uppercase;
-            letter-spacing: 0.05em; margin-bottom: 6px; font-weight: 600;
+            font-size: 0.7em; color: #555; text-transform: uppercase;
+            letter-spacing: 0.05em; margin-bottom: 0.375em; font-weight: 600;
         }
     `;
     document.head.appendChild(style);
@@ -524,9 +550,11 @@
     kbHint.innerHTML = '<kbd>j</kbd> next section &nbsp; <kbd>k</kbd> prev section &nbsp; <kbd>t</kbd> top';
     document.body.appendChild(kbHint);
 
-    // Show hint briefly on first visit
-    setTimeout(() => kbHint.classList.add('visible'), 2000);
-    setTimeout(() => kbHint.classList.remove('visible'), 7000);
+    // Show hint briefly on first visit — desktop only
+    if (!window.matchMedia('(max-width: 768px), (hover: none)').matches) {
+        setTimeout(() => kbHint.classList.add('visible'), 2000);
+        setTimeout(() => kbHint.classList.remove('visible'), 7000);
+    }
 
     document.addEventListener('keydown', e => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
@@ -627,6 +655,7 @@
 
         let tocOpen = true;        // desktop: sidebar visible?
         let mobileTocOpen = false; // mobile: bottom sheet visible?
+        const pageHeader = document.getElementById('header-wrapper');
         const pageArticle = document.getElementById('article');
         const headerWrapper = document.getElementById('header-wrapper');
         const mobileQuery = window.matchMedia('(max-width: 768px), (max-width: 1024px) and (hover: none)');
@@ -642,12 +671,9 @@
             topBtn.style.top = `${top + 6 + 22 + 4}px`;
         };
 
-        // Mobile: open/close bottom sheet — use inline styles so they beat any stylesheet
+        // Mobile: open/close bottom sheet — layout controlled by Stylus @media rules
         const openMobileToc = () => {
             mobileTocOpen = true;
-            toc.style.setProperty('position', 'fixed', 'important');
-            toc.style.setProperty('display', 'block', 'important');
-            // Allow display:block to paint before triggering slide-up transition
             requestAnimationFrame(() => toc.classList.add('toc-open'));
             backdrop.classList.add('visible');
             hamburgerBtn.innerHTML = '&#10005;';
@@ -659,28 +685,25 @@
             backdrop.classList.remove('visible');
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
-            // Hide after slide-down animation completes
-            setTimeout(() => {
-                if (!mobileTocOpen) toc.style.setProperty('display', 'none', 'important');
-            }, 350);
+            // transform: translateY(105%) slides it off-screen — no display:none needed
         };
 
         // Enter/exit mobile layout mode
         const enterMobileMode = () => {
             toc.classList.add('toc-mobile');
-            // Inline styles override any stylesheet — no cascade conflicts
-            toc.style.setProperty('position', 'fixed', 'important');
-            toc.style.setProperty('display', 'none', 'important');
+            toc.classList.remove('toc-open');
+            // Clear any desktop inline styles — Stylus @media rules take over layout
+            toc.style.removeProperty('display');
             toc.style.removeProperty('top');
             toc.style.removeProperty('max-height');
-            toc.classList.remove('toc-open');
+            pageHeader?.style.removeProperty('padding-left');
+            pageArticle?.style.removeProperty('margin-left');
+            pageArticle?.style.removeProperty('width');
+            pageArticle?.style.removeProperty('max-width');
             backdrop.classList.remove('visible');
             mobileTocOpen = false;
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
-            pageArticle?.style.setProperty('margin-left', '0', 'important');
-            pageArticle?.style.setProperty('width', '100%', 'important');
-            pageArticle?.style.setProperty('max-width', '100%', 'important');
         };
         const exitMobileMode = () => {
             toc.classList.remove('toc-mobile');
@@ -690,6 +713,7 @@
             toc.style.removeProperty('position');
             toc.style.removeProperty('display');
             if (tocOpen) {
+                pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
                 pageArticle?.style.removeProperty('max-width');
@@ -705,17 +729,22 @@
             tocOpen = !tocOpen;
             if (tocOpen) {
                 toc.style.removeProperty('display');
+                pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
                 pageArticle?.style.removeProperty('max-width');
+                pageArticle?.style.removeProperty('padding-left');
                 tocToggleBtn.title = 'Hide table of contents';
                 tocToggleBtn.textContent = '←';
                 updateTocPosition();
             } else {
                 toc.style.setProperty('display', 'none', 'important');
+                pageHeader?.style.removeProperty('padding-left');
                 pageArticle?.style.setProperty('margin-left', '0', 'important');
                 pageArticle?.style.setProperty('width', '100%', 'important');
                 pageArticle?.style.setProperty('max-width', '100%', 'important');
+                // Keep enough left padding so buttons don't land on prose
+                pageArticle?.style.setProperty('padding-left', '3em', 'important');
                 tocToggleBtn.title = 'Show table of contents';
                 tocToggleBtn.textContent = '→';
             }
@@ -780,5 +809,49 @@
             updateToc(window.scrollY);
         }
     }
+
+    // =============================================
+    // 11. FLOATING SEARCH BAR (shows on scroll up)
+    // =============================================
+    const articleTitle = document.querySelector('#aueditable h1, #article-content h1, .pagetitle')
+        ?.textContent?.trim()
+        || document.title.replace(/\s*\(Stanford.*\)$/, '').trim();
+
+    // Borrow the existing search form's action + param name so it routes correctly
+    const existingForm = document.querySelector('#search form');
+    const fsAction = existingForm?.action || 'https://plato.stanford.edu/search/searcher.py';
+    const fsParamName = existingForm?.querySelector('input[type="search"]')?.name || 'query';
+
+    const floatingSearch = document.createElement('form');
+    floatingSearch.id = 'sep-floating-search';
+    floatingSearch.action = fsAction;
+    floatingSearch.method = 'get';
+
+    const fsIcon = document.createElement('span');
+    fsIcon.className = 'sep-fs-icon';
+    fsIcon.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+
+    const fsInput = document.createElement('input');
+    fsInput.type = 'search';
+    fsInput.name = fsParamName;
+    fsInput.placeholder = articleTitle;
+    fsInput.autocomplete = 'off';
+    fsInput.spellcheck = false;
+
+    floatingSearch.append(fsIcon, fsInput);
+    document.body.appendChild(floatingSearch);
+
+    let fsLastY = window.scrollY;
+    let fsVisible = false;
+
+    scrollCallbacks.push(scrollY => {
+        const goingUp = scrollY < fsLastY;
+        fsLastY = scrollY;
+        if (goingUp && scrollY > 200) {
+            if (!fsVisible) { fsVisible = true; floatingSearch.classList.add('visible'); }
+        } else if (!goingUp) {
+            if (fsVisible) { fsVisible = false; floatingSearch.classList.remove('visible'); }
+        }
+    });
 
 })();
