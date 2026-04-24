@@ -44,81 +44,128 @@
         box-shadow: none !important;
     }
 
-    /* Compact sticky header — flex row, logo left, search right */
+    /* ============================================================
+       FLOATING PILL HEADER — transparent container, frosted pill
+       ============================================================ */
+
     #header-wrapper {
         position: sticky !important;
         top: 0 !important;
         z-index: 900 !important;
-        background: rgba(18, 18, 18, 0.94) !important;
-        backdrop-filter: blur(14px) !important;
-        -webkit-backdrop-filter: blur(14px) !important;
+        background: transparent !important;
         background-image: none !important;
-        border-bottom: 1px solid var(--sep-border) !important;
+        border-bottom: none !important;
+        padding: 10px 20px !important;
+        pointer-events: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* On article pages, shift pill past the TOC */
+    body:has(#toc) #header-wrapper {
+        justify-content: flex-start !important;
+        padding-left: 260px !important;
     }
 
     #header {
         display: flex !important;
         align-items: center !important;
-        height: 52px !important;
-        padding: 0 24px !important;
-        width: 100% !important;
+        height: 44px !important;
+        padding: 0 10px 0 14px !important;
+        gap: 8px !important;
+        flex: 1 !important;
+        max-width: 580px !important;
+        min-width: 0 !important;
         box-sizing: border-box !important;
-        max-width: none !important;
-        margin: 0 auto !important;
+        margin: 0 !important;
         text-align: left !important;
+        /* Frosted glass pill */
+        background: rgba(28, 28, 28, 0.62) !important;
+        backdrop-filter: blur(16px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+        border: 0.5px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 999px !important;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35) !important;
+        pointer-events: auto !important;
     }
 
-    /* Scale down site branding to inline pill */
+    /* Logo icon only — hide the long title text to save pill space */
     #site-title {
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
         flex-shrink: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
+        gap: 0 !important;
     }
 
     #site-logo,
     #site-title img {
-        height: 26px !important;
+        height: 22px !important;
         width: auto !important;
         display: block !important;
     }
 
     #site-title h1,
     #site-title .pagetitle,
-    #site-title span {
-        font-size: 13.5px !important;
-        font-weight: 500 !important;
-        letter-spacing: 0 !important;
-        line-height: 1 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        color: var(--sep-accent) !important;
-        white-space: nowrap !important;
+    #site-title > a,
+    #site-title > span {
+        display: none !important;
     }
 
-    #site-title a,
-    #site-title h1 a {
-        color: var(--sep-accent) !important;
-        text-decoration: none !important;
-        font-size: 13.5px !important;
-        font-weight: 500 !important;
+    /* Divider between logo and search */
+    #site-title::after {
+        content: '';
+        display: block;
+        width: 1px;
+        height: 18px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0 10px;
+        flex-shrink: 0;
     }
 
-    /* Search — fills remaining space */
+    /* Search — fills the pill */
     #search {
         flex: 1 !important;
-        max-width: 460px !important;
-        min-width: 0 !important;
         width: auto !important;
-        margin: 0 0 0 20px !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        margin: 0 !important;
     }
 
-    /* On article pages, push header content right of the TOC sidebar */
-    body:has(#toc) #header {
-        padding-left: 260px !important;
+    #search form,
+    #search .input-append,
+    #search .input-prepend {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    #search input[type="search"] {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        padding: 0 6px !important;
+        height: 38px !important;
+    }
+
+    #search input[type="search"]:focus {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Search submit button */
+    #search .btn {
+        border-radius: 999px !important;
+        border: none !important;
+        background: rgba(123, 164, 255, 0.12) !important;
+        color: var(--sep-accent) !important;
+        box-shadow: none !important;
+        padding: 4px 10px !important;
+    }
+
+    #search .btn:hover {
+        background: rgba(123, 164, 255, 0.22) !important;
     }
 
     #article {
