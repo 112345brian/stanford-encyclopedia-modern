@@ -639,6 +639,7 @@
     // =============================================
     // 10. TOC SCROLL SPY + TOGGLE
     // =============================================
+    let mobileTocOpen = false;
     const toc = document.getElementById('toc');
     if (toc) {
         const tocLinks = [...toc.querySelectorAll('a[href^="#"]')];
@@ -671,7 +672,6 @@
         document.body.appendChild(backdrop);
 
         let tocOpen = true;        // desktop: sidebar visible?
-        let mobileTocOpen = false; // mobile: bottom sheet visible?
         const pageHeader = document.getElementById('header-wrapper');
         const pageArticle = document.getElementById('article');
         const headerWrapper = document.getElementById('header-wrapper');
@@ -774,6 +774,12 @@
         hamburgerBtn.addEventListener('click', () => {
             if (mobileTocOpen) closeMobileToc();
             else openMobileToc();
+        });
+
+        // Close TOC when a link is tapped on mobile
+        toc.addEventListener('click', e => {
+            if (!mobileQuery.matches || !mobileTocOpen) return;
+            if (e.target.closest('a[href^="#"]')) closeMobileToc();
         });
         backdrop.addEventListener('click', closeMobileToc);
 
