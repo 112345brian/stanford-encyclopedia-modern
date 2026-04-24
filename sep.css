@@ -572,7 +572,7 @@
         overflow-y: auto !important;
         overflow-x: hidden !important;
         background: var(--sep-bg) !important;
-        padding: 0.8rem 0.5rem 0.8rem 30px !important;
+        padding: 0.8rem 0.5rem 0.8rem 36px !important;
         z-index: 1000 !important;
         font-size: 12.5px !important;
         line-height: 1.45 !important;
