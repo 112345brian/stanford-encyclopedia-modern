@@ -684,6 +684,7 @@
         width: calc(100% - 260px) !important;
         max-width: calc(100% - 260px) !important;
         box-sizing: border-box !important;
+        padding-top: 4.5em !important;  /* clear sticky logo header */
     }
 
     /* Make the TOC fixed in the sidebar area */

@@ -13,6 +13,14 @@
 
 (() => {
 
+    // Ensure mobile media queries fire correctly — SEP has no viewport meta tag
+    if (!document.querySelector('meta[name="viewport"]')) {
+        const vp = document.createElement('meta');
+        vp.name = 'viewport';
+        vp.content = 'width=device-width, initial-scale=1';
+        document.head.appendChild(vp);
+    }
+
     // =============================================
     // STYLES
     // =============================================
@@ -724,6 +732,7 @@
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
                 pageArticle?.style.removeProperty('max-width');
+                pageArticle?.style.removeProperty('padding-left');
                 tocToggleBtn.title = 'Hide table of contents';
                 tocToggleBtn.textContent = '←';
                 updateTocPosition();
@@ -733,6 +742,8 @@
                 pageArticle?.style.setProperty('margin-left', '0', 'important');
                 pageArticle?.style.setProperty('width', '100%', 'important');
                 pageArticle?.style.setProperty('max-width', '100%', 'important');
+                // Keep enough left padding so buttons don't land on prose
+                pageArticle?.style.setProperty('padding-left', '3em', 'important');
                 tocToggleBtn.title = 'Show table of contents';
                 tocToggleBtn.textContent = '→';
             }
