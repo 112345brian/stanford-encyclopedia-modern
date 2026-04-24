@@ -560,6 +560,9 @@
 
     #article {
         margin-left: 260px !important;
+        width: calc(100% - 260px) !important;
+        max-width: calc(100% - 260px) !important;
+        box-sizing: border-box !important;
     }
 
     /* Make the TOC fixed in the sidebar area */
@@ -730,9 +733,9 @@
 
         #article {
             margin-left: 0 !important;
-            overflow: visible !important;
-            width: auto !important;
+            width: 100% !important;
             max-width: 100% !important;
+            overflow: visible !important;
         }
 
         /* Tables must scroll horizontally, not break layout */
@@ -769,6 +772,8 @@
 
         #article {
             margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
         }
 
         #article-nav .nav {
