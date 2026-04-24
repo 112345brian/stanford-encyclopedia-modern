@@ -568,7 +568,7 @@
             const top = headerBottom > 0 ? Math.max(10, headerBottom + 10) : 10;
             toc.style.setProperty('top', `${top}px`, 'important');
             toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
-            if (tocOpen) tocToggleBtn.style.top = `${top}px`;
+            // button stays at fixed top — don't track scroll
         };
         updateTocPosition();
         scrollCallbacks.push(updateTocPosition);
@@ -585,7 +585,7 @@
                 tocToggleBtn.title = 'Hide table of contents';
                 tocToggleBtn.textContent = '←';
                 tocToggleBtn.style.left = '244px';
-                updateTocPosition();
+                updateTocPosition(); // recalc TOC top only
             } else {
                 toc.style.setProperty('display', 'none', 'important');
                 pageHeader?.style.removeProperty('padding-left');
@@ -593,7 +593,7 @@
                 pageArticle?.style.setProperty('width', '100%', 'important');
                 tocToggleBtn.title = 'Show table of contents';
                 tocToggleBtn.textContent = '☰';
-                // stay in the same spot — don't move to corner
+                tocToggleBtn.style.left = '10px';
             }
             window.scrollTo({ top: savedY, behavior: 'instant' });
         });
