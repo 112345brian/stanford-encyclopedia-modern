@@ -685,6 +685,7 @@
     // 10. TOC SCROLL SPY + TOGGLE
     // =============================================
     let mobileTocOpen = false;
+    const mobileQuery = window.matchMedia('(max-width: 768px), (max-width: 1024px) and (hover: none)');
     const toc = document.getElementById('toc');
     if (toc) {
         const tocLinks = [...toc.querySelectorAll('a[href^="#"]')];
@@ -720,7 +721,6 @@
         const pageHeader = document.getElementById('header-wrapper');
         const pageArticle = document.getElementById('article');
         const headerWrapper = document.getElementById('header-wrapper');
-        const mobileQuery = window.matchMedia('(max-width: 768px), (max-width: 1024px) and (hover: none)');
 
         // Desktop: update TOC and button positions to track header
         const updateTocPosition = () => {
