@@ -581,6 +581,7 @@
                 toc.style.removeProperty('display');
                 pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
+                pageArticle?.style.removeProperty('width');
                 tocToggleBtn.title = 'Hide table of contents';
                 tocToggleBtn.textContent = '←';
                 tocToggleBtn.style.left = '244px';
@@ -588,7 +589,8 @@
             } else {
                 toc.style.setProperty('display', 'none', 'important');
                 pageHeader?.style.removeProperty('padding-left');
-                pageArticle?.style.removeProperty('margin-left');
+                pageArticle?.style.setProperty('margin-left', '0', 'important');
+                pageArticle?.style.setProperty('width', '100%', 'important');
                 tocToggleBtn.title = 'Show table of contents';
                 tocToggleBtn.textContent = '☰';
                 tocToggleBtn.style.top = '20px';
