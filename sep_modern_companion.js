@@ -160,10 +160,10 @@
         }
         #sep-floating-search.visible { top: 14px; opacity: 1; pointer-events: auto; }
         #sep-floating-search:focus-within { outline: none; border-color: rgba(255,255,255,0.08); }
-        #sep-floating-search .sep-fs-icon { color: #555; font-size: 15px; flex-shrink: 0; line-height: 1; }
+        #sep-floating-search .sep-fs-icon { color: #555; font-size: 19px; flex-shrink: 0; display: flex; align-items: center; }
         #sep-floating-search input[type="search"] {
             flex: 1; background: transparent; border: none; outline: none;
-            color: #d6d6d6; font-size: 14.5px; padding: 12px 0;
+            color: #d6d6d6; font-size: 14.5px; height: 100%; padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-appearance: none;
         }
