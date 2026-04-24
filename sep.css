@@ -525,6 +525,11 @@
         display: none !important;
     }
 
+    /* Hide site navigation — search is sufficient; nav links move to footer */
+    #navigation {
+        display: none !important;
+    }
+
     /* Make the TOC fixed in the sidebar area */
     #toc {
         position: fixed !important;
