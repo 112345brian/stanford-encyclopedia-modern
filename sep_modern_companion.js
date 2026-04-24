@@ -154,6 +154,27 @@
             }
         }
 
+        /* Floating search bar (appears on scroll-up) */
+        #sep-floating-search {
+            position: fixed; top: -56px; left: 50%; transform: translateX(-50%);
+            z-index: 9990; width: min(560px, calc(100% - 2rem));
+            display: flex; align-items: center; gap: 10px;
+            background: #1e1e1e; border: 1px solid #333; border-radius: 10px;
+            padding: 0 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+            transition: top 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+            opacity: 0; pointer-events: none;
+        }
+        #sep-floating-search.visible { top: 14px; opacity: 1; pointer-events: auto; }
+        #sep-floating-search .sep-fs-icon { color: #555; font-size: 15px; flex-shrink: 0; line-height: 1; }
+        #sep-floating-search input[type="search"] {
+            flex: 1; background: transparent; border: none; outline: none;
+            color: #d6d6d6; font-size: 14.5px; padding: 12px 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-appearance: none;
+        }
+        #sep-floating-search input[type="search"]::placeholder { color: #444; }
+        #sep-floating-search input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+
         /* Citation popup */
         #sep-cite-popup {
             position: absolute; z-index: 9999; max-width: 480px; min-width: 280px;
@@ -780,5 +801,49 @@
             updateToc(window.scrollY);
         }
     }
+
+    // =============================================
+    // 11. FLOATING SEARCH BAR (shows on scroll up)
+    // =============================================
+    const articleTitle = document.querySelector('#aueditable h1, #article-content h1, .pagetitle')
+        ?.textContent?.trim()
+        || document.title.replace(/\s*\(Stanford.*\)$/, '').trim();
+
+    // Borrow the existing search form's action + param name so it routes correctly
+    const existingForm = document.querySelector('#search form');
+    const fsAction = existingForm?.action || 'https://plato.stanford.edu/search/searcher.py';
+    const fsParamName = existingForm?.querySelector('input[type="search"]')?.name || 'query';
+
+    const floatingSearch = document.createElement('form');
+    floatingSearch.id = 'sep-floating-search';
+    floatingSearch.action = fsAction;
+    floatingSearch.method = 'get';
+
+    const fsIcon = document.createElement('span');
+    fsIcon.className = 'sep-fs-icon';
+    fsIcon.textContent = '⌕';
+
+    const fsInput = document.createElement('input');
+    fsInput.type = 'search';
+    fsInput.name = fsParamName;
+    fsInput.placeholder = articleTitle;
+    fsInput.autocomplete = 'off';
+    fsInput.spellcheck = false;
+
+    floatingSearch.append(fsIcon, fsInput);
+    document.body.appendChild(floatingSearch);
+
+    let fsLastY = window.scrollY;
+    let fsVisible = false;
+
+    scrollCallbacks.push(scrollY => {
+        const goingUp = scrollY < fsLastY;
+        fsLastY = scrollY;
+        if (goingUp && scrollY > 200) {
+            if (!fsVisible) { fsVisible = true; floatingSearch.classList.add('visible'); }
+        } else if (!goingUp) {
+            if (fsVisible) { fsVisible = false; floatingSearch.classList.remove('visible'); }
+        }
+    });
 
 })();
