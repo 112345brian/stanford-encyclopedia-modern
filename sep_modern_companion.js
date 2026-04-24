@@ -36,8 +36,15 @@
         /* Section progress bar */
         #sep-section-progress {
             position: fixed; top: 0; left: 0; height: 2px; z-index: 9998;
-            background: rgba(255, 255, 255, 0.08); width: 0%;
+            background: #d6d6d6; width: 0%;
             transition: width 0.1s linear; pointer-events: none;
+        }
+
+        /* Section progress tick — sits above the blue bar */
+        #sep-section-tick {
+            position: fixed; top: 0; left: 0; width: 8px; height: 2px;
+            z-index: 10000; background: #d6d6d6; pointer-events: none;
+            transition: left 0.1s linear;
         }
 
         /* Back to top button */
@@ -143,10 +150,11 @@
             #sep-toc-toggle { display: none !important; }
             #sep-top-btn { display: none !important; }
 
-            /* Grip handle drawn above TOC content */
-            #toc::before {
-                content: ''; display: block; width: 2.25em; height: 0.25em;
-                background: #444; border-radius: 0.125em; margin: 0 auto 1em;
+            #toc::before { display: none !important; }
+            #sep-floating-search {
+                height: 3.25em;
+                background: rgba(22, 22, 22, 0.92);
+                font-size: 1.05em;
             }
         }
 
@@ -209,6 +217,10 @@
     const sectionProgressBar = document.createElement('div');
     sectionProgressBar.id = 'sep-section-progress';
     document.body.appendChild(sectionProgressBar);
+
+    const sectionTick = document.createElement('div');
+    sectionTick.id = 'sep-section-tick';
+    document.body.appendChild(sectionTick);
 
 
     // =============================================
@@ -763,6 +775,22 @@
         });
         backdrop.addEventListener('click', closeMobileToc);
 
+        // Swipe right from left edge to open, swipe left to close
+        let swipeTouchStartX = 0;
+        let swipeTouchStartY = 0;
+        document.addEventListener('touchstart', e => {
+            swipeTouchStartX = e.touches[0].clientX;
+            swipeTouchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        document.addEventListener('touchend', e => {
+            if (!mobileQuery.matches) return;
+            const dx = e.changedTouches[0].clientX - swipeTouchStartX;
+            const dy = e.changedTouches[0].clientY - swipeTouchStartY;
+            if (Math.abs(dx) < Math.abs(dy) * 1.5) return; // more vertical than horizontal
+            if (dx > 60 && swipeTouchStartX < 40 && !mobileTocOpen) openMobileToc();
+            else if (dx < -60 && mobileTocOpen) closeMobileToc();
+        }, { passive: true });
+
         // Switch modes on resize
         mobileQuery.addEventListener('change', e => {
             if (e.matches) enterMobileMode();
@@ -808,6 +836,7 @@
                     ? Math.min(100, Math.max(0, (scrollY + 200 - sectionTop) / sectionLen * 100))
                     : 0;
                 sectionProgressBar.style.width = `${sectionPct}%`;
+                sectionTick.style.left = `${sectionPct}%`;
             };
 
             scrollCallbacks.push(updateToc);
