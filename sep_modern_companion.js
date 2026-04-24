@@ -160,7 +160,7 @@
         }
         #sep-floating-search.visible { top: 0.875em; opacity: 1; pointer-events: auto; }
         #sep-floating-search:focus-within { outline: none; border-color: rgba(255,255,255,0.08); }
-        #sep-floating-search .sep-fs-icon { color: #555; font-size: 1.2em; flex-shrink: 0; display: flex; align-items: center; }
+        #sep-floating-search .sep-fs-icon { color: #555; font-size: 1.5em; line-height: 0; flex-shrink: 0; }
         #sep-floating-search input[type="search"] {
             flex: 1; background: transparent; border: none; outline: none;
             color: #d6d6d6; font-size: 0.9em; height: 100%; padding: 0;
