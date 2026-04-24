@@ -584,8 +584,7 @@
                 pageArticle?.style.removeProperty('width');
                 tocToggleBtn.title = 'Hide table of contents';
                 tocToggleBtn.textContent = '←';
-                tocToggleBtn.style.left = '244px';
-                updateTocPosition(); // recalc TOC top only
+                updateTocPosition();
             } else {
                 toc.style.setProperty('display', 'none', 'important');
                 pageHeader?.style.removeProperty('padding-left');
@@ -593,7 +592,6 @@
                 pageArticle?.style.setProperty('width', '100%', 'important');
                 tocToggleBtn.title = 'Show table of contents';
                 tocToggleBtn.textContent = '☰';
-                tocToggleBtn.style.left = '10px';
             }
             window.scrollTo({ top: savedY, behavior: 'instant' });
         });
