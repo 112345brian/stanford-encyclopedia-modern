@@ -674,15 +674,7 @@
     /* On very narrow screens (tablet/phone) */
     @media (max-width: 768px) {
 
-        /* Hide the fixed sidebar TOC */
-        #toc {
-            position: static !important;
-            width: auto !important;
-            max-height: none !important;
-            display: none !important;
-            font-size: 14px !important;
-            pointer-events: none !important;
-        }
+        /* TOC is managed entirely by JS on mobile — no static overrides here */
 
         /* Hide the default Entry Navigation entirely — replaced by JS TOC toggle */
         #article-nav .nav {
@@ -760,10 +752,7 @@
 
     /* Also catch touch devices in landscape / wider tablets */
     @media (max-width: 1024px) and (hover: none) {
-        #toc {
-            display: none !important;
-            pointer-events: none !important;
-        }
+        /* TOC managed by JS on touch devices */
 
         #header {
             padding-left: 0 !important;
