@@ -27,13 +27,14 @@
 
         /* Back to top button */
         #sep-top-btn {
-            position: fixed; bottom: 28px; right: 28px; z-index: 9998;
-            width: 40px; height: 40px; border-radius: 50%;
+            position: fixed; top: 60px; left: 20px; z-index: 9998;
+            width: 22px; height: 22px; border-radius: 4px;
             background: #1a1a1a; border: 1px solid #333; color: #888;
-            font-size: 18px; cursor: pointer; display: none;
+            font-size: 11px; cursor: pointer; display: none;
             align-items: center; justify-content: center;
-            transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
             font-family: -apple-system, sans-serif; line-height: 1;
+            padding: 0;
         }
         #sep-top-btn:hover { background: #252525; color: #7ba4ff; border-color: #7ba4ff; }
         #sep-top-btn.visible { display: flex; }
@@ -569,6 +570,7 @@
             toc.style.setProperty('top', `${top}px`, 'important');
             toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
             tocToggleBtn.style.top = `${top + 6}px`;
+            topBtn.style.top = `${top + 6 + 22 + 4}px`; // below toggle button
         };
         updateTocPosition();
         scrollCallbacks.push(updateTocPosition);
@@ -591,7 +593,7 @@
                 pageArticle?.style.setProperty('margin-left', '0', 'important');
                 pageArticle?.style.setProperty('width', '100%', 'important');
                 tocToggleBtn.title = 'Show table of contents';
-                tocToggleBtn.textContent = '☰';
+                tocToggleBtn.textContent = '→';
             }
             window.scrollTo({ top: savedY, behavior: 'instant' });
         });
