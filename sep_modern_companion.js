@@ -551,15 +551,17 @@
             .filter(s => s.target);
 
         if (tocSections.length) {
+            // Pin TOC just below the header — measure once, never update on scroll
             const headerWrapper = document.getElementById('header-wrapper');
+            const setTocPosition = () => {
+                const top = headerWrapper ? Math.max(10, headerWrapper.getBoundingClientRect().bottom + 10) : 10;
+                toc.style.setProperty('top', `${top}px`, 'important');
+                toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
+            };
+            setTocPosition();
+            window.addEventListener('resize', setTocPosition);
 
             const updateToc = scrollY => {
-                if (headerWrapper) {
-                    const desiredTop = Math.max(10, headerWrapper.getBoundingClientRect().bottom + 10);
-                    toc.style.setProperty('top', `${desiredTop}px`, 'important');
-                    toc.style.setProperty('max-height', `calc(100vh - ${desiredTop + 20}px)`, 'important');
-                }
-
                 const checkY = scrollY + 200;
                 let current = tocSections[0];
                 for (let i = tocSections.length - 1; i >= 0; i--) {
@@ -581,12 +583,7 @@
             };
 
             scrollCallbacks.push(updateToc);
-
-            // Run immediately and a few more times to catch layout shifts
             updateToc(window.scrollY);
-            setTimeout(() => updateToc(window.scrollY), 100);
-            setTimeout(() => updateToc(window.scrollY), 500);
-            setTimeout(() => updateToc(window.scrollY), 1000);
         }
     }
 
