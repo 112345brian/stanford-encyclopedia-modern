@@ -550,13 +550,7 @@
         display: none !important;
     }
 
-    /* Push content right to clear the fixed TOC (20px left + 220px wide + 20px gap) */
-    body:has(#toc) #header {
-        padding-left: 260px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
+    /* Push article content right to clear the fixed TOC; header spans full width */
     body:has(#toc) #article {
         margin-left: 260px !important;
         width: calc(100% - 260px) !important;
@@ -717,10 +711,6 @@
             max-width: 100% !important;
         }
 
-        #header {
-            padding-left: 0 !important;
-        }
-
         #article {
             margin-left: 0 !important;
             width: 100% !important;
@@ -752,10 +742,6 @@
     /* Also catch touch devices in landscape / wider tablets */
     @media (max-width: 1024px) and (hover: none) {
         /* TOC managed by JS on touch devices */
-
-        #header {
-            padding-left: 0 !important;
-        }
 
         #article {
             margin-left: 0 !important;
