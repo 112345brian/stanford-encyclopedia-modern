@@ -643,10 +643,13 @@
             topBtn.style.top = `${top + 6 + 22 + 4}px`;
         };
 
-        // Mobile: open/close bottom sheet
+        // Mobile: open/close bottom sheet — use inline styles so they beat any stylesheet
         const openMobileToc = () => {
             mobileTocOpen = true;
-            toc.classList.add('toc-open');
+            toc.style.setProperty('position', 'fixed', 'important');
+            toc.style.setProperty('display', 'block', 'important');
+            // Allow display:block to paint before triggering slide-up transition
+            requestAnimationFrame(() => toc.classList.add('toc-open'));
             backdrop.classList.add('visible');
             hamburgerBtn.innerHTML = '&#10005;';
             hamburgerBtn.title = 'Hide table of contents';
@@ -657,27 +660,38 @@
             backdrop.classList.remove('visible');
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
+            // Hide after slide-down animation completes
+            setTimeout(() => {
+                if (!mobileTocOpen) toc.style.setProperty('display', 'none', 'important');
+            }, 350);
         };
 
         // Enter/exit mobile layout mode
         const enterMobileMode = () => {
             toc.classList.add('toc-mobile');
-            toc.style.removeProperty('display');
+            // Inline styles override any stylesheet — no cascade conflicts
+            toc.style.setProperty('position', 'fixed', 'important');
+            toc.style.setProperty('display', 'none', 'important');
             toc.style.removeProperty('top');
             toc.style.removeProperty('max-height');
+            toc.classList.remove('toc-open');
+            backdrop.classList.remove('visible');
+            mobileTocOpen = false;
+            hamburgerBtn.innerHTML = '&#9776;';
+            hamburgerBtn.title = 'Show table of contents';
             pageHeader?.style.removeProperty('padding-left');
             pageArticle?.style.setProperty('margin-left', '0', 'important');
             pageArticle?.style.setProperty('width', '100%', 'important');
             pageArticle?.style.setProperty('max-width', '100%', 'important');
-            closeMobileToc();
         };
         const exitMobileMode = () => {
             toc.classList.remove('toc-mobile');
             toc.classList.remove('toc-open');
             backdrop.classList.remove('visible');
             mobileTocOpen = false;
+            toc.style.removeProperty('position');
+            toc.style.removeProperty('display');
             if (tocOpen) {
-                toc.style.removeProperty('display');
                 pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
