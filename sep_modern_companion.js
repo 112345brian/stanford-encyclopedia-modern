@@ -561,16 +561,18 @@
         const pageHeader = document.getElementById('header');
         const pageArticle = document.getElementById('article');
 
-        // Pin TOC just below the header — measure once, never update on scroll
+        // Pin TOC below the header while it's visible; snap to top once it scrolls away
         const headerWrapper = document.getElementById('header-wrapper');
-        const setTocPosition = () => {
-            const top = headerWrapper ? Math.max(10, headerWrapper.getBoundingClientRect().bottom + 10) : 10;
+        const updateTocPosition = () => {
+            const headerBottom = headerWrapper ? headerWrapper.getBoundingClientRect().bottom : 0;
+            const top = headerBottom > 0 ? Math.max(10, headerBottom + 10) : 10;
             toc.style.setProperty('top', `${top}px`, 'important');
             toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
             if (tocOpen) tocToggleBtn.style.top = `${top}px`;
         };
-        setTocPosition();
-        window.addEventListener('resize', setTocPosition);
+        updateTocPosition();
+        scrollCallbacks.push(updateTocPosition);
+        window.addEventListener('resize', updateTocPosition);
 
         tocToggleBtn.addEventListener('click', () => {
             const savedY = window.scrollY;
@@ -582,7 +584,7 @@
                 tocToggleBtn.title = 'Hide table of contents';
                 tocToggleBtn.textContent = '←';
                 tocToggleBtn.style.left = '244px';
-                setTocPosition();
+                updateTocPosition();
             } else {
                 toc.style.setProperty('display', 'none', 'important');
                 pageHeader?.style.removeProperty('padding-left');
