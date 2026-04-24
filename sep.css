@@ -541,24 +541,17 @@
    in that same position.
    ========================================================================== */
 
-    /* Hide the entire article sidebar — #toc replaces it */
-    #article-sidebar {
+    /* Only apply sidebar layout on pages that actually have a TOC */
+    body:has(#toc) #article-sidebar {
         display: none !important;
     }
 
-    /* Hide site navigation — search is sufficient */
-    #navigation {
+    body:has(#toc) #navigation {
         display: none !important;
     }
 
-    /* Push content right to clear the fixed TOC (20px left + 220px wide + 20px gap) */
-    #header {
-        padding-left: 260px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    #article {
+    /* Push article content right to clear the fixed TOC; header spans full width */
+    body:has(#toc) #article {
         margin-left: 260px !important;
         width: calc(100% - 260px) !important;
         max-width: calc(100% - 260px) !important;
@@ -674,15 +667,7 @@
     /* On very narrow screens (tablet/phone) */
     @media (max-width: 768px) {
 
-        /* Hide the fixed sidebar TOC */
-        #toc {
-            position: static !important;
-            width: auto !important;
-            max-height: none !important;
-            display: none !important;
-            font-size: 14px !important;
-            pointer-events: none !important;
-        }
+        /* TOC is managed entirely by JS on mobile — no static overrides here */
 
         /* Hide the default Entry Navigation entirely — replaced by JS TOC toggle */
         #article-nav .nav {
@@ -726,10 +711,6 @@
             max-width: 100% !important;
         }
 
-        #header {
-            padding-left: 0 !important;
-        }
-
         #article {
             margin-left: 0 !important;
             width: 100% !important;
@@ -760,14 +741,7 @@
 
     /* Also catch touch devices in landscape / wider tablets */
     @media (max-width: 1024px) and (hover: none) {
-        #toc {
-            display: none !important;
-            pointer-events: none !important;
-        }
-
-        #header {
-            padding-left: 0 !important;
-        }
+        /* TOC managed by JS on touch devices */
 
         #article {
             margin-left: 0 !important;
