@@ -64,6 +64,7 @@
 
     /* On article pages: bare logo mark, no pill, no static search */
     body:has(#toc) #header-wrapper {
+        position: static !important;  /* scrolls with page instead of sticking over content */
         justify-content: center !important;
         padding-left: 0 !important;
     }
@@ -684,7 +685,8 @@
         width: calc(100% - 260px) !important;
         max-width: calc(100% - 260px) !important;
         box-sizing: border-box !important;
-        padding-top: 4.5em !important;  /* clear sticky logo header */
+        padding-top: 1em !important;
+        border: none !important;  /* remove sidebar divider line */
     }
 
     /* Make the TOC fixed in the sidebar area */
