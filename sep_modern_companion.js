@@ -159,6 +159,7 @@
             opacity: 0; pointer-events: none;
         }
         #sep-floating-search.visible { top: 14px; opacity: 1; pointer-events: auto; }
+        #sep-floating-search:focus-within { outline: none; border-color: rgba(255,255,255,0.08); }
         #sep-floating-search .sep-fs-icon { color: #555; font-size: 15px; flex-shrink: 0; line-height: 1; }
         #sep-floating-search input[type="search"] {
             flex: 1; background: transparent; border: none; outline: none;
