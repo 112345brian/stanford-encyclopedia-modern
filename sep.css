@@ -838,7 +838,7 @@
             max-width: 320px !important;
             height: 100vh !important;
             max-height: 100vh !important;
-            padding: 64px 16px 32px !important;
+            padding: 4em 1em 2em !important;
             border-radius: 0 16px 16px 0 !important;
             z-index: 1004 !important;
             transform: translateX(-105%) !important;

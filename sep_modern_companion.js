@@ -695,6 +695,8 @@
             backdrop.classList.add('visible');
             hamburgerBtn.innerHTML = '&#10005;';
             hamburgerBtn.title = 'Hide table of contents';
+            floatingSearch.classList.remove('visible');
+            fsVisible = false;
         };
         const closeMobileToc = () => {
             mobileTocOpen = false;
@@ -882,7 +884,7 @@
     scrollCallbacks.push(scrollY => {
         const goingUp = scrollY < fsLastY;
         fsLastY = scrollY;
-        if (goingUp && scrollY > 200) {
+        if (goingUp && scrollY > 200 && !mobileTocOpen) {
             if (!fsVisible) { fsVisible = true; floatingSearch.classList.add('visible'); }
         } else if (!goingUp) {
             if (fsVisible) { fsVisible = false; floatingSearch.classList.remove('visible'); }
