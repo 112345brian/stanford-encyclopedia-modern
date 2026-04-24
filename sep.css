@@ -554,6 +554,8 @@
     /* Push content right to clear the fixed TOC (20px left + 220px wide + 20px gap) */
     #header {
         padding-left: 260px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     #article {

@@ -593,8 +593,7 @@
                 pageArticle?.style.setProperty('width', '100%', 'important');
                 tocToggleBtn.title = 'Show table of contents';
                 tocToggleBtn.textContent = '☰';
-                tocToggleBtn.style.top = '20px';
-                tocToggleBtn.style.left = '10px';
+                // stay in the same spot — don't move to corner
             }
             window.scrollTo({ top: savedY, behavior: 'instant' });
         });
