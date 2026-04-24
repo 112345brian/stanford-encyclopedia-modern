@@ -757,21 +757,52 @@
         background: var(--sep-border-mid);
     }
 
-    /* On very narrow screens (tablet/phone) */
-    @media (max-width: 768px) {
+    /* ---- Mobile / touch devices: bottom-sheet TOC, full-width article ---- */
+    @media (max-width: 768px), (max-width: 1024px) and (hover: none) {
 
-        /* TOC is managed entirely by JS on mobile — no static overrides here */
+        /* Override the desktop body:has(#toc) layout rules — must match specificity */
+        body:has(#toc) #article {
+            margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow: visible !important;
+        }
 
-        /* Hide the default Entry Navigation entirely — replaced by JS TOC toggle */
-        #article-nav .nav {
+        body:has(#toc) #header-wrapper {
+            padding-left: 20px !important;
+            justify-content: center !important;
+        }
+
+        /* TOC becomes a bottom sheet — hidden off-screen via transform by default */
+        #toc {
+            bottom: 0 !important;
+            top: auto !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            max-height: 70vh !important;
+            padding: 20px 16px 32px !important;
+            border-radius: 16px 16px 0 0 !important;
+            z-index: 1004 !important;
+            transform: translateY(105%) !important;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        /* JS adds .toc-open to slide it into view */
+        #toc.toc-open {
+            transform: translateY(0) !important;
+        }
+
+        /* Hide desktop-only controls */
+        #sep-toc-toggle {
             display: none !important;
         }
 
+        /* Hide default SEP navigation chrome */
+        #article-nav,
+        #article-nav .nav,
         #article-sidebar .btn-navbar {
-            display: none !important;
-        }
-
-        #article-nav {
             display: none !important;
         }
 
@@ -791,7 +822,6 @@
             font-size: 1.25rem !important;
         }
 
-        /* Ensure body can scroll */
         body,
         html {
             overflow-x: hidden !important;
@@ -804,62 +834,10 @@
             max-width: 100% !important;
         }
 
-        #article {
-            margin-left: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow: visible !important;
-        }
-
-        /* Tables must scroll horizontally, not break layout */
         table {
             display: block !important;
             overflow-x: auto !important;
             max-width: 100% !important;
-        }
-
-        #sep-toc-toggle {
-            display: none !important;
-        }
-
-        /* Mobile TOC toggle (built by JS) */
-        #sep-mobile-toc-btn {
-            display: flex !important;
-        }
-
-        #sep-mobile-toc-panel {
-            display: block !important;
-        }
-    }
-
-    /* Also catch touch devices in landscape / wider tablets */
-    @media (max-width: 1024px) and (hover: none) {
-        /* TOC managed by JS on touch devices */
-
-        #article {
-            margin-left: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-
-        #article-nav .nav {
-            display: none !important;
-        }
-
-        #article-nav {
-            display: none !important;
-        }
-
-        #article-sidebar .btn-navbar {
-            display: none !important;
-        }
-
-        #sep-mobile-toc-btn {
-            display: flex !important;
-        }
-
-        #sep-mobile-toc-panel {
-            display: block !important;
         }
     }
 
