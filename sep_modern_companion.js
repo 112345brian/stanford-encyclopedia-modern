@@ -135,20 +135,8 @@
             #sep-toc-toggle { display: none !important; }
             #sep-top-btn { display: none !important; }
 
-            #toc.toc-mobile {
-                top: auto !important; bottom: 0 !important;
-                left: 0 !important; right: 0 !important;
-                width: 100% !important; max-width: 100% !important;
-                max-height: 70vh !important;
-                transform: translateY(105%);
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                border-radius: 16px 16px 0 0 !important;
-                z-index: 1004 !important;
-                padding: 20px 16px 32px !important;
-                display: block !important;
-            }
-            #toc.toc-mobile.toc-open { transform: translateY(0) !important; }
-            #toc.toc-mobile::before {
+            /* Grip handle drawn above TOC content */
+            #toc::before {
                 content: ''; display: block; width: 36px; height: 4px;
                 background: #444; border-radius: 2px; margin: 0 auto 16px;
             }
@@ -664,12 +652,9 @@
             topBtn.style.top = `${top + 6 + 22 + 4}px`;
         };
 
-        // Mobile: open/close bottom sheet — use inline styles so they beat any stylesheet
+        // Mobile: open/close bottom sheet — layout controlled by Stylus @media rules
         const openMobileToc = () => {
             mobileTocOpen = true;
-            toc.style.setProperty('position', 'fixed', 'important');
-            toc.style.setProperty('display', 'block', 'important');
-            // Allow display:block to paint before triggering slide-up transition
             requestAnimationFrame(() => toc.classList.add('toc-open'));
             backdrop.classList.add('visible');
             hamburgerBtn.innerHTML = '&#10005;';
@@ -681,29 +666,25 @@
             backdrop.classList.remove('visible');
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
-            // Hide after slide-down animation completes
-            setTimeout(() => {
-                if (!mobileTocOpen) toc.style.setProperty('display', 'none', 'important');
-            }, 350);
+            // transform: translateY(105%) slides it off-screen — no display:none needed
         };
 
         // Enter/exit mobile layout mode
         const enterMobileMode = () => {
             toc.classList.add('toc-mobile');
-            // Inline styles override any stylesheet — no cascade conflicts
-            toc.style.setProperty('position', 'fixed', 'important');
-            toc.style.setProperty('display', 'none', 'important');
+            toc.classList.remove('toc-open');
+            // Clear any desktop inline styles — Stylus @media rules take over layout
+            toc.style.removeProperty('display');
             toc.style.removeProperty('top');
             toc.style.removeProperty('max-height');
-            toc.classList.remove('toc-open');
+            pageHeader?.style.removeProperty('padding-left');
+            pageArticle?.style.removeProperty('margin-left');
+            pageArticle?.style.removeProperty('width');
+            pageArticle?.style.removeProperty('max-width');
             backdrop.classList.remove('visible');
             mobileTocOpen = false;
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
-            pageHeader?.style.removeProperty('padding-left');
-            pageArticle?.style.setProperty('margin-left', '0', 'important');
-            pageArticle?.style.setProperty('width', '100%', 'important');
-            pageArticle?.style.setProperty('max-width', '100%', 'important');
         };
         const exitMobileMode = () => {
             toc.classList.remove('toc-mobile');
