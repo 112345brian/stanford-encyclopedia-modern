@@ -168,6 +168,7 @@
             -webkit-appearance: none;
         }
         #sep-floating-search input[type="search"]::placeholder { color: #444; }
+        #sep-floating-search input[type="search"]:focus::placeholder { color: transparent; }
         #sep-floating-search input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
 
         /* Citation popup */
