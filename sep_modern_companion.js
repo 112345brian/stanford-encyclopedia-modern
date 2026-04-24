@@ -168,12 +168,13 @@
         }
         #sep-floating-search.visible { top: 0.875em; opacity: 1; pointer-events: auto; }
         #sep-floating-search:focus-within { outline: none; border-color: rgba(255,255,255,0.08); }
-        #sep-floating-search .sep-fs-icon { color: #555; font-size: 1.5em; line-height: 1; flex-shrink: 0; display: flex; align-items: center; }
+        #sep-floating-search .sep-fs-icon { color: #555; flex-shrink: 0; display: flex; align-items: center; }
         #sep-floating-search input[type="search"] {
             flex: 1; background: transparent; border: none; outline: none;
-            color: #d6d6d6; font-size: 0.9em; height: 100%; padding: 0;
+            color: #d6d6d6; font-size: 0.9em; line-height: 1;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-appearance: none;
+            -webkit-appearance: none; align-self: center;
+            padding: 2px 0; margin-top: 1px;
         }
         #sep-floating-search input[type="search"]::placeholder { color: #444; }
         #sep-floating-search input[type="search"]:focus::placeholder { color: transparent; }
@@ -828,7 +829,7 @@
 
     const fsIcon = document.createElement('span');
     fsIcon.className = 'sep-fs-icon';
-    fsIcon.textContent = '⌕';
+    fsIcon.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
 
     const fsInput = document.createElement('input');
     fsInput.type = 'search';
