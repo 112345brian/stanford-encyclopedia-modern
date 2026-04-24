@@ -132,6 +132,11 @@
             h3 {
                 font-size: 1.05rem !important;
             }
+            /* TOC drawer: small top padding so item 1 is reachable */
+            #toc {
+                padding-top: 0.75em !important;
+                -webkit-overflow-scrolling: touch !important;
+            }
         }
 
         /* Keyboard nav hint */
@@ -869,7 +874,8 @@
                     current.link.classList.add('toc-active');
                     const tr = toc.getBoundingClientRect();
                     const lr = current.link.getBoundingClientRect();
-                    if (lr.top < tr.top + 10 || lr.bottom > tr.bottom - 10) {
+                    if ((!mobileQuery.matches || mobileTocOpen) &&
+                        (lr.top < tr.top + 10 || lr.bottom > tr.bottom - 10)) {
                         current.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                     }
                 }
@@ -894,7 +900,47 @@
     }
 
     // =============================================
-    // 11. FLOATING SEARCH BAR (shows on scroll up)
+    // 11. MOBILE PADDING ENFORCER (counters SEP's inline style overrides)
+    // =============================================
+    if (mobileQuery.matches) {
+        const mobileContainers = [
+            document.body,
+            document.getElementById('container'),
+            document.getElementById('content'),
+            document.getElementById('article'),
+            document.getElementById('aueditable'),
+            document.getElementById('article-content'),
+            document.getElementById('preamble'),
+            document.getElementById('article-header'),
+        ].filter(Boolean);
+        const contentEl = document.getElementById('aueditable') || document.getElementById('article-content');
+        let padObserver = null;
+        const enforceLayout = () => {
+            if (padObserver) padObserver.disconnect();
+            for (const el of mobileContainers) {
+                el.style.setProperty('padding-left', '0', 'important');
+                el.style.setProperty('padding-right', '0', 'important');
+                el.style.setProperty('margin-left', '0', 'important');
+                el.style.setProperty('margin-right', '0', 'important');
+                el.style.setProperty('max-width', '100%', 'important');
+                el.style.setProperty('width', '100%', 'important');
+            }
+            if (contentEl) {
+                contentEl.style.setProperty('padding-left', '1em', 'important');
+                contentEl.style.setProperty('padding-right', '1em', 'important');
+            }
+            requestAnimationFrame(() => {
+                padObserver = new MutationObserver(enforceLayout);
+                for (const el of mobileContainers) {
+                    padObserver.observe(el, { attributes: true, attributeFilter: ['style'] });
+                }
+            });
+        };
+        enforceLayout();
+    }
+
+    // =============================================
+    // 12. FLOATING SEARCH BAR (shows on scroll up)
     // =============================================
     const articleTitle = document.querySelector('#aueditable h1, #article-content h1, .pagetitle')
         ?.textContent?.trim()
