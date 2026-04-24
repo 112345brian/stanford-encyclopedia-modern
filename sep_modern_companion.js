@@ -541,9 +541,11 @@
     kbHint.innerHTML = '<kbd>j</kbd> next section &nbsp; <kbd>k</kbd> prev section &nbsp; <kbd>t</kbd> top';
     document.body.appendChild(kbHint);
 
-    // Show hint briefly on first visit
-    setTimeout(() => kbHint.classList.add('visible'), 2000);
-    setTimeout(() => kbHint.classList.remove('visible'), 7000);
+    // Show hint briefly on first visit — desktop only
+    if (!window.matchMedia('(max-width: 768px), (hover: none)').matches) {
+        setTimeout(() => kbHint.classList.add('visible'), 2000);
+        setTimeout(() => kbHint.classList.remove('visible'), 7000);
+    }
 
     document.addEventListener('keydown', e => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
