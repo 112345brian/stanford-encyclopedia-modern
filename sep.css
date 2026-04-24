@@ -369,6 +369,12 @@
         color: var(--sep-text) !important;
     }
 
+    /* SEP wraps heading text in <a name="..."> — force it to inherit heading color */
+    h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+
     h1:hover,
     .pagetitle:hover,
     h2:hover,
