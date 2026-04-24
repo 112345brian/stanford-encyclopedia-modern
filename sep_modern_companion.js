@@ -34,10 +34,10 @@
 
         /* Back to top button */
         #sep-top-btn {
-            position: fixed; top: 60px; left: 20px; z-index: 9998;
-            width: 22px; height: 22px; border-radius: 4px;
+            position: fixed; top: 3.75em; left: 1.25em; z-index: 9998;
+            width: 1.375em; height: 1.375em; border-radius: 0.25em;
             background: #1a1a1a; border: 1px solid #333; color: #888;
-            font-size: 11px; cursor: pointer; display: none;
+            font-size: 0.7em; cursor: pointer; display: none;
             align-items: center; justify-content: center;
             transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
             font-family: -apple-system, sans-serif; line-height: 1;
@@ -48,18 +48,18 @@
 
         /* Reading time badge */
         #sep-reading-time {
-            display: inline-block; font-size: 13px; color: #666;
+            display: inline-block; font-size: 0.8em; color: #666;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin-top: 6px; padding: 4px 10px; background: #1a1a1a;
-            border-radius: 4px; border: 1px solid #2a2a2a;
+            margin-top: 0.375em; padding: 0.25em 0.625em; background: #1a1a1a;
+            border-radius: 0.25em; border: 1px solid #2a2a2a;
         }
 
         /* Footnote popup */
         #sep-footnote-popup {
-            position: absolute; z-index: 9999; max-width: 420px;
-            background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
-            padding: 14px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            font-size: 13.5px; line-height: 1.65; color: #c0c0c0;
+            position: absolute; z-index: 9999; max-width: 26em;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 0.5em;
+            padding: 0.875em 1em; box-shadow: 0 0.25em 1.25em rgba(0,0,0,0.5);
+            font-size: 0.85em; line-height: 1.65; color: #c0c0c0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             pointer-events: none; opacity: 0; transition: opacity 0.15s ease;
         }
@@ -68,7 +68,7 @@
 
         /* Section anchor links (on hover) */
         .sep-anchor-link {
-            opacity: 0; margin-left: 8px; color: #555 !important;
+            opacity: 0; margin-left: 0.5em; color: #555 !important;
             text-decoration: none !important; font-size: 0.7em;
             transition: opacity 0.15s ease; cursor: pointer;
             font-weight: 400 !important; vertical-align: middle;
@@ -81,16 +81,16 @@
 
         /* Keyboard nav hint */
         #sep-kb-hint {
-            position: fixed; bottom: 28px; left: 28px; z-index: 9998;
-            font-size: 11px; color: #444; padding: 6px 10px;
-            background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px;
+            position: fixed; bottom: 1.75em; left: 1.75em; z-index: 9998;
+            font-size: 0.7em; color: #444; padding: 0.375em 0.625em;
+            background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 0.375em;
             font-family: -apple-system, sans-serif; opacity: 0;
             transition: opacity 0.3s ease; pointer-events: none;
         }
         #sep-kb-hint.visible { opacity: 1; }
         #sep-kb-hint kbd {
-            display: inline-block; padding: 1px 5px; background: #252525;
-            border: 1px solid #333; border-radius: 3px; font-size: 10px;
+            display: inline-block; padding: 0.1em 0.3em; background: #252525;
+            border: 1px solid #333; border-radius: 0.2em; font-size: 0.9em;
             font-family: -apple-system, sans-serif; color: #888;
         }
 
@@ -107,17 +107,17 @@
         /* TOC scroll spy */
         #toc a.toc-active {
             color: #7ba4ff !important; font-weight: 600 !important;
-            border-left: 2px solid #7ba4ff; padding-left: 6px; margin-left: -8px;
+            border-left: 2px solid #7ba4ff; padding-left: 0.375em; margin-left: -0.5em;
         }
 
         /* Mobile TOC: hamburger button */
         #sep-toc-hamburger {
-            position: fixed; bottom: 24px; right: 24px; z-index: 1005;
-            width: 44px; height: 44px; border-radius: 10px;
+            position: fixed; bottom: 1.5em; right: 1.5em; z-index: 1005;
+            width: 2.75em; height: 2.75em; border-radius: 0.625em;
             background: #1e1e1e; border: 1px solid #333; color: #aaa;
-            font-size: 18px; cursor: pointer;
+            font-size: 1em; cursor: pointer;
             display: none; align-items: center; justify-content: center;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            box-shadow: 0 0.125em 0.75em rgba(0,0,0,0.4);
             transition: color 0.15s ease, border-color 0.15s ease;
         }
         #sep-toc-hamburger:hover { color: #7ba4ff; border-color: #7ba4ff; }
@@ -137,33 +137,33 @@
 
             /* Grip handle drawn above TOC content */
             #toc::before {
-                content: ''; display: block; width: 36px; height: 4px;
-                background: #444; border-radius: 2px; margin: 0 auto 16px;
+                content: ''; display: block; width: 2.25em; height: 0.25em;
+                background: #444; border-radius: 0.125em; margin: 0 auto 1em;
             }
         }
 
         /* Floating search bar (appears on scroll-up) */
         #sep-floating-search {
-            position: fixed; top: -56px; left: 50%; transform: translateX(-50%);
-            z-index: 9990; width: min(560px, calc(100% - 2rem));
-            height: 44px;
-            display: flex; align-items: center; gap: 8px;
+            position: fixed; top: -3.5em; left: 50%; transform: translateX(-50%);
+            z-index: 9990; width: min(35em, calc(100% - 2rem));
+            height: 2.75em;
+            display: flex; align-items: center; gap: 0.5em;
             background: rgba(28, 28, 28, 0.62);
             backdrop-filter: blur(16px) saturate(180%);
             -webkit-backdrop-filter: blur(16px) saturate(180%);
             border: 0.5px solid rgba(255, 255, 255, 0.08);
             border-radius: 999px;
-            padding: 0 14px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
+            padding: 0 0.875em;
+            box-shadow: 0 0.125em 1.25em rgba(0, 0, 0, 0.35);
             transition: top 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
             opacity: 0; pointer-events: none;
         }
-        #sep-floating-search.visible { top: 14px; opacity: 1; pointer-events: auto; }
+        #sep-floating-search.visible { top: 0.875em; opacity: 1; pointer-events: auto; }
         #sep-floating-search:focus-within { outline: none; border-color: rgba(255,255,255,0.08); }
-        #sep-floating-search .sep-fs-icon { color: #555; font-size: 19px; flex-shrink: 0; display: flex; align-items: center; }
+        #sep-floating-search .sep-fs-icon { color: #555; font-size: 1.2em; flex-shrink: 0; display: flex; align-items: center; }
         #sep-floating-search input[type="search"] {
             flex: 1; background: transparent; border: none; outline: none;
-            color: #d6d6d6; font-size: 14.5px; height: 100%; padding: 0;
+            color: #d6d6d6; font-size: 0.9em; height: 100%; padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-appearance: none;
         }
@@ -173,18 +173,18 @@
 
         /* Citation popup */
         #sep-cite-popup {
-            position: absolute; z-index: 9999; max-width: 480px; min-width: 280px;
-            background: #1a1a1a; border: 1px solid #333; border-radius: 8px;
-            padding: 14px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            font-size: 13.5px; line-height: 1.65; color: #c0c0c0;
+            position: absolute; z-index: 9999; max-width: 30em; min-width: 17.5em;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 0.5em;
+            padding: 0.875em 1em; box-shadow: 0 0.25em 1.25em rgba(0,0,0,0.5);
+            font-size: 0.85em; line-height: 1.65; color: #c0c0c0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             pointer-events: none; opacity: 0; transition: opacity 0.15s ease;
         }
         #sep-cite-popup.visible { opacity: 1; pointer-events: auto; }
         #sep-cite-popup a { color: #7ba4ff !important; }
         #sep-cite-popup .sep-cite-label {
-            font-size: 11px; color: #555; text-transform: uppercase;
-            letter-spacing: 0.05em; margin-bottom: 6px; font-weight: 600;
+            font-size: 0.7em; color: #555; text-transform: uppercase;
+            letter-spacing: 0.05em; margin-bottom: 0.375em; font-weight: 600;
         }
     `;
     document.head.appendChild(style);
