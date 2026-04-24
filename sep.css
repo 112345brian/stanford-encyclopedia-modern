@@ -44,9 +44,81 @@
         box-shadow: none !important;
     }
 
+    /* Compact sticky header — flex row, logo left, search right */
     #header-wrapper {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 900 !important;
+        background: rgba(18, 18, 18, 0.94) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
         background-image: none !important;
-        border-bottom-color: var(--sep-border) !important;
+        border-bottom: 1px solid var(--sep-border) !important;
+    }
+
+    #header {
+        display: flex !important;
+        align-items: center !important;
+        height: 52px !important;
+        padding: 0 24px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        max-width: none !important;
+        margin: 0 auto !important;
+        text-align: left !important;
+    }
+
+    /* Scale down site branding to inline pill */
+    #site-title {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #site-logo,
+    #site-title img {
+        height: 26px !important;
+        width: auto !important;
+        display: block !important;
+    }
+
+    #site-title h1,
+    #site-title .pagetitle,
+    #site-title span {
+        font-size: 13.5px !important;
+        font-weight: 500 !important;
+        letter-spacing: 0 !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        color: var(--sep-accent) !important;
+        white-space: nowrap !important;
+    }
+
+    #site-title a,
+    #site-title h1 a {
+        color: var(--sep-accent) !important;
+        text-decoration: none !important;
+        font-size: 13.5px !important;
+        font-weight: 500 !important;
+    }
+
+    /* Search — fills remaining space */
+    #search {
+        flex: 1 !important;
+        max-width: 460px !important;
+        min-width: 0 !important;
+        width: auto !important;
+        margin: 0 0 0 20px !important;
+    }
+
+    /* On article pages, push header content right of the TOC sidebar */
+    body:has(#toc) #header {
+        padding-left: 260px !important;
     }
 
     #article {

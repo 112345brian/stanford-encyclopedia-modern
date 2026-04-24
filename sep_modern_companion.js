@@ -648,6 +648,7 @@
 
         let tocOpen = true;        // desktop: sidebar visible?
         let mobileTocOpen = false; // mobile: bottom sheet visible?
+        const pageHeader = document.getElementById('header');
         const pageArticle = document.getElementById('article');
         const headerWrapper = document.getElementById('header-wrapper');
         const mobileQuery = window.matchMedia('(max-width: 768px), (max-width: 1024px) and (hover: none)');
@@ -699,6 +700,7 @@
             mobileTocOpen = false;
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
+            pageHeader?.style.removeProperty('padding-left');
             pageArticle?.style.setProperty('margin-left', '0', 'important');
             pageArticle?.style.setProperty('width', '100%', 'important');
             pageArticle?.style.setProperty('max-width', '100%', 'important');
@@ -711,6 +713,7 @@
             toc.style.removeProperty('position');
             toc.style.removeProperty('display');
             if (tocOpen) {
+                pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
                 pageArticle?.style.removeProperty('max-width');
@@ -726,6 +729,7 @@
             tocOpen = !tocOpen;
             if (tocOpen) {
                 toc.style.removeProperty('display');
+                pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
                 pageArticle?.style.removeProperty('max-width');
@@ -734,6 +738,7 @@
                 updateTocPosition();
             } else {
                 toc.style.setProperty('display', 'none', 'important');
+                pageHeader?.style.removeProperty('padding-left');
                 pageArticle?.style.setProperty('margin-left', '0', 'important');
                 pageArticle?.style.setProperty('width', '100%', 'important');
                 pageArticle?.style.setProperty('max-width', '100%', 'important');
