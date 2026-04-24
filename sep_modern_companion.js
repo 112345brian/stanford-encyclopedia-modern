@@ -595,6 +595,7 @@
                 pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
+                pageArticle?.style.removeProperty('max-width');
                 tocToggleBtn.title = 'Hide table of contents';
                 tocToggleBtn.textContent = '←';
                 updateTocPosition();
@@ -603,6 +604,7 @@
                 pageHeader?.style.removeProperty('padding-left');
                 pageArticle?.style.setProperty('margin-left', '0', 'important');
                 pageArticle?.style.setProperty('width', '100%', 'important');
+                pageArticle?.style.setProperty('max-width', '100%', 'important');
                 tocToggleBtn.title = 'Show table of contents';
                 tocToggleBtn.textContent = '→';
             }
