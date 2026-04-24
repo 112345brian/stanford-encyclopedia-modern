@@ -62,16 +62,25 @@
         justify-content: center !important;
     }
 
-    /* On article pages: logo-only pill, no static search — search is floating */
+    /* On article pages: bare logo mark, no pill, no static search */
     body:has(#toc) #header-wrapper {
-        justify-content: flex-start !important;
-        padding-left: 260px !important;
+        justify-content: center !important;
+        padding-left: 0 !important;
     }
 
     body:has(#toc) #header {
         flex: 0 0 auto !important;
-        max-width: none !important;
         width: auto !important;
+        max-width: none !important;
+        height: auto !important;
+        padding: 0.25em !important;
+        /* Strip pill styling */
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
     }
 
     body:has(#toc) #search {
@@ -80,6 +89,18 @@
 
     body:has(#toc) #site-title::after {
         display: none !important;
+    }
+
+    body:has(#toc) #site-logo,
+    body:has(#toc) #site-title img {
+        height: 2em !important;
+        opacity: 0.7;
+        transition: opacity 0.15s ease !important;
+    }
+
+    body:has(#toc) #site-logo:hover,
+    body:has(#toc) #site-title img:hover {
+        opacity: 1;
     }
 
     #header {
