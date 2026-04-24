@@ -110,6 +110,50 @@
             border-left: 2px solid #7ba4ff; padding-left: 6px; margin-left: -8px;
         }
 
+        /* Mobile TOC: hamburger button */
+        #sep-toc-hamburger {
+            position: fixed; bottom: 24px; right: 24px; z-index: 1005;
+            width: 44px; height: 44px; border-radius: 10px;
+            background: #1e1e1e; border: 1px solid #333; color: #aaa;
+            font-size: 18px; cursor: pointer;
+            display: none; align-items: center; justify-content: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+            transition: color 0.15s ease, border-color 0.15s ease;
+        }
+        #sep-toc-hamburger:hover { color: #7ba4ff; border-color: #7ba4ff; }
+
+        /* Mobile TOC: dark backdrop */
+        #sep-mobile-backdrop {
+            position: fixed; inset: 0; z-index: 1003;
+            background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        #sep-mobile-backdrop.visible { opacity: 1; pointer-events: auto; }
+
+        @media (max-width: 768px), (max-width: 1024px) and (hover: none) {
+            #sep-toc-hamburger { display: flex !important; }
+            #sep-toc-toggle { display: none !important; }
+            #sep-top-btn { display: none !important; }
+
+            #toc.toc-mobile {
+                top: auto !important; bottom: 0 !important;
+                left: 0 !important; right: 0 !important;
+                width: 100% !important; max-width: 100% !important;
+                max-height: 70vh !important;
+                transform: translateY(105%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                border-radius: 16px 16px 0 0 !important;
+                z-index: 1004 !important;
+                padding: 20px 16px 32px !important;
+                display: block !important;
+            }
+            #toc.toc-mobile.toc-open { transform: translateY(0) !important; }
+            #toc.toc-mobile::before {
+                content: ''; display: block; width: 36px; height: 4px;
+                background: #444; border-radius: 2px; margin: 0 auto 16px;
+            }
+        }
+
         /* Citation popup */
         #sep-cite-popup {
             position: absolute; z-index: 9999; max-width: 480px; min-width: 280px;
@@ -562,31 +606,89 @@
             })
             .filter(s => s.target);
 
-        // TOC toggle button
+        // Desktop sidebar toggle button (←/→)
         const tocToggleBtn = document.createElement('button');
         tocToggleBtn.id = 'sep-toc-toggle';
         tocToggleBtn.title = 'Hide table of contents';
         tocToggleBtn.textContent = '←';
         document.body.appendChild(tocToggleBtn);
 
-        let tocOpen = true;
+        // Mobile hamburger button (☰)
+        const hamburgerBtn = document.createElement('button');
+        hamburgerBtn.id = 'sep-toc-hamburger';
+        hamburgerBtn.innerHTML = '&#9776;';
+        hamburgerBtn.title = 'Show table of contents';
+        document.body.appendChild(hamburgerBtn);
+
+        // Mobile backdrop
+        const backdrop = document.createElement('div');
+        backdrop.id = 'sep-mobile-backdrop';
+        document.body.appendChild(backdrop);
+
+        let tocOpen = true;        // desktop: sidebar visible?
+        let mobileTocOpen = false; // mobile: bottom sheet visible?
         const pageHeader = document.getElementById('header');
         const pageArticle = document.getElementById('article');
-
-        // Pin TOC below the header while it's visible; snap to top once it scrolls away
         const headerWrapper = document.getElementById('header-wrapper');
+        const mobileQuery = window.matchMedia('(max-width: 768px), (max-width: 1024px) and (hover: none)');
+
+        // Desktop: update TOC and button positions to track header
         const updateTocPosition = () => {
+            if (mobileQuery.matches) return;
             const headerBottom = headerWrapper ? headerWrapper.getBoundingClientRect().bottom : 0;
             const top = headerBottom > 0 ? Math.max(10, headerBottom + 10) : 10;
             toc.style.setProperty('top', `${top}px`, 'important');
             toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
             tocToggleBtn.style.top = `${top + 6}px`;
-            topBtn.style.top = `${top + 6 + 22 + 4}px`; // below toggle button
+            topBtn.style.top = `${top + 6 + 22 + 4}px`;
         };
-        updateTocPosition();
-        scrollCallbacks.push(updateTocPosition);
-        window.addEventListener('resize', updateTocPosition);
 
+        // Mobile: open/close bottom sheet
+        const openMobileToc = () => {
+            mobileTocOpen = true;
+            toc.classList.add('toc-open');
+            backdrop.classList.add('visible');
+            hamburgerBtn.innerHTML = '&#10005;';
+            hamburgerBtn.title = 'Hide table of contents';
+        };
+        const closeMobileToc = () => {
+            mobileTocOpen = false;
+            toc.classList.remove('toc-open');
+            backdrop.classList.remove('visible');
+            hamburgerBtn.innerHTML = '&#9776;';
+            hamburgerBtn.title = 'Show table of contents';
+        };
+
+        // Enter/exit mobile layout mode
+        const enterMobileMode = () => {
+            toc.classList.add('toc-mobile');
+            toc.style.removeProperty('display');
+            toc.style.removeProperty('top');
+            toc.style.removeProperty('max-height');
+            pageHeader?.style.removeProperty('padding-left');
+            pageArticle?.style.setProperty('margin-left', '0', 'important');
+            pageArticle?.style.setProperty('width', '100%', 'important');
+            pageArticle?.style.setProperty('max-width', '100%', 'important');
+            closeMobileToc();
+        };
+        const exitMobileMode = () => {
+            toc.classList.remove('toc-mobile');
+            toc.classList.remove('toc-open');
+            backdrop.classList.remove('visible');
+            mobileTocOpen = false;
+            if (tocOpen) {
+                toc.style.removeProperty('display');
+                pageHeader?.style.setProperty('padding-left', '260px', 'important');
+                pageArticle?.style.setProperty('margin-left', '260px', 'important');
+                pageArticle?.style.removeProperty('width');
+                pageArticle?.style.removeProperty('max-width');
+            } else {
+                toc.style.setProperty('display', 'none', 'important');
+            }
+            updateTocPosition();
+        };
+
+        // Desktop toggle click
         tocToggleBtn.addEventListener('click', () => {
             const savedY = window.scrollY;
             tocOpen = !tocOpen;
@@ -610,6 +712,25 @@
             }
             window.scrollTo({ top: savedY, behavior: 'instant' });
         });
+
+        // Mobile hamburger click
+        hamburgerBtn.addEventListener('click', () => {
+            if (mobileTocOpen) closeMobileToc();
+            else openMobileToc();
+        });
+        backdrop.addEventListener('click', closeMobileToc);
+
+        // Switch modes on resize
+        mobileQuery.addEventListener('change', e => {
+            if (e.matches) enterMobileMode();
+            else exitMobileMode();
+        });
+
+        updateTocPosition();
+        scrollCallbacks.push(updateTocPosition);
+        window.addEventListener('resize', updateTocPosition);
+
+        if (mobileQuery.matches) enterMobileMode();
 
         if (tocSections.length) {
             const updateToc = scrollY => {
