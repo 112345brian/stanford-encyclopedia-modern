@@ -568,7 +568,7 @@
             const top = headerBottom > 0 ? Math.max(10, headerBottom + 10) : 10;
             toc.style.setProperty('top', `${top}px`, 'important');
             toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
-            // button stays at fixed top — don't track scroll
+            tocToggleBtn.style.top = `${top + 6}px`;
         };
         updateTocPosition();
         scrollCallbacks.push(updateTocPosition);
