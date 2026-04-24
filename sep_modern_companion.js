@@ -648,7 +648,7 @@
 
         let tocOpen = true;        // desktop: sidebar visible?
         let mobileTocOpen = false; // mobile: bottom sheet visible?
-        const pageHeader = document.getElementById('header');
+        const pageHeader = document.getElementById('header-wrapper');
         const pageArticle = document.getElementById('article');
         const headerWrapper = document.getElementById('header-wrapper');
         const mobileQuery = window.matchMedia('(max-width: 768px), (max-width: 1024px) and (hover: none)');
