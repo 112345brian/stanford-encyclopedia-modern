@@ -245,14 +245,16 @@
     // =============================================
     // 6. SECTION ANCHOR LINKS (click to copy)
     // =============================================
-    const headings = document.querySelectorAll(
-        '#aueditable h2[id], #aueditable h3[id], #article-content h2[id], #article-content h3[id]'
-    );
+    // SEP headings use <h2><a name="..."> rather than <h2 id="...">
+    const headings = [...document.querySelectorAll(
+        '#aueditable h2, #aueditable h3, #article-content h2, #article-content h3'
+    )].filter(h => h.id || h.querySelector('a[name]'));
 
     for (const h of headings) {
+        const hId = h.id || h.querySelector('a[name]')?.name || '';
         const anchor = document.createElement('a');
         anchor.className = 'sep-anchor-link';
-        anchor.href = `#${h.id}`;
+        anchor.href = `#${hId}`;
         anchor.textContent = '¶';
         anchor.title = 'Copy link to section';
         anchor.addEventListener('click', e => {
@@ -458,8 +460,8 @@
     // 8. KEYBOARD NAVIGATION
     // =============================================
     const allSections = [...document.querySelectorAll(
-        '#aueditable h2[id], #aueditable h3[id], #article-content h2[id], #article-content h3[id]'
-    )];
+        '#aueditable h2, #aueditable h3, #article-content h2, #article-content h3'
+    )].filter(h => h.id || h.querySelector('a[name]'));
 
     const kbHint = document.createElement('div');
     kbHint.id = 'sep-kb-hint';
@@ -539,8 +541,13 @@
     const toc = document.getElementById('toc');
     if (toc) {
         const tocLinks = [...toc.querySelectorAll('a[href^="#"]')];
+        // SEP uses <a name="..."> anchors, not id attributes on headings
         const tocSections = tocLinks
-            .map(link => ({ link, target: document.getElementById(link.getAttribute('href').slice(1)) }))
+            .map(link => {
+                const id = link.getAttribute('href').slice(1);
+                const target = document.getElementById(id) ?? document.querySelector(`a[name="${CSS.escape(id)}"]`);
+                return { link, target };
+            })
             .filter(s => s.target);
 
         if (tocSections.length) {
