@@ -62,10 +62,24 @@
         justify-content: center !important;
     }
 
-    /* On article pages, shift pill past the TOC */
+    /* On article pages: logo-only pill, no static search — search is floating */
     body:has(#toc) #header-wrapper {
         justify-content: flex-start !important;
         padding-left: 260px !important;
+    }
+
+    body:has(#toc) #header {
+        flex: 0 0 auto !important;
+        max-width: none !important;
+        width: auto !important;
+    }
+
+    body:has(#toc) #search {
+        display: none !important;
+    }
+
+    body:has(#toc) #site-title::after {
+        display: none !important;
     }
 
     #header {
