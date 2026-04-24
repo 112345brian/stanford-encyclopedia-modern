@@ -42,10 +42,10 @@
 
         /* Back to top button */
         #sep-top-btn {
-            position: fixed; top: 3.75em; left: 1.25em; z-index: 9998;
-            width: 1.375em; height: 1.375em; border-radius: 0.25em;
+            position: fixed; top: 3.75em; left: 20px; z-index: 9998;
+            width: 22px; height: 22px; border-radius: 4px;
             background: #1a1a1a; border: 1px solid #333; color: #888;
-            font-size: 0.7em; cursor: pointer; display: none;
+            font-size: 11px; cursor: pointer; display: none;
             align-items: center; justify-content: center;
             transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
             font-family: -apple-system, sans-serif; line-height: 1;
@@ -168,7 +168,7 @@
         }
         #sep-floating-search.visible { top: 0.875em; opacity: 1; pointer-events: auto; }
         #sep-floating-search:focus-within { outline: none; border-color: rgba(255,255,255,0.08); }
-        #sep-floating-search .sep-fs-icon { color: #555; font-size: 1.5em; line-height: 0; flex-shrink: 0; }
+        #sep-floating-search .sep-fs-icon { color: #555; font-size: 1.5em; line-height: 1; flex-shrink: 0; display: flex; align-items: center; }
         #sep-floating-search input[type="search"] {
             flex: 1; background: transparent; border: none; outline: none;
             color: #d6d6d6; font-size: 0.9em; height: 100%; padding: 0;
