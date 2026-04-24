@@ -541,24 +541,23 @@
    in that same position.
    ========================================================================== */
 
-    /* Hide the entire article sidebar — #toc replaces it */
-    #article-sidebar {
+    /* Only apply sidebar layout on pages that actually have a TOC */
+    body:has(#toc) #article-sidebar {
         display: none !important;
     }
 
-    /* Hide site navigation — search is sufficient */
-    #navigation {
+    body:has(#toc) #navigation {
         display: none !important;
     }
 
     /* Push content right to clear the fixed TOC (20px left + 220px wide + 20px gap) */
-    #header {
+    body:has(#toc) #header {
         padding-left: 260px !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
 
-    #article {
+    body:has(#toc) #article {
         margin-left: 260px !important;
         width: calc(100% - 260px) !important;
         max-width: calc(100% - 260px) !important;
