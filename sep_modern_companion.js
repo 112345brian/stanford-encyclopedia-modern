@@ -146,9 +146,15 @@
         #sep-floating-search {
             position: fixed; top: -56px; left: 50%; transform: translateX(-50%);
             z-index: 9990; width: min(560px, calc(100% - 2rem));
-            display: flex; align-items: center; gap: 10px;
-            background: #1e1e1e; border: 1px solid #333; border-radius: 10px;
-            padding: 0 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+            height: 44px;
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(28, 28, 28, 0.62);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 0.5px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            padding: 0 14px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
             transition: top 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
             opacity: 0; pointer-events: none;
         }
