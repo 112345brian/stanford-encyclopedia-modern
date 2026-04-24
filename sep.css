@@ -520,21 +520,15 @@
    in that same position.
    ========================================================================== */
 
-    /* Hide the default Entry Navigation list (Entry Contents, Bibliography, etc.)
-   since the TOC will replace it */
-    #article-nav .nav {
-        display: none !important;
-    }
-
-    /* Hide the "Entry Navigation" button label */
-    #article-sidebar .btn-navbar {
+    /* Hide the entire article sidebar — #toc replaces it */
+    #article-sidebar {
         display: none !important;
     }
 
     /* Make the TOC fixed in the sidebar area */
     #toc {
         position: fixed !important;
-        top: 300px;
+        top: 10px;
         left: 20px !important;
         width: 220px !important;
         max-height: calc(100vh - 30px) !important;
@@ -546,7 +540,6 @@
         font-size: 12.5px !important;
         line-height: 1.45 !important;
         border: none !important;
-        transition: top 0.15s ease;
         scrollbar-width: thin;
         scrollbar-color: transparent transparent;
     }
