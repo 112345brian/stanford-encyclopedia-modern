@@ -36,7 +36,7 @@
         /* Section progress bar */
         #sep-section-progress {
             position: fixed; top: 0; left: 0; height: 2px; z-index: 9998;
-            background: rgba(123, 164, 255, 0.38); width: 0%;
+            background: rgba(255, 255, 255, 0.08); width: 0%;
             transition: width 0.1s linear; pointer-events: none;
         }
 
