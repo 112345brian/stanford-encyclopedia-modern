@@ -546,7 +546,7 @@
 
     const kbHint = document.createElement('div');
     kbHint.id = 'sep-kb-hint';
-    kbHint.innerHTML = '<kbd>j</kbd> next section &nbsp; <kbd>k</kbd> prev section &nbsp; <kbd>t</kbd> top';
+    kbHint.innerHTML = '<kbd>k</kbd> next &nbsp; <kbd>j</kbd> prev &nbsp; <kbd>h</kbd> top &nbsp; <kbd>l</kbd> bottom';
     document.body.appendChild(kbHint);
 
     // Show hint briefly on first visit — desktop only
@@ -558,7 +558,7 @@
     document.addEventListener('keydown', e => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
 
-        if (e.key === 'j' || e.key === 'k') {
+        if (e.key === 'k' || e.key === 'j') {
             e.preventDefault();
             const scrollY = window.scrollY + 100;
             let currentIdx = -1;
@@ -570,16 +570,21 @@
                 }
             }
 
-            const nextIdx = e.key === 'j'
+            const nextIdx = e.key === 'k'
                 ? Math.min(currentIdx + 1, allSections.length - 1)
                 : Math.max(currentIdx - 1, 0);
 
             allSections[nextIdx]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        if (e.key === 't') {
+        if (e.key === 'h') {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        if (e.key === 'l') {
+            e.preventDefault();
+            window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
         }
     });
 
