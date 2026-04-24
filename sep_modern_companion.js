@@ -775,11 +775,9 @@
         });
         backdrop.addEventListener('click', closeMobileToc);
 
-        // Swipe right from left edge to open, swipe left to close; double-tap left side to open
+        // Swipe right from left edge to open, swipe left to close
         let swipeTouchStartX = 0;
         let swipeTouchStartY = 0;
-        let lastTapTime = 0;
-        let lastTapX = 0;
         document.addEventListener('touchstart', e => {
             swipeTouchStartX = e.touches[0].clientX;
             swipeTouchStartY = e.touches[0].clientY;
@@ -789,19 +787,6 @@
             const touch = e.changedTouches[0];
             const dx = touch.clientX - swipeTouchStartX;
             const dy = touch.clientY - swipeTouchStartY;
-
-            // Double-tap on left 40% of screen to open TOC
-            if (Math.abs(dx) < 10 && Math.abs(dy) < 10 && touch.clientX < window.innerWidth * 0.4) {
-                const now = Date.now();
-                if (now - lastTapTime < 350 && Math.abs(touch.clientX - lastTapX) < 60) {
-                    if (!mobileTocOpen) openMobileToc();
-                    lastTapTime = 0;
-                    return;
-                }
-                lastTapTime = now;
-                lastTapX = touch.clientX;
-            }
-
             if (Math.abs(dx) < Math.abs(dy) * 1.5) return; // more vertical than horizontal
             if (dx > 60 && swipeTouchStartX < 80 && !mobileTocOpen) openMobileToc();
             else if (dx < -60 && mobileTocOpen) closeMobileToc();
