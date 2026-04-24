@@ -25,6 +25,13 @@
             pointer-events: none;
         }
 
+        /* Section progress bar */
+        #sep-section-progress {
+            position: fixed; top: 2px; left: 0; height: 2px; z-index: 9998;
+            background: rgba(123, 164, 255, 0.38); width: 0%;
+            transition: width 0.1s linear; pointer-events: none;
+        }
+
         /* Back to top button */
         #sep-top-btn {
             position: fixed; top: 60px; left: 20px; z-index: 9998;
@@ -128,6 +135,10 @@
     const progressBar = document.createElement('div');
     progressBar.id = 'sep-progress';
     document.body.appendChild(progressBar);
+
+    const sectionProgressBar = document.createElement('div');
+    sectionProgressBar.id = 'sep-section-progress';
+    document.body.appendChild(sectionProgressBar);
 
 
     // =============================================
@@ -601,13 +612,14 @@
         if (tocSections.length) {
             const updateToc = scrollY => {
                 const checkY = scrollY + 200;
-                let current = tocSections[0];
+                let currentIdx = 0;
                 for (let i = tocSections.length - 1; i >= 0; i--) {
                     if (tocSections[i].target.getBoundingClientRect().top + scrollY <= checkY) {
-                        current = tocSections[i];
+                        currentIdx = i;
                         break;
                     }
                 }
+                const current = tocSections[currentIdx];
 
                 for (const { link } of tocSections) link.classList.remove('toc-active');
                 if (current) {
@@ -618,6 +630,18 @@
                         current.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                     }
                 }
+
+                // Section progress bar
+                const sectionTop = current.target.getBoundingClientRect().top + scrollY;
+                const next = tocSections[currentIdx + 1];
+                const sectionBottom = next
+                    ? next.target.getBoundingClientRect().top + scrollY
+                    : document.documentElement.scrollHeight;
+                const sectionLen = sectionBottom - sectionTop;
+                const sectionPct = sectionLen > 0
+                    ? Math.min(100, Math.max(0, (scrollY + 200 - sectionTop) / sectionLen * 100))
+                    : 0;
+                sectionProgressBar.style.width = `${sectionPct}%`;
             };
 
             scrollCallbacks.push(updateToc);
