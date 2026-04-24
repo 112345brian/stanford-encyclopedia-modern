@@ -525,9 +525,18 @@
         display: none !important;
     }
 
-    /* Hide site navigation — search is sufficient; nav links move to footer */
+    /* Hide site navigation — search is sufficient */
     #navigation {
         display: none !important;
+    }
+
+    /* Push header and article content right to clear the fixed TOC (20px + 220px + 20px gap) */
+    #header {
+        padding-left: 260px !important;
+    }
+
+    #content {
+        padding-left: 260px !important;
     }
 
     /* Make the TOC fixed in the sidebar area */
