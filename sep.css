@@ -1,0 +1,736 @@
+/* ==UserStyle==
+@name           SEP Dark Modern (Wikipedia-matched)
+@namespace      github.com/openstyles/stylus
+@version        3.0.0
+@description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
+@author         Me
+==/UserStyle== */
+
+@-moz-document url-prefix("https://plato.stanford.edu/") {
+
+
+    /* ==========================================================================
+   NUCLEAR RESET — Kill every SEP background
+   ========================================================================== */
+
+    body {
+        background: #121212 !important;
+        color: #d6d6d6 !important;
+        -webkit-font-smoothing: auto !important;
+        -moz-osx-font-smoothing: auto !important;
+    }
+
+    #container {
+        background: #121212 !important;
+        box-shadow: none !important;
+    }
+
+    #header-wrapper {
+        background-image: none !important;
+        border-bottom-color: #2a2a2a !important;
+    }
+
+    #article {
+        background: #121212 !important;
+        border-color: #2a2a2a !important;
+        box-shadow: none !important;
+    }
+
+    #article-banner-content {
+        background: #1a1a1a !important;
+        border-color: #2a2a2a !important;
+        box-shadow: none !important;
+    }
+
+    .notice,
+    #mission {
+        background: #1a1a1a !important;
+        border-color: #2a2a2a !important;
+        box-shadow: none !important;
+    }
+
+    #article-nav {
+        background: #121212 !important;
+    }
+
+    #footer {
+        background: #121212 !important;
+        background-image: none !important;
+        border-top-color: #2a2a2a !important;
+        color: #888 !important;
+    }
+
+    #footer h4,
+    #footer h2,
+    #footer p,
+    #footer ul li {
+        background: #121212 !important;
+    }
+
+    #footer h4,
+    #footer h2 {
+        color: #999 !important;
+    }
+
+    #footer i {
+        color: #7ba4ff !important;
+    }
+
+    #footer-menu a {
+        background: transparent !important;
+        color: #7ba4ff !important;
+    }
+
+    #footer-menu a:hover {
+        color: #a3c1ff !important;
+        background: transparent !important;
+    }
+
+    .menu-block {
+        border-bottom-color: #2a2a2a !important;
+    }
+
+    #site-credits,
+    #site-credits p,
+    #article-copyright,
+    #article-banner {
+        background: #121212 !important;
+        color: #888 !important;
+    }
+
+    .btn {
+        background: #1e1e1e !important;
+        border-color: #333 !important;
+        color: #d6d6d6 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    .btn:hover {
+        background: #252525 !important;
+        border-color: #555 !important;
+    }
+
+    .btn:hover i {
+        color: #7ba4ff !important;
+    }
+
+    a.btn {
+        color: #d6d6d6 !important;
+    }
+
+    .btn-group {
+        background: #1e1e1e !important;
+        border-color: #333 !important;
+    }
+
+    .navbar .nav {
+        background: #1a1a1a !important;
+        border-color: #2a2a2a !important;
+    }
+
+    .navbar .nav>li>a {
+        background: #1a1a1a !important;
+        color: #d6d6d6 !important;
+    }
+
+    .navbar .nav>li>a:hover,
+    .navbar .nav>li>a:focus,
+    .navbar .nav li.dropdown.open>.dropdown-toggle {
+        background: #252525 !important;
+        color: #e0e0e0 !important;
+    }
+
+    .navbar .btn-navbar,
+    .navbar .btn-navbar:hover,
+    .navbar .btn-navbar.collapsed {
+        background: #1e1e1e !important;
+        border-color: #333 !important;
+        color: #d6d6d6 !important;
+    }
+
+    .navbar .container {
+        box-shadow: none !important;
+    }
+
+    .nav-collapse .nav>li>a,
+    .nav-collapse .dropdown-menu a {
+        background: #1a1a1a !important;
+        color: #d6d6d6 !important;
+    }
+
+    .nav-collapse.in {
+        border-color: #2a2a2a !important;
+    }
+
+    .nav-collapse .dropdown-menu {
+        background: #1e1e1e !important;
+    }
+
+    .nav-collapse .dropdown-menu>li>a {
+        background: #1e1e1e !important;
+        color: #d6d6d6 !important;
+    }
+
+    .nav-collapse .dropdown-menu>li>a:hover {
+        background: #252525 !important;
+    }
+
+    .searchpage,
+    .search_results,
+    .result_listing {
+        background: transparent !important;
+        color: #d6d6d6 !important;
+    }
+
+    .search_total {
+        color: #999 !important;
+    }
+
+    .result_title a {
+        color: #7ba4ff !important;
+    }
+
+    .result_snippet {
+        color: #999 !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    }
+
+    .result_author {
+        color: #777 !important;
+    }
+
+    .result_url a {
+        color: #7ba4ff !important;
+    }
+
+    #search input[type="search"] {
+        background: #1e1e1e !important;
+        border-color: #333 !important;
+        color: #d6d6d6 !important;
+    }
+
+    #search input[type="search"]:focus {
+        border-color: #7ba4ff !important;
+        box-shadow: 0 0 0 3px rgba(123, 164, 255, 0.2) !important;
+        color: #e0e0e0 !important;
+    }
+
+    #search-switch {
+        color: #d6d6d6 !important;
+    }
+
+    hr {
+        border-color: #2a2a2a !important;
+    }
+
+    *::before,
+    *::after {
+        background-image: none !important;
+    }
+
+    /* Kill ALL text-shadows and box-shadows */
+    a,
+    a:link,
+    a:visited,
+    a:hover {
+        text-shadow: none !important;
+    }
+
+    td,
+    th,
+    tr,
+    thead,
+    tbody,
+    tfoot {
+        background: #121212 !important;
+        border-color: #2a2a2a !important;
+    }
+
+    table.striped tbody tr:nth-child(odd) {
+        background: #1a1a1a !important;
+    }
+
+    .bggray {
+        background: #333 !important;
+    }
+
+    .bgltgray {
+        background: #2a2a2a !important;
+    }
+
+
+    /* ==========================================================================
+   TYPOGRAPHY — Exact Wikipedia values
+   Font: system stack (San Francisco on Mac)
+   Size: 16.5px | Weight: 430 | Line-height: 1.82 | Letter-spacing: 0.006em
+   Max-width: 48rem (~70 chars/line)
+   ========================================================================== */
+
+    body,
+    #aueditable,
+    #article-content,
+    p,
+    li,
+    dd,
+    dt,
+    td,
+    th {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Lato, Helvetica, Arial, sans-serif !important;
+    }
+
+    #aueditable,
+    #article-content {
+        font-size: 16.5px !important;
+        font-weight: 430 !important;
+        line-height: 1.82 !important;
+        letter-spacing: 0.006em !important;
+        max-width: 48rem !important;
+    }
+
+    b,
+    strong {
+        font-weight: 750 !important;
+        color: #e8e8e8 !important;
+    }
+
+    #aueditable p,
+    #article-content p {
+        margin-bottom: 1.2em !important;
+        color: #d6d6d6 !important;
+    }
+
+    em,
+    i {
+        color: #e0e0e0 !important;
+    }
+
+
+    /* ==========================================================================
+   HEADINGS — Exact Wikipedia values
+   h1: Source Serif 4, 2.2rem, 700
+   h2: Source Serif 4, 1.5rem, 600, border-bottom
+   h3+: system sans, 1.15rem, 600
+   ========================================================================== */
+
+    h1,
+    .pagetitle {
+        font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif !important;
+        font-weight: 700 !important;
+        font-size: 2.2rem !important;
+        letter-spacing: -0.025em !important;
+        line-height: 1.2 !important;
+        color: #e8e8e8 !important;
+    }
+
+    h2 {
+        font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif !important;
+        font-size: 1.5rem !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.015em !important;
+        color: #e8e8e8 !important;
+        margin-top: 2rem !important;
+        padding-bottom: 0.35rem !important;
+        border-bottom: 1px solid #2a2a2a !important;
+    }
+
+    h3 {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-size: 1.15rem !important;
+        font-weight: 600 !important;
+        color: #e0e0e0 !important;
+        margin-top: 1.5rem !important;
+    }
+
+    h4,
+    h5,
+    h6 {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-weight: 600 !important;
+        color: #d6d6d6 !important;
+    }
+
+    #site-title,
+    #site-title a {
+        color: #7ba4ff !important;
+    }
+
+
+    /* ==========================================================================
+   LINKS — Exact Wikipedia values
+   Color: #7ba4ff | Hover: #a3c1ff | Visited: #9b8aff
+   No underline by default, underline on hover with 2px offset
+   ========================================================================== */
+
+    a:link,
+    a:visited {
+        color: #7ba4ff !important;
+        text-decoration: none !important;
+        transition: color 0.15s ease !important;
+    }
+
+    a:hover,
+    a:focus,
+    a:active {
+        color: #a3c1ff !important;
+        text-decoration: underline !important;
+        text-underline-offset: 2px !important;
+        text-decoration-thickness: 1px !important;
+    }
+
+    /* Restore underlines on article content links (SEP convention) */
+    #aueditable a:link,
+    #article-content a:link,
+    #content a:link,
+    #article-copyright a:link {
+        text-decoration: underline !important;
+        text-underline-offset: 2px !important;
+        text-decoration-thickness: 1px !important;
+    }
+
+
+    /* ==========================================================================
+   REFERENCES — Exact Wikipedia values
+   Smaller, lighter, fade to 55%, brighten on hover
+   ========================================================================== */
+
+    sup a {
+        font-size: 0.65em !important;
+        font-weight: 400 !important;
+        opacity: 0.55 !important;
+        transition: opacity 0.15s ease !important;
+    }
+
+    sup a:hover {
+        opacity: 1 !important;
+    }
+
+    .bibliography,
+    .bibliography h5 {
+        color: #b0b0b0 !important;
+    }
+
+
+    /* ==========================================================================
+   BLOCKQUOTES — Exact Wikipedia values
+   Left border #7ba4ff, subtle blue tint background
+   ========================================================================== */
+
+    blockquote {
+        border-left: 3px solid #7ba4ff !important;
+        padding: 0.5rem 1.1rem !important;
+        margin: 1em 0 1em 0 !important;
+        border-radius: 0 6px 6px 0 !important;
+        color: #b8b8b8 !important;
+        background: rgba(123, 164, 255, 0.05) !important;
+    }
+
+
+    /* ==========================================================================
+   CODE — Exact Wikipedia values
+   ========================================================================== */
+
+    code,
+    pre,
+    tt,
+    kbd,
+    samp,
+    .monospace,
+    .fw {
+        font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace !important;
+        font-size: 0.875em !important;
+        color: #c8c8c8 !important;
+    }
+
+    pre {
+        background: #1e1e1e !important;
+        border: 1px solid #2a2a2a !important;
+        border-radius: 4px !important;
+        padding: 1rem !important;
+    }
+
+
+    /* ==========================================================================
+   TABLES — Rounded, dark
+   ========================================================================== */
+
+    table {
+        border-color: #2a2a2a !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+    }
+
+    span.note {
+        color: #888 !important;
+    }
+
+    span.obar,
+    .rule-below,
+    .rule-above,
+    .ubar,
+    table.inner-rules td,
+    table.inner-rules th,
+    table.inner-box td,
+    table.inner-box th,
+    table.operator td,
+    table.two-hrules {
+        border-color: #555 !important;
+    }
+
+    table.fraction td.denominator {
+        border-top-color: #d6d6d6 !important;
+    }
+
+
+    /* ==========================================================================
+   STICKY SIDEBAR TOC — Wikipedia-style
+   On a 13" MacBook (1440px), the sidebar is ~227px on the left.
+   We hide the default Entry Navigation links and make #toc fixed
+   in that same position.
+   ========================================================================== */
+
+    /* Hide the default Entry Navigation list (Entry Contents, Bibliography, etc.)
+   since the TOC will replace it */
+    #article-nav .nav {
+        display: none !important;
+    }
+
+    /* Hide the "Entry Navigation" button label */
+    #article-sidebar .btn-navbar {
+        display: none !important;
+    }
+
+    /* Make the TOC fixed in the sidebar area */
+    #toc {
+        position: fixed !important;
+        top: 300px;
+        left: 20px !important;
+        width: 220px !important;
+        max-height: calc(100vh - 30px) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        background: #121212 !important;
+        padding: 0.8rem 0.5rem !important;
+        z-index: 1000 !important;
+        font-size: 12.5px !important;
+        line-height: 1.45 !important;
+        border: none !important;
+        transition: top 0.15s ease;
+    }
+
+    #toc ul {
+        list-style: none !important;
+        padding-left: 0 !important;
+        margin: 0 !important;
+    }
+
+    #toc ul ul {
+        padding-left: 0.8em !important;
+    }
+
+    #toc li {
+        padding: 2px 0 !important;
+    }
+
+    #toc a:link,
+    #toc a:visited {
+        color: #888 !important;
+        text-decoration: none !important;
+        font-weight: 400 !important;
+        font-size: 12.5px !important;
+        transition: color 0.15s ease !important;
+    }
+
+    #toc a:hover {
+        color: #7ba4ff !important;
+        text-decoration: none !important;
+    }
+
+    /* Active section highlight (set by JS userscript) */
+    #toc a.toc-active {
+        color: #7ba4ff !important;
+        font-weight: 600 !important;
+    }
+
+    #toc hr {
+        display: none !important;
+    }
+
+    /* Slim scrollbar for TOC */
+    #toc::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    #toc::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #toc::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 999px;
+    }
+
+    #toc:hover::-webkit-scrollbar-thumb {
+        background: #333;
+    }
+
+    /* On very narrow screens (tablet/phone) */
+    @media (max-width: 768px) {
+
+        /* Hide the fixed sidebar TOC */
+        #toc {
+            position: static !important;
+            width: auto !important;
+            max-height: none !important;
+            display: none !important;
+            font-size: 14px !important;
+            pointer-events: none !important;
+        }
+
+        /* Hide the default Entry Navigation entirely — replaced by JS TOC toggle */
+        #article-nav .nav {
+            display: none !important;
+        }
+
+        #article-sidebar .btn-navbar {
+            display: none !important;
+        }
+
+        #article-nav {
+            display: none !important;
+        }
+
+        /* Prevent content from being too constrained */
+        #aueditable,
+        #article-content {
+            max-width: 100% !important;
+            padding: 0 12px !important;
+        }
+
+        h1,
+        .pagetitle {
+            font-size: 1.6rem !important;
+        }
+
+        h2 {
+            font-size: 1.25rem !important;
+        }
+
+        /* Ensure body can scroll */
+        body,
+        html {
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        #container {
+            overflow: visible !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        #article {
+            overflow: visible !important;
+            width: auto !important;
+            max-width: 100% !important;
+        }
+
+        /* Tables must scroll horizontally, not break layout */
+        table {
+            display: block !important;
+            overflow-x: auto !important;
+            max-width: 100% !important;
+        }
+
+        /* Mobile TOC toggle (built by JS) */
+        #sep-mobile-toc-btn {
+            display: flex !important;
+        }
+
+        #sep-mobile-toc-panel {
+            display: block !important;
+        }
+    }
+
+    /* Also catch touch devices in landscape / wider tablets */
+    @media (max-width: 1024px) and (hover: none) {
+        #toc {
+            display: none !important;
+            pointer-events: none !important;
+        }
+
+        #article-nav .nav {
+            display: none !important;
+        }
+
+        #article-nav {
+            display: none !important;
+        }
+
+        #article-sidebar .btn-navbar {
+            display: none !important;
+        }
+
+        #sep-mobile-toc-btn {
+            display: flex !important;
+        }
+
+        #sep-mobile-toc-panel {
+            display: block !important;
+        }
+    }
+
+
+    /* ==========================================================================
+   IMAGES — Rounded
+   ========================================================================== */
+
+    #aueditable img,
+    #article-content img {
+        border-radius: 6px !important;
+    }
+
+
+    /* ==========================================================================
+   SCROLLBAR & SELECTION — Exact Wikipedia values
+   ========================================================================== */
+
+    ::selection {
+        background: rgba(123, 164, 255, 0.25) !important;
+        color: #e8e8e8 !important;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #121212;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+
+    /* ==========================================================================
+   TRANSITIONS
+   ========================================================================== */
+
+    a,
+    input,
+    button,
+    select,
+    textarea {
+        transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease !important;
+    }
+
+
+}
