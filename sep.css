@@ -530,13 +530,13 @@
         display: none !important;
     }
 
-    /* Push header and article content right to clear the fixed TOC (20px + 220px + 20px gap) */
+    /* Push content right to clear the fixed TOC (20px left + 220px wide + 20px gap) */
     #header {
         padding-left: 260px !important;
     }
 
-    #content {
-        padding-left: 260px !important;
+    #article {
+        margin-left: 260px !important;
     }
 
     /* Make the TOC fixed in the sidebar area */
@@ -672,7 +672,12 @@
             max-width: 100% !important;
         }
 
+        #header {
+            padding-left: 0 !important;
+        }
+
         #article {
+            margin-left: 0 !important;
             overflow: visible !important;
             width: auto !important;
             max-width: 100% !important;
@@ -700,6 +705,14 @@
         #toc {
             display: none !important;
             pointer-events: none !important;
+        }
+
+        #header {
+            padding-left: 0 !important;
+        }
+
+        #article {
+            margin-left: 0 !important;
         }
 
         #article-nav .nav {
