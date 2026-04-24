@@ -536,7 +536,7 @@
     }
 
     // =============================================
-    // 10. TOC SCROLL SPY
+    // 10. TOC SCROLL SPY + TOGGLE
     // =============================================
     const toc = document.getElementById('toc');
     if (toc) {
@@ -550,17 +550,53 @@
             })
             .filter(s => s.target);
 
-        if (tocSections.length) {
-            // Pin TOC just below the header — measure once, never update on scroll
-            const headerWrapper = document.getElementById('header-wrapper');
-            const setTocPosition = () => {
-                const top = headerWrapper ? Math.max(10, headerWrapper.getBoundingClientRect().bottom + 10) : 10;
-                toc.style.setProperty('top', `${top}px`, 'important');
-                toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
-            };
-            setTocPosition();
-            window.addEventListener('resize', setTocPosition);
+        // TOC toggle button
+        const tocToggleBtn = document.createElement('button');
+        tocToggleBtn.id = 'sep-toc-toggle';
+        tocToggleBtn.title = 'Hide table of contents';
+        tocToggleBtn.textContent = '←';
+        document.body.appendChild(tocToggleBtn);
 
+        let tocOpen = true;
+        const pageHeader = document.getElementById('header');
+        const pageArticle = document.getElementById('article');
+
+        // Pin TOC below the header while it's visible; snap to top once it scrolls away
+        const headerWrapper = document.getElementById('header-wrapper');
+        const updateTocPosition = () => {
+            const headerBottom = headerWrapper ? headerWrapper.getBoundingClientRect().bottom : 0;
+            const top = headerBottom > 0 ? Math.max(10, headerBottom + 10) : 10;
+            toc.style.setProperty('top', `${top}px`, 'important');
+            toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
+            tocToggleBtn.style.top = `${top + 6}px`;
+        };
+        updateTocPosition();
+        scrollCallbacks.push(updateTocPosition);
+        window.addEventListener('resize', updateTocPosition);
+
+        tocToggleBtn.addEventListener('click', () => {
+            const savedY = window.scrollY;
+            tocOpen = !tocOpen;
+            if (tocOpen) {
+                toc.style.removeProperty('display');
+                pageHeader?.style.setProperty('padding-left', '260px', 'important');
+                pageArticle?.style.setProperty('margin-left', '260px', 'important');
+                pageArticle?.style.removeProperty('width');
+                tocToggleBtn.title = 'Hide table of contents';
+                tocToggleBtn.textContent = '←';
+                updateTocPosition();
+            } else {
+                toc.style.setProperty('display', 'none', 'important');
+                pageHeader?.style.removeProperty('padding-left');
+                pageArticle?.style.setProperty('margin-left', '0', 'important');
+                pageArticle?.style.setProperty('width', '100%', 'important');
+                tocToggleBtn.title = 'Show table of contents';
+                tocToggleBtn.textContent = '☰';
+            }
+            window.scrollTo({ top: savedY, behavior: 'instant' });
+        });
+
+        if (tocSections.length) {
             const updateToc = scrollY => {
                 const checkY = scrollY + 200;
                 let current = tocSections[0];
