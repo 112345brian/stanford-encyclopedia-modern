@@ -898,5 +898,26 @@
         transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease !important;
     }
 
+    /* Floating search bar — kill all focus rings */
+    #sep-floating-search,
+    #sep-floating-search:focus,
+    #sep-floating-search:focus-within {
+        outline: none !important;
+        border-color: rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    #sep-floating-search input[type="search"] {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    #sep-floating-search input[type="search"]:focus {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
 
 }
