@@ -94,6 +94,46 @@
         /* Smooth scroll globally */
         html { scroll-behavior: smooth; }
 
+        /* Mobile layout reset + Wikipedia-matched typography */
+        @media (max-width: 768px), (max-width: 1024px) and (hover: none) {
+            /* Strip all container padding/margin first */
+            body, #container, #content, #article,
+            #aueditable, #article-content,
+            #preamble, #article-header, #article-banner {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            /* Then add reading padding + Wikipedia-matched type to the content area */
+            #aueditable,
+            #article-content {
+                padding: 0 1em !important;
+                font-size: 0.9375rem !important;
+                line-height: 1.6 !important;
+                letter-spacing: 0 !important;
+            }
+            #aueditable p,
+            #article-content p {
+                margin-bottom: 0.8em !important;
+            }
+            h1, .pagetitle {
+                font-size: 1.9rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: 0.2em !important;
+            }
+            h2 {
+                font-size: 1.25rem !important;
+                margin-top: 1.5em !important;
+            }
+            h3 {
+                font-size: 1.05rem !important;
+            }
+        }
+
         /* Keyboard nav hint */
         #sep-kb-hint {
             position: fixed; bottom: 1.75em; left: 1.75em; z-index: 9998;
