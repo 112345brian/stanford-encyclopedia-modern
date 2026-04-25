@@ -135,9 +135,10 @@
                 font-weight: bold !important;
                 margin: 0.75em 0 0.25em 0 !important;
             }
-            /* TOC drawer: small top padding so item 1 is reachable */
+            /* TOC drawer */
             #toc {
                 padding-top: 0.75em !important;
+                overflow-y: auto !important;
                 -webkit-overflow-scrolling: touch !important;
             }
         }
@@ -746,6 +747,7 @@
             hamburgerBtn.title = 'Hide table of contents';
             floatingSearch.classList.remove('visible');
             fsVisible = false;
+            document.body.style.setProperty('overflow', 'hidden', 'important');
         };
         const closeMobileToc = () => {
             mobileTocOpen = false;
@@ -753,13 +755,14 @@
             backdrop.classList.remove('visible');
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
-            // transform: translateY(105%) slides it off-screen — no display:none needed
+            document.body.style.removeProperty('overflow');
         };
 
         // Enter/exit mobile layout mode
         const enterMobileMode = () => {
             toc.classList.add('toc-mobile');
             toc.classList.remove('toc-open');
+            toc.scrollTop = 0;
             // Clear any desktop inline styles — Stylus @media rules take over layout
             toc.style.removeProperty('display');
             toc.style.removeProperty('top');
@@ -770,6 +773,7 @@
             pageArticle?.style.removeProperty('max-width');
             backdrop.classList.remove('visible');
             mobileTocOpen = false;
+            document.body.style.removeProperty('overflow');
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
         };
@@ -778,6 +782,7 @@
             toc.classList.remove('toc-open');
             backdrop.classList.remove('visible');
             mobileTocOpen = false;
+            document.body.style.removeProperty('overflow');
             toc.style.removeProperty('position');
             toc.style.removeProperty('display');
             if (tocOpen) {
