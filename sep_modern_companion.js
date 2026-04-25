@@ -108,29 +108,32 @@
                 width: 100% !important;
                 box-sizing: border-box !important;
             }
-            /* Then add reading padding + Wikipedia-matched type to the content area */
+            /* Reading padding + MinervaNeue-matched typography */
             #aueditable,
             #article-content {
-                padding: 0 1em !important;
-                font-size: 0.9375rem !important;
-                line-height: 1.6 !important;
+                padding: 0 1rem !important;
+                font-size: 1rem !important;
+                line-height: 1.65 !important;
                 letter-spacing: 0 !important;
             }
             #aueditable p,
             #article-content p {
-                margin-bottom: 0.8em !important;
+                margin: 0.5em 0 1em 0 !important;
             }
             h1, .pagetitle {
-                font-size: 1.9rem !important;
+                font-size: 1.7rem !important;
                 line-height: 1.2 !important;
-                margin-bottom: 0.2em !important;
+                margin-bottom: 0.25em !important;
             }
             h2 {
-                font-size: 1.25rem !important;
-                margin-top: 1.5em !important;
+                font-size: 1.5rem !important;
+                padding: 0.75rem 0 !important;
+                margin: 0 !important;
             }
             h3 {
-                font-size: 1.05rem !important;
+                font-size: 1.2rem !important;
+                font-weight: bold !important;
+                margin: 0.75em 0 0.25em 0 !important;
             }
             /* TOC drawer: small top padding so item 1 is reachable */
             #toc {
@@ -927,8 +930,8 @@
                 el.style.setProperty('width', '100%', 'important');
             }
             if (contentEl) {
-                contentEl.style.setProperty('padding-left', '1em', 'important');
-                contentEl.style.setProperty('padding-right', '1em', 'important');
+                contentEl.style.setProperty('padding-left', '1rem', 'important');
+                contentEl.style.setProperty('padding-right', '1rem', 'important');
             }
             requestAnimationFrame(() => {
                 padObserver = new MutationObserver(enforceLayout);
