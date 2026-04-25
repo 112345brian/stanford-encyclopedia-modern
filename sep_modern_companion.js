@@ -739,6 +739,11 @@
         };
 
         // Mobile: open/close bottom sheet — layout controlled by Stylus @media rules
+        // Prevent body scroll on touch (works in Firefox Android where overflow:hidden is ignored)
+        const preventBodyScroll = e => {
+            if (toc.contains(e.target)) return;
+            e.preventDefault();
+        };
         const openMobileToc = () => {
             mobileTocOpen = true;
             requestAnimationFrame(() => toc.classList.add('toc-open'));
@@ -748,14 +753,29 @@
             floatingSearch.classList.remove('visible');
             fsVisible = false;
             document.body.style.setProperty('overflow', 'hidden', 'important');
+            document.addEventListener('touchmove', preventBodyScroll, { passive: false });
+            // Fix item 1 clipping: SEP's <ul> has negative margin that pushes first item above toc's top edge
+            setTimeout(() => {
+                const firstLink = toc.querySelector('a[href^="#"]');
+                if (!firstLink) return;
+                const tocRect = toc.getBoundingClientRect();
+                const linkRect = firstLink.getBoundingClientRect();
+                if (linkRect.top < tocRect.top) {
+                    const overflow = tocRect.top - linkRect.top;
+                    const currentPt = parseFloat(getComputedStyle(toc).paddingTop) || 0;
+                    toc.style.setProperty('padding-top', `${currentPt + overflow + 12}px`, 'important');
+                }
+            }, 350);
         };
         const closeMobileToc = () => {
             mobileTocOpen = false;
             toc.classList.remove('toc-open');
+            toc.style.removeProperty('padding-top');
             backdrop.classList.remove('visible');
             hamburgerBtn.innerHTML = '&#9776;';
             hamburgerBtn.title = 'Show table of contents';
             document.body.style.removeProperty('overflow');
+            document.removeEventListener('touchmove', preventBodyScroll);
         };
 
         // Enter/exit mobile layout mode
@@ -763,6 +783,7 @@
             toc.classList.add('toc-mobile');
             toc.classList.remove('toc-open');
             toc.scrollTop = 0;
+            toc.style.removeProperty('padding-top');
             // Clear any desktop inline styles — Stylus @media rules take over layout
             toc.style.removeProperty('display');
             toc.style.removeProperty('top');
@@ -991,42 +1012,5 @@
             if (fsVisible) { fsVisible = false; floatingSearch.classList.remove('visible'); }
         }
     });
-
-    // =============================================
-    // DIAGNOSTIC OVERLAY
-    // =============================================
-    const diag = document.createElement('div');
-    diag.style.cssText = `
-        position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
-        background: rgba(0,0,0,0.88); color: #0f0; font: 11px/1.5 monospace;
-        padding: 8px 12px; pointer-events: none;
-        border-top: 1px solid #0f0;
-    `;
-    document.body.appendChild(diag);
-
-    const contentEl2 = document.getElementById('aueditable') || document.getElementById('article-content');
-    const toc2 = document.getElementById('toc');
-
-    const updateDiag = () => {
-        const cs = contentEl2 ? getComputedStyle(contentEl2) : null;
-        const bodyCs = getComputedStyle(document.body);
-        const tocChildren = toc2 ? [...toc2.children].map(el =>
-            `${el.tagName}${el.id ? '#'+el.id : ''}${el.className ? '.'+[...el.classList].join('.') : ''}`
-        ).join(', ') : 'no toc';
-        const firstLink = toc2?.querySelector('a[href^="#"]');
-        const firstLinkRect = firstLink ? firstLink.getBoundingClientRect() : null;
-        const tocRect = toc2 ? toc2.getBoundingClientRect() : null;
-        diag.innerHTML = [
-            `<b>mobileQuery.matches:</b> ${mobileQuery.matches} &nbsp; <b>innerWidth:</b> ${window.innerWidth}px`,
-            `<b>mobileTocOpen:</b> ${mobileTocOpen} &nbsp; <b>body.overflow (computed):</b> ${bodyCs.overflow} &nbsp; <b>body.style.overflow (inline):</b> "${document.body.style.overflow}"`,
-            `<b>contentEl:</b> ${contentEl2?.id || 'null'} &nbsp; <b>paddingLeft:</b> ${cs?.paddingLeft} &nbsp; <b>paddingRight:</b> ${cs?.paddingRight}`,
-            `<b>toc.scrollTop:</b> ${toc2?.scrollTop ?? 'no toc'} &nbsp; <b>toc rect top:</b> ${tocRect?.top?.toFixed(0)}px`,
-            `<b>toc 1st link text:</b> "${firstLink?.textContent?.trim().slice(0,30)}" &nbsp; <b>rect top:</b> ${firstLinkRect?.top?.toFixed(0)}px`,
-            `<b>toc children:</b> ${tocChildren}`,
-        ].join('<br>');
-    };
-
-    setInterval(updateDiag, 300);
-    updateDiag();
 
 })();
