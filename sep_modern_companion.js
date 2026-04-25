@@ -1010,11 +1010,19 @@
     const updateDiag = () => {
         const cs = contentEl2 ? getComputedStyle(contentEl2) : null;
         const bodyCs = getComputedStyle(document.body);
+        const tocChildren = toc2 ? [...toc2.children].map(el =>
+            `${el.tagName}${el.id ? '#'+el.id : ''}${el.className ? '.'+[...el.classList].join('.') : ''}`
+        ).join(', ') : 'no toc';
+        const firstLink = toc2?.querySelector('a[href^="#"]');
+        const firstLinkRect = firstLink ? firstLink.getBoundingClientRect() : null;
+        const tocRect = toc2 ? toc2.getBoundingClientRect() : null;
         diag.innerHTML = [
             `<b>mobileQuery.matches:</b> ${mobileQuery.matches} &nbsp; <b>innerWidth:</b> ${window.innerWidth}px`,
             `<b>mobileTocOpen:</b> ${mobileTocOpen} &nbsp; <b>body.overflow (computed):</b> ${bodyCs.overflow} &nbsp; <b>body.style.overflow (inline):</b> "${document.body.style.overflow}"`,
-            `<b>contentEl:</b> ${contentEl2?.id || 'null'} &nbsp; <b>paddingLeft (computed):</b> ${cs?.paddingLeft} &nbsp; <b>paddingRight:</b> ${cs?.paddingRight}`,
-            `<b>toc.scrollTop:</b> ${toc2?.scrollTop ?? 'no toc'} &nbsp; <b>toc.classList:</b> ${toc2?.className || 'no toc'}`,
+            `<b>contentEl:</b> ${contentEl2?.id || 'null'} &nbsp; <b>paddingLeft:</b> ${cs?.paddingLeft} &nbsp; <b>paddingRight:</b> ${cs?.paddingRight}`,
+            `<b>toc.scrollTop:</b> ${toc2?.scrollTop ?? 'no toc'} &nbsp; <b>toc rect top:</b> ${tocRect?.top?.toFixed(0)}px`,
+            `<b>toc 1st link text:</b> "${firstLink?.textContent?.trim().slice(0,30)}" &nbsp; <b>rect top:</b> ${firstLinkRect?.top?.toFixed(0)}px`,
+            `<b>toc children:</b> ${tocChildren}`,
         ].join('<br>');
     };
 
