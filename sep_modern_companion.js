@@ -992,4 +992,33 @@
         }
     });
 
+    // =============================================
+    // DIAGNOSTIC OVERLAY
+    // =============================================
+    const diag = document.createElement('div');
+    diag.style.cssText = `
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
+        background: rgba(0,0,0,0.88); color: #0f0; font: 11px/1.5 monospace;
+        padding: 8px 12px; pointer-events: none;
+        border-top: 1px solid #0f0;
+    `;
+    document.body.appendChild(diag);
+
+    const contentEl2 = document.getElementById('aueditable') || document.getElementById('article-content');
+    const toc2 = document.getElementById('toc');
+
+    const updateDiag = () => {
+        const cs = contentEl2 ? getComputedStyle(contentEl2) : null;
+        const bodyCs = getComputedStyle(document.body);
+        diag.innerHTML = [
+            `<b>mobileQuery.matches:</b> ${mobileQuery.matches} &nbsp; <b>innerWidth:</b> ${window.innerWidth}px`,
+            `<b>mobileTocOpen:</b> ${mobileTocOpen} &nbsp; <b>body.overflow (computed):</b> ${bodyCs.overflow} &nbsp; <b>body.style.overflow (inline):</b> "${document.body.style.overflow}"`,
+            `<b>contentEl:</b> ${contentEl2?.id || 'null'} &nbsp; <b>paddingLeft (computed):</b> ${cs?.paddingLeft} &nbsp; <b>paddingRight:</b> ${cs?.paddingRight}`,
+            `<b>toc.scrollTop:</b> ${toc2?.scrollTop ?? 'no toc'} &nbsp; <b>toc.classList:</b> ${toc2?.className || 'no toc'}`,
+        ].join('<br>');
+    };
+
+    setInterval(updateDiag, 300);
+    updateDiag();
+
 })();
