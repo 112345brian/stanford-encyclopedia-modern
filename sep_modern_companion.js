@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.6
+// @version      1.1.7
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=stanford.edu
+// @updateURL    https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep_modern_companion.js
+// @downloadURL  https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep_modern_companion.js
 // @grant        none
 // @noframes
 // @run-at       document-end

@@ -1,9 +1,10 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.4
+@version        3.1.5
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
+@updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
 ==/UserStyle== */
 
 @-moz-document url-prefix("https://plato.stanford.edu/") {
