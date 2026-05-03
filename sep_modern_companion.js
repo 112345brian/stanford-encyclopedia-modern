@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.12
+// @version      1.1.13
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -415,6 +415,7 @@
         }
         #sep-cite-popup.visible { opacity: 1; pointer-events: auto; }
         #sep-cite-popup a { color: #7ba4ff !important; }
+        #sep-footnote-popup .sep-cite-label,
         #sep-cite-popup .sep-cite-label {
             font-size: 0.7em; color: #555; text-transform: uppercase;
             letter-spacing: 0.05em; margin-bottom: 0.375em; font-weight: 600;
@@ -505,23 +506,53 @@
     document.body.appendChild(footnotePopup);
 
     let hideFootnoteTimeout = null;
+    let footnoteHoverToken = 0;
+    const footnoteDocCache = new Map();
+    const canShowHoverPreview = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    document.addEventListener('mouseover', e => {
-        const link = e.target.closest('a[href^="#note-"]') || e.target.closest('sup a[href^="#"]');
+    const getFootnoteLink = target =>
+        target.closest('a[href^="#note-"], a[href*="notes.html#note-"], sup a[href*="#note-"]');
+
+    async function getFootnoteContent(link) {
+        const href = link.getAttribute('href');
+        if (!href) return null;
+
+        const url = new URL(href, window.location.href);
+        const id = url.hash?.slice(1);
+        if (!id) return null;
+
+        let targetEl = null;
+        if (url.pathname === window.location.pathname) {
+            targetEl = document.getElementById(id);
+        } else if (url.origin === window.location.origin) {
+            const docUrl = `${url.origin}${url.pathname}${url.search}`;
+            if (!footnoteDocCache.has(docUrl)) {
+                footnoteDocCache.set(docUrl, fetch(docUrl)
+                    .then(response => response.ok ? response.text() : null)
+                    .then(html => html ? new DOMParser().parseFromString(html, 'text/html') : null)
+                    .catch(() => null));
+            }
+            const noteDoc = await footnoteDocCache.get(docUrl);
+            targetEl = noteDoc?.getElementById(id);
+        }
+
+        return targetEl?.innerHTML || null;
+    }
+
+    document.addEventListener('mouseover', async e => {
+        if (!canShowHoverPreview()) return;
+
+        const link = getFootnoteLink(e.target);
         if (!link) return;
 
-        const href = link.getAttribute('href');
-        if (!href?.startsWith('#')) return;
-
-        const targetEl = document.getElementById(href.slice(1));
-        if (!targetEl) return;
-
+        const token = ++footnoteHoverToken;
         clearTimeout(hideFootnoteTimeout);
 
-        const content = targetEl.innerHTML;
+        const content = await getFootnoteContent(link);
+        if (token !== footnoteHoverToken) return;
         if (!content || content.length < 5) return;
 
-        footnotePopup.innerHTML = content;
+        footnotePopup.innerHTML = `<div class="sep-cite-label">Citation</div>${content}`;
 
         const rect = link.getBoundingClientRect();
         const popupWidth = 420;
@@ -541,8 +572,9 @@
     });
 
     document.addEventListener('mouseout', e => {
-        const link = e.target.closest('a[href^="#note-"]') || e.target.closest('sup a[href^="#"]');
+        const link = getFootnoteLink(e.target);
         if (!link) return;
+        footnoteHoverToken++;
         hideFootnoteTimeout = setTimeout(() => footnotePopup.classList.remove('visible'), 200);
     });
 
@@ -725,6 +757,8 @@
     let hideCiteTimeout = null;
 
     document.addEventListener('mouseover', e => {
+        if (!canShowHoverPreview()) return;
+
         const link = e.target.closest('a.sep-cite-link');
         if (!link) return;
 
