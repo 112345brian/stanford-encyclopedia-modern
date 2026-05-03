@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.15
+// @version      1.1.16
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -322,16 +322,12 @@
             pointer-events: auto;
         }
         #sep-reader-title {
-            flex: 1 1 auto;
-            min-width: 0;
-            color: #e0e0e0;
-            font: 600 1rem/1.2 Georgia, "Times New Roman", serif;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            display: none;
         }
         #sep-reader-toc-btn {
-            flex: 0 0 auto;
+            position: absolute;
+            right: max(1rem, env(safe-area-inset-right));
+            top: 8px;
             height: 32px;
             border: 0;
             border-radius: 4px;
@@ -350,10 +346,11 @@
             outline: none;
         }
         #sep-floating-search {
-            flex: 0 1 18rem;
-            min-width: 9rem;
-            max-width: 22rem;
-            height: 34px;
+            position: absolute;
+            left: var(--sep-reader-content-left, 50%);
+            top: 8px;
+            width: var(--sep-reader-content-width, min(48rem, calc(100vw - 2rem)));
+            height: 32px;
             box-sizing: border-box;
             display: flex; align-items: center; gap: 0.5em;
             background: #151515;
@@ -383,9 +380,21 @@
                 gap: 0.65rem;
             }
             #sep-reader-title {
+                display: block;
+                flex: 1 1 auto;
+                min-width: 0;
+                color: #e0e0e0;
+                font: 600 1rem/1.2 Georgia, "Times New Roman", serif;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 font-size: 1rem;
             }
+            #sep-reader-toc-btn {
+                position: static;
+            }
             #sep-floating-search {
+                position: static;
                 flex: 0 0 2rem;
                 width: 2rem;
                 min-width: 2rem;
@@ -1280,6 +1289,16 @@
     readerBar.append(readerTitle, floatingSearch, readerTocBtn);
     document.body.appendChild(readerBar);
 
+    const updateReaderBarMetrics = () => {
+        const content = document.getElementById('aueditable') || document.getElementById('article-content');
+        if (!content) return;
+        const rect = content.getBoundingClientRect();
+        document.documentElement.style.setProperty('--sep-reader-content-left', `${Math.max(0, rect.left)}px`);
+        document.documentElement.style.setProperty('--sep-reader-content-width', `${Math.max(280, rect.width)}px`);
+    };
+    updateReaderBarMetrics();
+    window.addEventListener('resize', updateReaderBarMetrics, { passive: true });
+
     readerTocBtn.addEventListener('click', () => {
         if (isMobileViewport()) {
             if (mobileTocOpen) closeMobileToc();
@@ -1324,6 +1343,7 @@
         if (canShowReaderBar) {
             if (!fsVisible) {
                 fsVisible = true;
+                updateReaderBarMetrics();
                 readerBar.classList.add('visible');
                 topBtn.classList.add('reader-hidden');
                 updateTocPosition();
