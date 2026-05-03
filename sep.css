@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.7
+@version        3.1.9
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -737,20 +737,35 @@
     #toc {
         position: fixed !important;
         top: 10px;
-        left: 16px !important;
-        width: 244px !important;
+        left: 24px !important;
+        width: 252px !important;
         box-sizing: border-box !important;
         max-height: calc(100vh - 30px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         background: var(--sep-bg) !important;
-        padding: 0.8rem 0.75rem 0.8rem 66px !important;
+        padding: 3.3rem 0.75rem 0.8rem !important;
         z-index: 1000 !important;
-        font-size: 12.5px !important;
-        line-height: 1.45 !important;
+        font-size: 0.92rem !important;
+        line-height: 1.35 !important;
         border: none !important;
         scrollbar-width: thin;
         scrollbar-color: transparent transparent;
+    }
+
+    #toc::before {
+        content: "CONTENTS";
+        position: absolute;
+        top: 1rem;
+        left: 0.75rem;
+        right: 0.75rem;
+        height: 1.8rem;
+        border-bottom: 1px solid var(--sep-border);
+        color: var(--sep-text-soft);
+        font: 700 0.72rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        pointer-events: none;
     }
 
     #toc:hover {
@@ -764,11 +779,11 @@
     }
 
     #toc ul ul {
-        padding-left: 0.8em !important;
+        padding-left: 1rem !important;
     }
 
     #toc li {
-        padding: 2px 0 !important;
+        padding: 0.12rem 0 !important;
     }
 
     #toc a:link,
@@ -776,19 +791,25 @@
         color: var(--sep-text-muted) !important;
         text-decoration: none !important;
         font-weight: 400 !important;
-        font-size: 12.5px !important;
-        transition: color 0.15s ease !important;
+        font-size: 0.84rem !important;
+        line-height: 1.35 !important;
+        display: block !important;
+        border-radius: 4px !important;
+        padding: 0.45rem 0.65rem !important;
+        transition: color 0.15s ease, background-color 0.15s ease !important;
     }
 
     #toc a:hover {
         color: var(--sep-accent) !important;
+        background: rgba(123, 164, 255, 0.08) !important;
         text-decoration: none !important;
     }
 
     /* Active section highlight (set by JS userscript) */
     #toc a.toc-active {
-        color: var(--sep-accent) !important;
+        color: var(--sep-text-bright) !important;
         font-weight: 600 !important;
+        background: rgba(123, 164, 255, 0.26) !important;
     }
 
     #sep-toc-panel-header {
@@ -803,28 +824,27 @@
     #sep-toc-toggle {
         position: fixed;
         top: 20px;
-        left: 20px;
+        left: 132px;
         z-index: 1002;
-        width: 22px;
-        height: 22px;
-        background: var(--sep-bg-card);
-        border: 1px solid var(--sep-border-mid);
-        border-radius: 4px;
+        width: auto;
+        height: 1.4rem;
+        background: transparent;
+        border: 0;
+        border-radius: 3px;
         color: var(--sep-text-muted);
-        font-size: 11px;
+        font-size: 0.8rem;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0;
+        padding: 0 0.2rem;
         line-height: 1;
         transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
     }
 
     #sep-toc-toggle:hover {
         color: var(--sep-accent);
-        border-color: var(--sep-accent);
-        background: var(--sep-bg-hover);
+        background: transparent;
     }
 
     #toc::-webkit-scrollbar {

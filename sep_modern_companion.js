@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.11
+// @version      1.1.12
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -891,7 +891,7 @@
         const tocToggleBtn = document.createElement('button');
         tocToggleBtn.id = 'sep-toc-toggle';
         tocToggleBtn.title = 'Hide table of contents';
-        tocToggleBtn.textContent = '←';
+        tocToggleBtn.textContent = 'hide';
         document.body.appendChild(tocToggleBtn);
 
         // Mobile hamburger button (☰)
@@ -938,8 +938,8 @@
             const top = Math.max(10, headerBottom > 0 ? headerBottom + 10 : 10, readerBottom + 10);
             toc.style.setProperty('top', `${top}px`, 'important');
             toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
-            tocToggleBtn.style.top = `${top + 6}px`;
-            topBtn.style.top = `${top + 6 + 22 + 4}px`;
+            tocToggleBtn.style.top = `${top + 14}px`;
+            topBtn.style.top = `${top + 44}px`;
         };
 
         // Mobile: open/close bottom sheet — layout controlled by Stylus @media rules
@@ -1041,7 +1041,7 @@
                 pageArticle?.style.removeProperty('max-width');
                 pageArticle?.style.removeProperty('padding-left');
                 tocToggleBtn.title = 'Hide table of contents';
-                tocToggleBtn.textContent = '←';
+                tocToggleBtn.textContent = 'hide';
                 updateTocPosition();
             } else {
                 toc.style.setProperty('display', 'none', 'important');
@@ -1052,7 +1052,7 @@
                 // Keep enough left padding so buttons don't land on prose
                 pageArticle?.style.setProperty('padding-left', '3em', 'important');
                 tocToggleBtn.title = 'Show table of contents';
-                tocToggleBtn.textContent = '→';
+                tocToggleBtn.textContent = 'contents';
             }
             window.scrollTo({ top: savedY, behavior: 'instant' });
         };
