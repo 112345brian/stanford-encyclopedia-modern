@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.4
+// @version      1.1.5
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -60,6 +60,7 @@
         }
         #sep-top-btn:hover { background: #252525; color: #7ba4ff; border-color: #7ba4ff; }
         #sep-top-btn.visible { display: flex; }
+        #sep-top-btn.reader-hidden { display: none !important; }
 
         /* Reading time badge */
         #sep-reading-time {
@@ -291,35 +292,74 @@
         #sep-mobile-backdrop.visible { opacity: 1; pointer-events: auto; touch-action: none; }
 
         @media (max-width: 768px) {
-            #sep-toc-hamburger { display: flex !important; }
+            #sep-toc-hamburger { display: none !important; }
             #sep-toc-toggle { display: none !important; }
             #sep-top-btn { display: none !important; }
             #sep-reading-time { display: none !important; }
             #sep-toc-hamburger.toc-is-open { opacity: 0 !important; pointer-events: none !important; }
 
             #toc::before { display: none !important; }
-            #sep-floating-search {
-                display: none !important;
-            }
         }
 
-        /* Floating search bar (appears on scroll-up) */
-        #sep-floating-search {
-            position: fixed; top: 12px; right: 20px; left: auto; transform: none;
-            z-index: 890; width: min(24rem, calc(100vw - 340px));
-            height: 2.5em;
-            display: flex; align-items: center; gap: 0.5em;
-            background: #1a1a1a;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 0 0.75em;
+        /* Reader app bar (appears on scroll-up) */
+        #sep-reader-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1003;
+            height: 48px;
+            display: flex; align-items: center; gap: 0.75rem;
+            box-sizing: border-box;
+            padding: 0 1rem;
+            background: #121212;
+            border-bottom: 1px solid #2a2a2a;
             box-shadow: none;
-            transition: opacity 0.16s ease;
-            opacity: 0; pointer-events: none;
+            transform: translateY(-100%);
+            transition: transform 0.16s ease;
+            pointer-events: none;
         }
-        #sep-floating-search.visible { opacity: 1; pointer-events: auto; }
+        #sep-reader-bar.visible {
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        #sep-reader-title {
+            flex: 1 1 auto;
+            min-width: 0;
+            color: #e0e0e0;
+            font: 600 1rem/1.2 Georgia, "Times New Roman", serif;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #sep-reader-toc-btn {
+            flex: 0 0 auto;
+            height: 32px;
+            border: 0;
+            border-radius: 4px;
+            background: transparent;
+            color: #9bb8ff;
+            font: 600 0.78rem/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0 0.35rem;
+            cursor: pointer;
+        }
+        #sep-reader-toc-btn:hover,
+        #sep-reader-toc-btn:focus-visible {
+            color: #d6d6d6;
+            background: #202020;
+            outline: none;
+        }
+        #sep-floating-search {
+            flex: 0 1 18rem;
+            min-width: 9rem;
+            max-width: 22rem;
+            height: 34px;
+            box-sizing: border-box;
+            display: flex; align-items: center; gap: 0.5em;
+            background: #151515;
+            border: 1px solid #2f2f2f;
+            border-radius: 4px;
+            padding: 0 0.65em;
+            margin: 0 !important;
+        }
         #sep-floating-search:focus-within { outline: none; border-color: #555; }
         #sep-floating-search .sep-fs-icon { color: #555; flex-shrink: 0; display: flex; align-items: center; }
         #sep-floating-search input[type="search"] {
@@ -332,6 +372,33 @@
         #sep-floating-search input[type="search"]::placeholder { color: #444; }
         #sep-floating-search input[type="search"]:focus::placeholder { color: transparent; }
         #sep-floating-search input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+        @media (max-width: 768px) {
+            #sep-reader-bar {
+                height: 48px;
+                padding: 0 max(0.75rem, env(safe-area-inset-right)) 0 max(0.75rem, env(safe-area-inset-left));
+                gap: 0.65rem;
+            }
+            #sep-reader-title {
+                font-size: 1rem;
+            }
+            #sep-floating-search {
+                flex: 0 0 2rem;
+                width: 2rem;
+                min-width: 2rem;
+                height: 2rem;
+                justify-content: center;
+                padding: 0;
+                border-color: transparent !important;
+                background: transparent !important;
+            }
+            #sep-floating-search input[type="search"] {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                opacity: 0;
+                pointer-events: none;
+            }
+        }
 
         /* Citation popup */
         #sep-cite-popup {
@@ -789,6 +856,11 @@
     const mobileQuery = window.matchMedia('(max-width: 768px)');
     const isMobileViewport = () => window.innerWidth <= 768;
     const toc = document.getElementById('toc');
+    let tocOpen = true;
+    let openMobileToc = () => {};
+    let closeMobileToc = () => {};
+    let toggleDesktopToc = () => {};
+    let updateTocPosition = () => {};
     if (toc) {
         const tocLinks = [...toc.querySelectorAll('a[href^="#"]')];
         // SEP uses <a name="..."> anchors, not id attributes on headings
@@ -843,16 +915,18 @@
         backdrop.id = 'sep-mobile-backdrop';
         document.body.appendChild(backdrop);
 
-        let tocOpen = true;        // desktop: sidebar visible?
+        tocOpen = true;        // desktop: sidebar visible?
         const pageHeader = document.getElementById('header-wrapper');
         const pageArticle = document.getElementById('article');
         const headerWrapper = document.getElementById('header-wrapper');
 
         // Desktop: update TOC and button positions to track header
-        const updateTocPosition = () => {
+        updateTocPosition = () => {
             if (isMobileViewport()) return;
             const headerBottom = headerWrapper ? headerWrapper.getBoundingClientRect().bottom : 0;
-            const top = headerBottom > 0 ? Math.max(10, headerBottom + 10) : 10;
+            const readerVisible = document.getElementById('sep-reader-bar')?.classList.contains('visible') ?? false;
+            const readerBottom = readerVisible ? 48 : 0;
+            const top = Math.max(10, headerBottom > 0 ? headerBottom + 10 : 10, readerBottom + 10);
             toc.style.setProperty('top', `${top}px`, 'important');
             toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
             tocToggleBtn.style.top = `${top + 6}px`;
@@ -863,7 +937,7 @@
         // Scroll lock: overflow:hidden for Chrome/Safari; touch-action:none on the backdrop
         // handles Firefox Android (backdrop covers full viewport at z-index below TOC,
         // so the compositor blocks scroll on background touches while TOC stays scrollable).
-        const openMobileToc = () => {
+        openMobileToc = () => {
             if (!isMobileViewport()) return;
             mobileTocOpen = true;
             requestAnimationFrame(() => toc.classList.add('toc-open'));
@@ -872,7 +946,7 @@
             hamburgerBtn.title = 'Hide table of contents';
             hamburgerBtn.setAttribute('aria-label', 'Hide table of contents');
             hamburgerBtn.setAttribute('aria-expanded', 'true');
-            floatingSearch.classList.remove('visible');
+            readerBar?.classList.remove('visible');
             fsVisible = false;
             document.body.style.setProperty('overflow', 'hidden', 'important');
             document.documentElement.style.setProperty('overflow', 'hidden', 'important');
@@ -889,7 +963,7 @@
                 }
             }, 350);
         };
-        const closeMobileToc = () => {
+        closeMobileToc = () => {
             mobileTocOpen = false;
             toc.classList.remove('toc-open');
             toc.style.removeProperty('padding-top');
@@ -947,7 +1021,7 @@
         };
 
         // Desktop toggle click
-        tocToggleBtn.addEventListener('click', () => {
+        toggleDesktopToc = () => {
             const savedY = window.scrollY;
             tocOpen = !tocOpen;
             if (tocOpen) {
@@ -972,7 +1046,8 @@
                 tocToggleBtn.textContent = '→';
             }
             window.scrollTo({ top: savedY, behavior: 'instant' });
-        });
+        };
+        tocToggleBtn.addEventListener('click', toggleDesktopToc);
 
         // Mobile hamburger click
         hamburgerBtn.addEventListener('click', () => {
@@ -1098,7 +1173,7 @@
     }
 
     // =============================================
-    // 12. FLOATING SEARCH BAR (shows on scroll up)
+    // 12. READER APP BAR (shows on scroll up)
     // =============================================
     const articleTitle = document.querySelector('#aueditable h1, #article-content h1, .pagetitle')
         ?.textContent?.trim()
@@ -1108,6 +1183,20 @@
     const existingForm = document.querySelector('#search form');
     const fsAction = existingForm?.action || 'https://plato.stanford.edu/search/searcher.py';
     const fsParamName = existingForm?.querySelector('input[type="search"]')?.name || 'query';
+
+    const readerBar = document.createElement('div');
+    readerBar.id = 'sep-reader-bar';
+
+    const readerTitle = document.createElement('div');
+    readerTitle.id = 'sep-reader-title';
+    readerTitle.textContent = articleTitle;
+
+    const readerTocBtn = document.createElement('button');
+    readerTocBtn.id = 'sep-reader-toc-btn';
+    readerTocBtn.type = 'button';
+    readerTocBtn.textContent = 'Contents';
+    readerTocBtn.setAttribute('aria-controls', 'toc');
+    readerTocBtn.setAttribute('aria-expanded', 'false');
 
     const floatingSearch = document.createElement('form');
     floatingSearch.id = 'sep-floating-search';
@@ -1126,7 +1215,19 @@
     fsInput.spellcheck = false;
 
     floatingSearch.append(fsIcon, fsInput);
-    document.body.appendChild(floatingSearch);
+    readerBar.append(readerTitle, floatingSearch, readerTocBtn);
+    document.body.appendChild(readerBar);
+
+    readerTocBtn.addEventListener('click', () => {
+        if (isMobileViewport()) {
+            if (mobileTocOpen) closeMobileToc();
+            else openMobileToc();
+            readerTocBtn.setAttribute('aria-expanded', String(mobileTocOpen));
+        } else {
+            toggleDesktopToc();
+            readerTocBtn.setAttribute('aria-expanded', String(tocOpen));
+        }
+    });
 
     let fsLastY = window.scrollY;
     let fsVisible = false;
@@ -1135,10 +1236,21 @@
         const goingUp = scrollY < fsLastY;
         fsLastY = scrollY;
         if (goingUp && scrollY > 200 && !mobileTocOpen) {
-            if (!fsVisible) { fsVisible = true; floatingSearch.classList.add('visible'); }
+            if (!fsVisible) {
+                fsVisible = true;
+                readerBar.classList.add('visible');
+                topBtn.classList.add('reader-hidden');
+                updateTocPosition();
+            }
         } else if (!goingUp) {
-            if (fsVisible) { fsVisible = false; floatingSearch.classList.remove('visible'); }
+            if (fsVisible) {
+                fsVisible = false;
+                readerBar.classList.remove('visible');
+                topBtn.classList.remove('reader-hidden');
+                updateTocPosition();
+            }
         }
+        readerTocBtn.setAttribute('aria-expanded', String(isMobileViewport() ? mobileTocOpen : tocOpen));
     });
 
 })();
