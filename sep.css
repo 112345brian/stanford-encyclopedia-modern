@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.0
+@version        3.1.1
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 ==/UserStyle== */
@@ -746,6 +746,10 @@
         font-weight: 600 !important;
     }
 
+    #sep-toc-panel-header {
+        display: none !important;
+    }
+
     #toc hr {
         display: none !important;
     }
@@ -912,7 +916,7 @@
             position: sticky;
             top: 0;
             z-index: 1;
-            display: flex;
+            display: flex !important;
             align-items: center;
             justify-content: space-between;
             height: 3.25rem;
