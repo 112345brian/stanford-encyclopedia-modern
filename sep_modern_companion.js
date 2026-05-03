@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.9
+// @version      1.1.10
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -1247,18 +1247,30 @@
 
     let fsLastY = window.scrollY;
     let fsVisible = false;
+    let lastManualScrollAt = 0;
+    const markManualScroll = () => { lastManualScrollAt = Date.now(); };
+
+    window.addEventListener('wheel', markManualScroll, { passive: true });
+    window.addEventListener('touchmove', markManualScroll, { passive: true });
+    window.addEventListener('keydown', e => {
+        if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '].includes(e.key)) {
+            markManualScroll();
+        }
+    });
 
     scrollCallbacks.push(scrollY => {
         const goingUp = scrollY < fsLastY;
         fsLastY = scrollY;
-        if (goingUp && scrollY > 200 && !mobileTocOpen) {
+        const manualScroll = Date.now() - lastManualScrollAt < 700;
+        const canShowReaderBar = manualScroll && goingUp && scrollY > 200 && (!isMobileViewport() || !mobileTocOpen);
+        if (canShowReaderBar) {
             if (!fsVisible) {
                 fsVisible = true;
                 readerBar.classList.add('visible');
                 topBtn.classList.add('reader-hidden');
                 updateTocPosition();
             }
-        } else if (!goingUp) {
+        } else if (!goingUp || (isMobileViewport() && mobileTocOpen)) {
             if (fsVisible) {
                 fsVisible = false;
                 readerBar.classList.remove('visible');
