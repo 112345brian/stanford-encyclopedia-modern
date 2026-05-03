@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.1
+// @version      1.1.2
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -174,10 +174,10 @@
                 justify-content: space-between;
                 height: 3.25rem;
                 padding: 0 0.875rem 0 1rem;
-                background: rgba(18,18,18,0.96);
+                background: #121212;
                 border-bottom: 1px solid #262626;
-                backdrop-filter: blur(14px);
-                -webkit-backdrop-filter: blur(14px);
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
             }
             #sep-toc-panel-title {
                 color: #d6d6d6;
@@ -259,12 +259,12 @@
         /* Mobile TOC: hamburger button */
         #sep-toc-hamburger {
             position: fixed; bottom: max(1rem, env(safe-area-inset-bottom)); right: 1rem; z-index: 1005;
-            min-width: 2.75em; height: 2.75em; border-radius: 999px;
-            background: rgba(30,30,30,0.94); border: 1px solid #333; color: #d6d6d6;
+            min-width: 2.75em; height: 2.5em; border-radius: 8px;
+            background: #1a1a1a; border: 1px solid #333; color: #d6d6d6;
             font-size: 0.875em; cursor: pointer;
             display: none; align-items: center; justify-content: center;
             padding: 0 0.95em;
-            box-shadow: 0 0.125em 0.75em rgba(0,0,0,0.4);
+            box-shadow: none;
             transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
         }
         #sep-toc-hamburger:hover { color: #7ba4ff; border-color: #7ba4ff; background: #1e1e1e; }
@@ -286,30 +286,28 @@
 
             #toc::before { display: none !important; }
             #sep-floating-search {
-                height: 3.25em;
-                background: rgba(22, 22, 22, 0.92);
-                font-size: 1.05em;
+                display: none !important;
             }
         }
 
         /* Floating search bar (appears on scroll-up) */
         #sep-floating-search {
-            position: fixed; top: -3.5em; left: 50%; transform: translateX(-50%);
-            z-index: 9990; width: min(35em, calc(100% - 2rem));
-            height: 2.75em;
+            position: fixed; top: 12px; right: 20px; left: auto; transform: none;
+            z-index: 890; width: min(24rem, calc(100vw - 340px));
+            height: 2.5em;
             display: flex; align-items: center; gap: 0.5em;
-            background: rgba(28, 28, 28, 0.62);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: 0.5px solid rgba(255, 255, 255, 0.08);
-            border-radius: 999px;
-            padding: 0 0.875em;
-            box-shadow: 0 0.125em 1.25em rgba(0, 0, 0, 0.35);
-            transition: top 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+            background: #1a1a1a;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 0 0.75em;
+            box-shadow: none;
+            transition: opacity 0.16s ease;
             opacity: 0; pointer-events: none;
         }
-        #sep-floating-search.visible { top: 0.875em; opacity: 1; pointer-events: auto; }
-        #sep-floating-search:focus-within { outline: none; border-color: rgba(255,255,255,0.08); }
+        #sep-floating-search.visible { opacity: 1; pointer-events: auto; }
+        #sep-floating-search:focus-within { outline: none; border-color: #555; }
         #sep-floating-search .sep-fs-icon { color: #555; flex-shrink: 0; display: flex; align-items: center; }
         #sep-floating-search input[type="search"] {
             flex: 1; background: transparent; border: none; outline: none;

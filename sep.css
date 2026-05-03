@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.1
+@version        3.1.2
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 ==/UserStyle== */
@@ -45,7 +45,7 @@
     }
 
     /* ============================================================
-       FLOATING PILL HEADER — transparent container, frosted pill
+       HEADER — flat, restrained controls
        ============================================================ */
 
     #header-wrapper {
@@ -116,13 +116,12 @@
         box-sizing: border-box !important;
         margin: 0 !important;
         text-align: left !important;
-        /* Frosted glass pill */
-        background: rgba(28, 28, 28, 0.62) !important;
-        backdrop-filter: blur(16px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-        border: 0.5px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 999px !important;
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35) !important;
+        background: var(--sep-bg-card) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border: 1px solid var(--sep-border) !important;
+        border-radius: 8px !important;
+        box-shadow: none !important;
         pointer-events: auto !important;
     }
 
@@ -921,10 +920,10 @@
             justify-content: space-between;
             height: 3.25rem;
             padding: 0 0.875rem 0 1rem;
-            background: rgba(18,18,18,0.96);
+            background: var(--sep-bg);
             border-bottom: 1px solid #262626;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
         }
 
         #sep-toc-panel-title {
@@ -1027,13 +1026,13 @@
         transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease !important;
     }
 
-    /* Floating search bar — kill all focus rings */
+    /* Floating search bar — flat utility surface */
     #sep-floating-search,
     #sep-floating-search:focus,
     #sep-floating-search:focus-within {
         outline: none !important;
-        border-color: rgba(255, 255, 255, 0.08) !important;
-        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35) !important;
+        border-color: var(--sep-border-mid) !important;
+        box-shadow: none !important;
     }
 
     #sep-floating-search input[type="search"] {
