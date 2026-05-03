@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.7
+// @version      1.1.8
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -364,12 +364,14 @@
         }
         #sep-floating-search:focus-within { outline: none; border-color: #555; }
         #sep-floating-search .sep-fs-icon { color: #555; flex-shrink: 0; display: flex; align-items: center; }
+        #sep-floating-search .sep-fs-icon svg { display: block; }
         #sep-floating-search input[type="search"] {
             flex: 1; background: transparent; border: none; outline: none;
-            color: #d6d6d6; font-size: 0.9em; line-height: 1;
+            height: 100%; min-height: 0;
+            color: #d6d6d6; font-size: 0.9em; line-height: normal;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-appearance: none; align-self: center;
-            padding: 2px 0; margin-top: 1px;
+            padding: 0; margin: 0;
         }
         #sep-floating-search input[type="search"]::placeholder { color: #444; }
         #sep-floating-search input[type="search"]:focus::placeholder { color: transparent; }
