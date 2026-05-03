@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.11
+@version        3.1.12
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -84,7 +84,13 @@
     }
 
     body:has(#toc) #search {
-        display: block !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        height: 34px !important;
+        margin: 0 !important;
     }
 
     body:has(#toc) #branding {
@@ -121,12 +127,16 @@
 
     body:has(#toc) #search form {
         display: flex !important;
-        align-items: center !important;
+        align-items: stretch !important;
         gap: 0 !important;
-        height: 100% !important;
+        width: 100% !important;
+        height: 34px !important;
+        margin: 0 !important;
     }
 
     body:has(#toc) #search input[type="search"] {
+        -webkit-appearance: none !important;
+        appearance: none !important;
         flex: 1 1 auto !important;
         width: 0 !important;
         min-width: 0 !important;
@@ -135,17 +145,21 @@
         border: 1px solid var(--sep-border-mid) !important;
         border-right: 0 !important;
         border-radius: 4px 0 0 4px !important;
-        background: var(--sep-bg-card) !important;
+        background: #151515 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
         padding: 0 0.85rem !important;
         color: var(--sep-text) !important;
         font-size: 0.95rem !important;
-        line-height: normal !important;
+        line-height: 34px !important;
     }
 
     body:has(#toc) #search .search-btn-wrapper {
         display: flex !important;
-        align-items: center !important;
+        align-items: stretch !important;
         flex: 0 0 auto !important;
+        height: 34px !important;
+        margin: 0 !important;
     }
 
     body:has(#toc) #search .btn {
@@ -157,12 +171,16 @@
         width: auto !important;
         height: 34px !important;
         box-sizing: border-box !important;
+        margin: 0 !important;
         padding: 0 0.85rem !important;
         border: 1px solid var(--sep-border-mid) !important;
         border-radius: 0 4px 4px 0 !important;
-        background: var(--sep-bg-raised) !important;
+        background: #202020 !important;
         color: var(--sep-text-soft) !important;
+        box-shadow: none !important;
         font: 600 0.9rem/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        text-shadow: none !important;
+        vertical-align: top !important;
     }
 
     body:has(#toc) #search .btn i {
