@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1.0
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -95,7 +95,7 @@
         html { scroll-behavior: smooth; }
 
         /* Mobile layout reset + Wikipedia-matched typography */
-        @media (max-width: 768px), (max-width: 1024px) and (hover: none) {
+        @media (max-width: 768px) {
             /* Strip all container padding/margin first */
             body, #container, #content, #article,
             #aueditable, #article-content,
@@ -113,33 +113,109 @@
             #article-content {
                 padding: 0 1rem !important;
                 font-size: 1rem !important;
-                line-height: 1.65 !important;
+                line-height: 1.5 !important;
                 letter-spacing: 0 !important;
             }
             #aueditable p,
             #article-content p {
-                margin: 0.5em 0 1em 0 !important;
+                margin: 0.5rem 0 1rem 0 !important;
             }
             h1, .pagetitle {
-                font-size: 1.7rem !important;
-                line-height: 1.2 !important;
+                font-size: 1.5rem !important;
+                line-height: 1.33 !important;
                 margin-bottom: 0.25em !important;
             }
             h2 {
-                font-size: 1.5rem !important;
-                padding: 0.75rem 0 !important;
+                font-size: 1.25rem !important;
+                line-height: 1.35 !important;
+                padding: 0.875rem 0 0.375rem !important;
                 margin: 0 !important;
             }
             h3 {
-                font-size: 1.2rem !important;
+                font-size: 1rem !important;
+                line-height: 1.5 !important;
                 font-weight: bold !important;
-                margin: 0.75em 0 0.25em 0 !important;
+                margin: 1rem 0 0.25rem 0 !important;
             }
             /* TOC drawer */
             #toc {
-                padding-top: 0.75em !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: auto !important;
+                right: 0 !important;
+                width: min(82vw, 320px) !important;
+                max-width: min(82vw, 320px) !important;
+                height: 100dvh !important;
+                max-height: 100dvh !important;
+                padding: 0 0 1.25rem !important;
+                border-radius: 16px 0 0 16px !important;
                 overflow-y: auto !important;
+                overscroll-behavior: contain !important;
+                touch-action: pan-y !important;
                 -webkit-overflow-scrolling: touch !important;
+                transform: translateX(105%) !important;
+                transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            }
+            #toc.toc-open {
+                transform: translateX(0) !important;
+            }
+            #toc > ul {
+                padding: 0.35rem 1rem 5rem !important;
+            }
+            #toc li {
+                padding: 0.18rem 0 !important;
+            }
+            #sep-toc-panel-header {
+                position: sticky;
+                top: 0;
+                z-index: 1;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 3.25rem;
+                padding: 0 0.875rem 0 1rem;
+                background: rgba(18,18,18,0.96);
+                border-bottom: 1px solid #262626;
+                backdrop-filter: blur(14px);
+                -webkit-backdrop-filter: blur(14px);
+            }
+            #sep-toc-panel-title {
+                color: #d6d6d6;
+                font: 600 0.875rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                letter-spacing: 0;
+            }
+            #sep-toc-panel-close {
+                width: 2.25rem;
+                height: 2.25rem;
+                border: 0;
+                border-radius: 999px;
+                background: transparent;
+                color: #aaa;
+                font-size: 1.25rem;
+                line-height: 1;
+                cursor: pointer;
+            }
+            #sep-toc-panel-close:hover,
+            #sep-toc-panel-close:focus-visible {
+                color: #d6d6d6;
+                background: #242424;
+            }
+            /* TOC font hierarchy: level 1 > body text, decreasing per level */
+            #toc > ul > li > a,
+            #toc > ul > li > span {
+                font-size: 0.9rem !important;
+                font-weight: 500 !important;
+                line-height: 1.35 !important;
+            }
+            #toc > ul > li > ul > li > a {
+                font-size: 0.82rem !important;
+                font-weight: 400 !important;
+                line-height: 1.35 !important;
+            }
+            #toc > ul > li > ul > li > ul > li > a {
+                font-size: 0.78rem !important;
+                font-weight: 400 !important;
+                line-height: 1.35 !important;
             }
         }
 
@@ -170,21 +246,22 @@
 
         /* TOC scroll spy */
         #toc a.toc-active {
-            color: #7ba4ff !important; font-weight: 600 !important;
-            border-left: 2px solid #7ba4ff; padding-left: 0.375em; margin-left: -0.5em;
+            color: #8fb1ff !important; font-weight: 500 !important;
+            border-left: 2px solid #7ba4ff; padding-left: 0.5em; margin-left: -0.65em;
         }
 
         /* Mobile TOC: hamburger button */
         #sep-toc-hamburger {
-            position: fixed; bottom: 1.5em; right: 1.5em; z-index: 1005;
-            width: 2.75em; height: 2.75em; border-radius: 0.625em;
-            background: #1e1e1e; border: 1px solid #333; color: #aaa;
-            font-size: 1em; cursor: pointer;
+            position: fixed; bottom: max(1rem, env(safe-area-inset-bottom)); right: 1rem; z-index: 1005;
+            min-width: 2.75em; height: 2.75em; border-radius: 999px;
+            background: rgba(30,30,30,0.94); border: 1px solid #333; color: #d6d6d6;
+            font-size: 0.875em; cursor: pointer;
             display: none; align-items: center; justify-content: center;
+            padding: 0 0.95em;
             box-shadow: 0 0.125em 0.75em rgba(0,0,0,0.4);
-            transition: color 0.15s ease, border-color 0.15s ease;
+            transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
         }
-        #sep-toc-hamburger:hover { color: #7ba4ff; border-color: #7ba4ff; }
+        #sep-toc-hamburger:hover { color: #7ba4ff; border-color: #7ba4ff; background: #1e1e1e; }
 
         /* Mobile TOC: dark backdrop */
         #sep-mobile-backdrop {
@@ -192,12 +269,14 @@
             background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none;
             transition: opacity 0.25s ease;
         }
-        #sep-mobile-backdrop.visible { opacity: 1; pointer-events: auto; }
+        #sep-mobile-backdrop.visible { opacity: 1; pointer-events: auto; touch-action: none; }
 
-        @media (max-width: 768px), (max-width: 1024px) and (hover: none) {
-            #sep-toc-hamburger { display: none !important; }
+        @media (max-width: 768px) {
+            #sep-toc-hamburger { display: flex !important; }
             #sep-toc-toggle { display: none !important; }
             #sep-top-btn { display: none !important; }
+            #sep-reading-time { display: none !important; }
+            #sep-toc-hamburger.toc-is-open { opacity: 0 !important; pointer-events: none !important; }
 
             #toc::before { display: none !important; }
             #sep-floating-search {
@@ -612,7 +691,7 @@
     document.body.appendChild(kbHint);
 
     // Show hint briefly on first visit — desktop only
-    if (!window.matchMedia('(max-width: 768px), (hover: none)').matches) {
+    if (!window.matchMedia('(max-width: 768px)').matches) {
         setTimeout(() => kbHint.classList.add('visible'), 2000);
         setTimeout(() => kbHint.classList.remove('visible'), 7000);
     }
@@ -690,7 +769,8 @@
     // 10. TOC SCROLL SPY + TOGGLE
     // =============================================
     let mobileTocOpen = false;
-    const mobileQuery = window.matchMedia('(max-width: 768px), (max-width: 1024px) and (hover: none)');
+    const mobileQuery = window.matchMedia('(max-width: 768px)');
+    const isMobileViewport = () => window.innerWidth <= 768;
     const toc = document.getElementById('toc');
     if (toc) {
         const tocLinks = [...toc.querySelectorAll('a[href^="#"]')];
@@ -713,9 +793,27 @@
         // Mobile hamburger button (☰)
         const hamburgerBtn = document.createElement('button');
         hamburgerBtn.id = 'sep-toc-hamburger';
-        hamburgerBtn.innerHTML = '&#9776;';
+        hamburgerBtn.type = 'button';
+        hamburgerBtn.textContent = 'Contents';
         hamburgerBtn.title = 'Show table of contents';
+        hamburgerBtn.setAttribute('aria-label', 'Show table of contents');
+        hamburgerBtn.setAttribute('aria-controls', 'toc');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
         document.body.appendChild(hamburgerBtn);
+
+        const tocPanelHeader = document.createElement('div');
+        tocPanelHeader.id = 'sep-toc-panel-header';
+        const tocPanelTitle = document.createElement('div');
+        tocPanelTitle.id = 'sep-toc-panel-title';
+        tocPanelTitle.textContent = 'Contents';
+        const tocPanelClose = document.createElement('button');
+        tocPanelClose.id = 'sep-toc-panel-close';
+        tocPanelClose.type = 'button';
+        tocPanelClose.textContent = '×';
+        tocPanelClose.title = 'Close table of contents';
+        tocPanelClose.setAttribute('aria-label', 'Close table of contents');
+        tocPanelHeader.append(tocPanelTitle, tocPanelClose);
+        toc.prepend(tocPanelHeader);
 
         // Mobile backdrop
         const backdrop = document.createElement('div');
@@ -729,7 +827,7 @@
 
         // Desktop: update TOC and button positions to track header
         const updateTocPosition = () => {
-            if (mobileQuery.matches) return;
+            if (isMobileViewport()) return;
             const headerBottom = headerWrapper ? headerWrapper.getBoundingClientRect().bottom : 0;
             const top = headerBottom > 0 ? Math.max(10, headerBottom + 10) : 10;
             toc.style.setProperty('top', `${top}px`, 'important');
@@ -739,21 +837,22 @@
         };
 
         // Mobile: open/close bottom sheet — layout controlled by Stylus @media rules
-        // Prevent body scroll on touch (works in Firefox Android where overflow:hidden is ignored)
-        const preventBodyScroll = e => {
-            if (toc.contains(e.target)) return;
-            e.preventDefault();
-        };
+        // Scroll lock: overflow:hidden for Chrome/Safari; touch-action:none on the backdrop
+        // handles Firefox Android (backdrop covers full viewport at z-index below TOC,
+        // so the compositor blocks scroll on background touches while TOC stays scrollable).
         const openMobileToc = () => {
+            if (!isMobileViewport()) return;
             mobileTocOpen = true;
             requestAnimationFrame(() => toc.classList.add('toc-open'));
             backdrop.classList.add('visible');
-            hamburgerBtn.innerHTML = '&#10005;';
+            hamburgerBtn.classList.add('toc-is-open');
             hamburgerBtn.title = 'Hide table of contents';
+            hamburgerBtn.setAttribute('aria-label', 'Hide table of contents');
+            hamburgerBtn.setAttribute('aria-expanded', 'true');
             floatingSearch.classList.remove('visible');
             fsVisible = false;
             document.body.style.setProperty('overflow', 'hidden', 'important');
-            document.addEventListener('touchmove', preventBodyScroll, { passive: false });
+            document.documentElement.style.setProperty('overflow', 'hidden', 'important');
             // Fix item 1 clipping: SEP's <ul> has negative margin that pushes first item above toc's top edge
             setTimeout(() => {
                 const firstLink = toc.querySelector('a[href^="#"]');
@@ -772,10 +871,13 @@
             toc.classList.remove('toc-open');
             toc.style.removeProperty('padding-top');
             backdrop.classList.remove('visible');
-            hamburgerBtn.innerHTML = '&#9776;';
+            hamburgerBtn.classList.remove('toc-is-open');
+            hamburgerBtn.textContent = 'Contents';
             hamburgerBtn.title = 'Show table of contents';
+            hamburgerBtn.setAttribute('aria-label', 'Show table of contents');
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
             document.body.style.removeProperty('overflow');
-            document.removeEventListener('touchmove', preventBodyScroll);
+            document.documentElement.style.removeProperty('overflow');
         };
 
         // Enter/exit mobile layout mode
@@ -795,8 +897,11 @@
             backdrop.classList.remove('visible');
             mobileTocOpen = false;
             document.body.style.removeProperty('overflow');
-            hamburgerBtn.innerHTML = '&#9776;';
+            document.documentElement.style.removeProperty('overflow');
+            hamburgerBtn.textContent = 'Contents';
             hamburgerBtn.title = 'Show table of contents';
+            hamburgerBtn.setAttribute('aria-label', 'Show table of contents');
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
         };
         const exitMobileMode = () => {
             toc.classList.remove('toc-mobile');
@@ -804,6 +909,7 @@
             backdrop.classList.remove('visible');
             mobileTocOpen = false;
             document.body.style.removeProperty('overflow');
+            document.documentElement.style.removeProperty('overflow');
             toc.style.removeProperty('position');
             toc.style.removeProperty('display');
             if (tocOpen) {
@@ -853,31 +959,19 @@
 
         // Close TOC when a link is tapped on mobile
         toc.addEventListener('click', e => {
-            if (!mobileQuery.matches || !mobileTocOpen) return;
+            if (!isMobileViewport() || !mobileTocOpen) return;
             if (e.target.closest('a[href^="#"]')) closeMobileToc();
         });
         backdrop.addEventListener('click', closeMobileToc);
+        tocPanelClose.addEventListener('click', closeMobileToc);
 
-        // Swipe right from left edge to open, swipe left to close
-        let swipeTouchStartX = 0;
-        let swipeTouchStartY = 0;
-        document.addEventListener('touchstart', e => {
-            swipeTouchStartX = e.touches[0].clientX;
-            swipeTouchStartY = e.touches[0].clientY;
-        }, { passive: true });
-        document.addEventListener('touchend', e => {
-            if (!mobileQuery.matches) return;
-            const touch = e.changedTouches[0];
-            const dx = touch.clientX - swipeTouchStartX;
-            const dy = touch.clientY - swipeTouchStartY;
-            if (Math.abs(dx) < Math.abs(dy) * 1.5) return; // more vertical than horizontal
-            if (dx > 60 && swipeTouchStartX < 80 && !mobileTocOpen) openMobileToc();
-            else if (dx < -60 && mobileTocOpen) closeMobileToc();
-        }, { passive: true });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && mobileTocOpen) closeMobileToc();
+        });
 
         // Switch modes on resize
         mobileQuery.addEventListener('change', e => {
-            if (e.matches) enterMobileMode();
+            if (e.matches && isMobileViewport()) enterMobileMode();
             else exitMobileMode();
         });
 
@@ -885,7 +979,7 @@
         scrollCallbacks.push(updateTocPosition);
         window.addEventListener('resize', updateTocPosition);
 
-        if (mobileQuery.matches) enterMobileMode();
+        if (isMobileViewport()) enterMobileMode();
 
         if (tocSections.length) {
             const updateToc = scrollY => {
@@ -904,7 +998,7 @@
                     current.link.classList.add('toc-active');
                     const tr = toc.getBoundingClientRect();
                     const lr = current.link.getBoundingClientRect();
-                    if ((!mobileQuery.matches || mobileTocOpen) &&
+                    if ((!isMobileViewport() || mobileTocOpen) &&
                         (lr.top < tr.top + 10 || lr.bottom > tr.bottom - 10)) {
                         current.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                     }
@@ -932,7 +1026,7 @@
     // =============================================
     // 11. MOBILE PADDING ENFORCER (counters SEP's inline style overrides)
     // =============================================
-    if (mobileQuery.matches) {
+    if (isMobileViewport()) {
         const mobileContainers = [
             document.body,
             document.getElementById('container'),
