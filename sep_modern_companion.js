@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.2
+// @version      1.1.3
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -36,14 +36,14 @@
         /* Section progress bar */
         #sep-section-progress {
             position: fixed; top: 0; left: 0; height: 2px; z-index: 9998;
-            background: #d6d6d6; width: 0%;
+            background: #242424; width: 0%;
             transition: width 0.1s linear; pointer-events: none;
         }
 
         /* Section progress tick — sits above the blue bar */
         #sep-section-tick {
             position: fixed; top: 0; left: 0; width: 8px; height: 2px;
-            z-index: 10000; background: #d6d6d6; pointer-events: none;
+            z-index: 10000; background: #3a3a3a; pointer-events: none;
             transition: left 0.1s linear;
         }
 
