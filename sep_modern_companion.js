@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.5
+// @version      1.1.6
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -173,6 +173,8 @@
             #toc a:link,
             #toc a:visited {
                 display: block !important;
+                box-sizing: border-box !important;
+                min-height: 1.8rem !important;
                 padding: 0.28rem 0 !important;
             }
             #sep-toc-panel-header {
@@ -221,13 +223,11 @@
                 font-size: 0.82rem !important;
                 font-weight: 400 !important;
                 line-height: 1.35 !important;
-                padding: 0.24rem 0 !important;
             }
             #toc > ul > li > ul > li > ul > li > a {
                 font-size: 0.78rem !important;
                 font-weight: 400 !important;
                 line-height: 1.35 !important;
-                padding: 0.2rem 0 !important;
             }
         }
 

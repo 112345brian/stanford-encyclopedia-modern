@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.3
+@version        3.1.4
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 ==/UserStyle== */
@@ -959,7 +959,9 @@
         #toc a:link,
         #toc a:visited {
             display: block !important;
+            box-sizing: border-box !important;
             font-size: 0.78rem !important;
+            min-height: 1.8rem !important;
             padding: 0.28rem 0 !important;
         }
         #toc > ul > li > a:link,
@@ -973,7 +975,6 @@
             font-size: 0.82rem !important;
             font-weight: 400 !important;
             line-height: 1.35 !important;
-            padding: 0.24rem 0 !important;
         }
 
         #toc > ul > li > ul > li > ul > li > a:link,
@@ -981,7 +982,6 @@
             font-size: 0.78rem !important;
             font-weight: 400 !important;
             line-height: 1.35 !important;
-            padding: 0.2rem 0 !important;
         }
 
         #toc a.toc-active {
