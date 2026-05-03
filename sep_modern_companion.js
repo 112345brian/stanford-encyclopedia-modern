@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.3
+// @version      1.1.4
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -160,10 +160,19 @@
                 transform: translateX(0) !important;
             }
             #toc > ul {
-                padding: 0.35rem 1rem 5rem !important;
+                padding: 0.45rem 1rem 5rem !important;
             }
             #toc li {
-                padding: 0.18rem 0 !important;
+                padding: 0 !important;
+            }
+            #toc ul ul {
+                margin: 0.38rem 0 !important;
+                padding-left: 1.1rem !important;
+            }
+            #toc a:link,
+            #toc a:visited {
+                display: block !important;
+                padding: 0.28rem 0 !important;
             }
             #sep-toc-panel-header {
                 position: sticky;
@@ -205,17 +214,19 @@
             #toc > ul > li > span {
                 font-size: 0.9rem !important;
                 font-weight: 500 !important;
-                line-height: 1.35 !important;
+                line-height: 1.38 !important;
             }
             #toc > ul > li > ul > li > a {
                 font-size: 0.82rem !important;
                 font-weight: 400 !important;
                 line-height: 1.35 !important;
+                padding: 0.24rem 0 !important;
             }
             #toc > ul > li > ul > li > ul > li > a {
                 font-size: 0.78rem !important;
                 font-weight: 400 !important;
                 line-height: 1.35 !important;
+                padding: 0.2rem 0 !important;
             }
         }
 
@@ -247,7 +258,9 @@
         /* TOC scroll spy */
         #toc a.toc-active {
             color: #8fb1ff !important; font-weight: 500 !important;
-            border-left: 2px solid #7ba4ff; padding-left: 0.5em; margin-left: -0.65em;
+            box-shadow: inset 2px 0 #7ba4ff;
+            padding-left: 0.6rem !important;
+            margin-left: -0.6rem;
         }
 
         @media (min-width: 769px) {
@@ -786,6 +799,12 @@
                 return { link, target };
             })
             .filter(s => s.target);
+        let manualTocSection = null;
+        let manualTocActiveUntil = 0;
+        const setActiveTocLink = link => {
+            for (const { link: tocLink } of tocSections) tocLink.classList.remove('toc-active');
+            link?.classList.add('toc-active');
+        };
 
         // Desktop sidebar toggle button (←/→)
         const tocToggleBtn = document.createElement('button');
@@ -961,10 +980,16 @@
             else openMobileToc();
         });
 
-        // Close TOC when a link is tapped on mobile
+        // Make tapped TOC targets register before scroll spy settles.
         toc.addEventListener('click', e => {
-            if (!isMobileViewport() || !mobileTocOpen) return;
-            if (e.target.closest('a[href^="#"]')) closeMobileToc();
+            const link = e.target.closest('a[href^="#"]');
+            if (!link) return;
+
+            manualTocSection = tocSections.find(section => section.link === link) ?? null;
+            manualTocActiveUntil = Date.now() + 1200;
+            setActiveTocLink(link);
+
+            if (isMobileViewport() && mobileTocOpen) closeMobileToc();
         });
         backdrop.addEventListener('click', closeMobileToc);
         tocPanelClose.addEventListener('click', closeMobileToc);
@@ -987,7 +1012,8 @@
 
         if (tocSections.length) {
             const updateToc = scrollY => {
-                const checkY = scrollY + 200;
+                const spyOffset = isMobileViewport() ? 80 : 200;
+                const checkY = scrollY + spyOffset;
                 let currentIdx = 0;
                 for (let i = tocSections.length - 1; i >= 0; i--) {
                     if (tocSections[i].target.getBoundingClientRect().top + scrollY <= checkY) {
@@ -995,11 +1021,15 @@
                         break;
                     }
                 }
-                const current = tocSections[currentIdx];
+                let current = tocSections[currentIdx];
+                const manualActive = manualTocSection && Date.now() < manualTocActiveUntil;
+                if (manualActive) {
+                    current = manualTocSection;
+                    currentIdx = tocSections.indexOf(manualTocSection);
+                }
 
-                for (const { link } of tocSections) link.classList.remove('toc-active');
                 if (current) {
-                    current.link.classList.add('toc-active');
+                    setActiveTocLink(current.link);
                     const tr = toc.getBoundingClientRect();
                     const lr = current.link.getBoundingClientRect();
                     if ((!isMobileViewport() || mobileTocOpen) &&
@@ -1016,7 +1046,7 @@
                     : document.documentElement.scrollHeight;
                 const sectionLen = sectionBottom - sectionTop;
                 const sectionPct = sectionLen > 0
-                    ? Math.min(100, Math.max(0, (scrollY + 200 - sectionTop) / sectionLen * 100))
+                    ? Math.min(100, Math.max(0, (scrollY + spyOffset - sectionTop) / sectionLen * 100))
                     : 0;
                 sectionProgressBar.style.width = `${sectionPct}%`;
                 sectionTick.style.left = `${sectionPct}%`;

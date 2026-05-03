@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.2
+@version        3.1.3
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 ==/UserStyle== */
@@ -904,11 +904,16 @@
         }
 
         #toc > ul {
-            padding: 0.35rem 1rem 5rem !important;
+            padding: 0.45rem 1rem 5rem !important;
         }
 
         #toc li {
-            padding: 0.18rem 0 !important;
+            padding: 0 !important;
+        }
+
+        #toc ul ul {
+            margin: 0.38rem 0 !important;
+            padding-left: 1.1rem !important;
         }
 
         #sep-toc-panel-header {
@@ -953,19 +958,38 @@
         /* TOC font hierarchy — readable but lighter than article body */
         #toc a:link,
         #toc a:visited {
+            display: block !important;
             font-size: 0.78rem !important;
+            padding: 0.28rem 0 !important;
         }
         #toc > ul > li > a:link,
         #toc > ul > li > a:visited {
             font-size: 0.9rem !important;
             font-weight: 500 !important;
-            line-height: 1.35 !important;
+            line-height: 1.38 !important;
         }
         #toc > ul > li > ul > li > a:link,
         #toc > ul > li > ul > li > a:visited {
             font-size: 0.82rem !important;
             font-weight: 400 !important;
             line-height: 1.35 !important;
+            padding: 0.24rem 0 !important;
+        }
+
+        #toc > ul > li > ul > li > ul > li > a:link,
+        #toc > ul > li > ul > li > ul > li > a:visited {
+            font-size: 0.78rem !important;
+            font-weight: 400 !important;
+            line-height: 1.35 !important;
+            padding: 0.2rem 0 !important;
+        }
+
+        #toc a.toc-active {
+            color: #8fb1ff !important;
+            font-weight: 500 !important;
+            box-shadow: inset 2px 0 var(--sep-accent);
+            padding-left: 0.6rem !important;
+            margin-left: -0.6rem;
         }
     }
 
