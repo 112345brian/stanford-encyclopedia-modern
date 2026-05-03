@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.10
+// @version      1.1.11
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -1191,7 +1191,10 @@
     // =============================================
     // 12. READER APP BAR (shows on scroll up)
     // =============================================
-    const articleTitle = document.querySelector('#aueditable h1, #article-content h1, .pagetitle')
+    const articleTitleEl = document.querySelector('#aueditable h1, #article-content h1, .pagetitle');
+    const originalHeader = document.getElementById('header-wrapper');
+    const articlePreamble = document.getElementById('preamble');
+    const articleTitle = articleTitleEl
         ?.textContent?.trim()
         || document.title.replace(/\s*\(Stanford.*\)$/, '').trim();
 
@@ -1258,11 +1261,23 @@
         }
     });
 
+    const shouldSuppressReaderBarNearPageChrome = () => {
+        const titleRect = articleTitleEl?.getBoundingClientRect();
+        const headerRect = originalHeader?.getBoundingClientRect();
+        const preambleRect = articlePreamble?.getBoundingClientRect();
+        const titleVisible = titleRect && titleRect.bottom > 0 && titleRect.top < window.innerHeight;
+        const headerVisible = headerRect && headerRect.bottom > 0 && headerRect.top < window.innerHeight;
+        const preambleVisible = preambleRect && preambleRect.bottom > 48 && preambleRect.top < window.innerHeight;
+        return Boolean(titleVisible || headerVisible || preambleVisible);
+    };
+
     scrollCallbacks.push(scrollY => {
         const goingUp = scrollY < fsLastY;
         fsLastY = scrollY;
         const manualScroll = Date.now() - lastManualScrollAt < 700;
-        const canShowReaderBar = manualScroll && goingUp && scrollY > 200 && (!isMobileViewport() || !mobileTocOpen);
+        const pageChromeVisible = shouldSuppressReaderBarNearPageChrome();
+        const canShowReaderBar = manualScroll && goingUp && scrollY > 200 &&
+            !pageChromeVisible && (!isMobileViewport() || !mobileTocOpen);
         if (canShowReaderBar) {
             if (!fsVisible) {
                 fsVisible = true;
@@ -1270,7 +1285,7 @@
                 topBtn.classList.add('reader-hidden');
                 updateTocPosition();
             }
-        } else if (!goingUp || (isMobileViewport() && mobileTocOpen)) {
+        } else if (!goingUp || pageChromeVisible || (isMobileViewport() && mobileTocOpen)) {
             if (fsVisible) {
                 fsVisible = false;
                 readerBar.classList.remove('visible');
