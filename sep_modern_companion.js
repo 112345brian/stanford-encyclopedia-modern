@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.8
+// @version      1.1.9
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -881,6 +881,11 @@
             for (const { link: tocLink } of tocSections) tocLink.classList.remove('toc-active');
             link?.classList.add('toc-active');
         };
+        const getAnchorScrollOffset = () => {
+            if (isMobileViewport()) return 72;
+            const readerVisible = document.getElementById('sep-reader-bar')?.classList.contains('visible') ?? false;
+            return readerVisible ? 72 : 56;
+        };
 
         // Desktop sidebar toggle button (←/→)
         const tocToggleBtn = document.createElement('button');
@@ -1067,6 +1072,13 @@
             manualTocSection = tocSections.find(section => section.link === link) ?? null;
             manualTocActiveUntil = Date.now() + 1200;
             setActiveTocLink(link);
+            if (manualTocSection) {
+                e.preventDefault();
+                const targetTop = manualTocSection.target.getBoundingClientRect().top + window.scrollY;
+                const top = Math.max(0, targetTop - getAnchorScrollOffset());
+                window.history.pushState(null, '', link.getAttribute('href'));
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
 
             if (isMobileViewport() && mobileTocOpen) closeMobileToc();
         });
