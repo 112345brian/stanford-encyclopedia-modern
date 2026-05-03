@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.14
+// @version      1.1.15
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -54,14 +54,14 @@
             position: fixed; top: 3.75em; left: 20px; z-index: 9998;
             width: 22px; height: 22px; border-radius: 4px;
             background: #1a1a1a; border: 1px solid #333; color: #888;
-            font-size: 11px; cursor: pointer; display: none;
+            font-size: 11px; cursor: pointer; display: none !important;
             align-items: center; justify-content: center;
             transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
             font-family: -apple-system, sans-serif; line-height: 1;
             padding: 0;
         }
         #sep-top-btn:hover { background: #252525; color: #7ba4ff; border-color: #7ba4ff; }
-        #sep-top-btn.visible { display: flex; }
+        #sep-top-btn.visible { display: none !important; }
         #sep-top-btn.reader-hidden { display: none !important; }
 
         /* Reading time badge */
