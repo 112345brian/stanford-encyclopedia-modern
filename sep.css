@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.12
+@version        3.1.13
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -67,14 +67,17 @@
     body:has(#toc) #header-wrapper {
         position: static !important;  /* scrolls with page instead of sticking over content */
         justify-content: center !important;
+        width: calc(100% - 260px) !important;
+        margin-left: 260px !important;
+        box-sizing: border-box !important;
         padding: 10px 20px !important;
     }
 
     body:has(#toc) #header {
-        flex: 0 1 44rem !important;
-        width: min(44rem, calc(100vw - 40px)) !important;
-        max-width: min(44rem, calc(100vw - 40px)) !important;
-        height: 36px !important;
+        flex: 0 1 48rem !important;
+        width: min(48rem, calc(100% - 20px)) !important;
+        max-width: min(48rem, calc(100% - 20px)) !important;
+        height: 34px !important;
         padding: 0 !important;
         gap: 0.85rem !important;
         background: transparent !important;
@@ -89,7 +92,7 @@
         flex: 1 1 auto !important;
         width: auto !important;
         min-width: 0 !important;
-        height: 34px !important;
+        height: 32px !important;
         margin: 0 !important;
     }
 
@@ -130,7 +133,7 @@
         align-items: stretch !important;
         gap: 0 !important;
         width: 100% !important;
-        height: 34px !important;
+        height: 32px !important;
         margin: 0 !important;
     }
 
@@ -140,7 +143,7 @@
         flex: 1 1 auto !important;
         width: 0 !important;
         min-width: 0 !important;
-        height: 34px !important;
+        height: 32px !important;
         box-sizing: border-box !important;
         border: 1px solid var(--sep-border-mid) !important;
         border-right: 0 !important;
@@ -151,14 +154,14 @@
         padding: 0 0.85rem !important;
         color: var(--sep-text) !important;
         font-size: 0.95rem !important;
-        line-height: 34px !important;
+        line-height: 32px !important;
     }
 
     body:has(#toc) #search .search-btn-wrapper {
         display: flex !important;
         align-items: stretch !important;
         flex: 0 0 auto !important;
-        height: 34px !important;
+        height: 32px !important;
         margin: 0 !important;
     }
 
@@ -169,7 +172,7 @@
         justify-content: center !important;
         min-width: 4.25rem !important;
         width: auto !important;
-        height: 34px !important;
+        height: 32px !important;
         box-sizing: border-box !important;
         margin: 0 !important;
         padding: 0 0.85rem !important;
@@ -960,6 +963,8 @@
         }
 
         body:has(#toc) #header-wrapper {
+            width: 100% !important;
+            margin-left: 0 !important;
             padding-left: 20px !important;
             justify-content: center !important;
         }
