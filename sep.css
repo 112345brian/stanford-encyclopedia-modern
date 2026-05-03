@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.5
+@version        3.1.6
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -693,13 +693,14 @@
     #toc {
         position: fixed !important;
         top: 10px;
-        left: 20px !important;
-        width: 220px !important;
+        left: 16px !important;
+        width: 244px !important;
+        box-sizing: border-box !important;
         max-height: calc(100vh - 30px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         background: var(--sep-bg) !important;
-        padding: 0.8rem 0.5rem 0.8rem 36px !important;
+        padding: 0.8rem 0.75rem 0.8rem 66px !important;
         z-index: 1000 !important;
         font-size: 12.5px !important;
         line-height: 1.45 !important;
