@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.6
+@version        3.1.7
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -63,30 +63,43 @@
         justify-content: center !important;
     }
 
-    /* On article pages: bare logo mark, no pill, no static search */
+    /* On article pages: keep a flat utility search header at the top */
     body:has(#toc) #header-wrapper {
         position: static !important;  /* scrolls with page instead of sticking over content */
         justify-content: center !important;
-        padding-left: 0 !important;
+        padding: 10px 20px !important;
     }
 
     body:has(#toc) #header {
-        flex: 0 0 auto !important;
-        width: auto !important;
-        max-width: none !important;
-        height: auto !important;
-        padding: 0.25em !important;
-        /* Strip pill styling */
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        border: none !important;
-        border-radius: 0 !important;
+        flex: 0 1 42rem !important;
+        width: min(42rem, calc(100vw - 40px)) !important;
+        max-width: min(42rem, calc(100vw - 40px)) !important;
+        height: 44px !important;
+        padding: 0 10px 0 14px !important;
+        background: var(--sep-bg-card) !important;
+        border: 1px solid var(--sep-border) !important;
+        border-radius: 8px !important;
         box-shadow: none !important;
     }
 
     body:has(#toc) #search {
-        display: none !important;
+        display: block !important;
+    }
+
+    body:has(#toc) #branding {
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body:has(#toc) #site-title {
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
     }
 
     body:has(#toc) #site-title::after {
@@ -95,7 +108,7 @@
 
     body:has(#toc) #site-logo,
     body:has(#toc) #site-title img {
-        height: 2em !important;
+        height: 22px !important;
         opacity: 0.7;
         transition: opacity 0.15s ease !important;
     }
@@ -103,6 +116,37 @@
     body:has(#toc) #site-logo:hover,
     body:has(#toc) #site-title img:hover {
         opacity: 1;
+    }
+
+    body:has(#toc) #search form {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        height: 100% !important;
+    }
+
+    body:has(#toc) #search input[type="search"] {
+        flex: 1 1 auto !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        height: 100% !important;
+        line-height: normal !important;
+    }
+
+    body:has(#toc) #search .search-btn-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 auto !important;
+    }
+
+    body:has(#toc) #search .btn {
+        position: static !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        padding: 0 !important;
     }
 
     #header {
