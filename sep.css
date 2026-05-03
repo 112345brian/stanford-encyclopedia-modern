@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.9
+@version        3.1.10
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -744,7 +744,7 @@
         overflow-y: auto !important;
         overflow-x: hidden !important;
         background: var(--sep-bg) !important;
-        padding: 3.3rem 0.75rem 0.8rem !important;
+        padding: 0 0.75rem 0.8rem !important;
         z-index: 1000 !important;
         font-size: 0.92rem !important;
         line-height: 1.35 !important;
@@ -753,19 +753,39 @@
         scrollbar-color: transparent transparent;
     }
 
-    #toc::before {
-        content: "CONTENTS";
-        position: absolute;
-        top: 1rem;
-        left: 0.75rem;
-        right: 0.75rem;
-        height: 1.8rem;
+    #sep-desktop-toc-header {
+        display: flex !important;
+        align-items: center !important;
+        gap: 1rem !important;
+        height: 2.95rem !important;
         border-bottom: 1px solid var(--sep-border);
+        margin-bottom: 0.35rem !important;
+    }
+
+    #sep-desktop-toc-title {
         color: var(--sep-text-soft);
         font: 700 0.72rem/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        pointer-events: none;
+    }
+
+    #sep-desktop-toc-header #sep-toc-toggle {
+        position: static !important;
+        width: auto !important;
+        height: 1.4rem !important;
+        background: transparent !important;
+        border: 0 !important;
+        color: var(--sep-text-muted) !important;
+        font-size: 0.8rem !important;
+        padding: 0 !important;
+    }
+
+    body > #sep-toc-toggle {
+        background: var(--sep-bg-card) !important;
+        border: 1px solid var(--sep-border-mid) !important;
+        border-radius: 4px !important;
+        padding: 0 0.5rem !important;
+        color: var(--sep-text-muted) !important;
     }
 
     #toc:hover {
@@ -824,7 +844,7 @@
     #sep-toc-toggle {
         position: fixed;
         top: 20px;
-        left: 132px;
+        left: 20px;
         z-index: 1002;
         width: auto;
         height: 1.4rem;

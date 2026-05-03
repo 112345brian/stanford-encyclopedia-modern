@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.13
+// @version      1.1.14
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -926,7 +926,13 @@
         tocToggleBtn.id = 'sep-toc-toggle';
         tocToggleBtn.title = 'Hide table of contents';
         tocToggleBtn.textContent = 'hide';
-        document.body.appendChild(tocToggleBtn);
+        const desktopTocHeader = document.createElement('div');
+        desktopTocHeader.id = 'sep-desktop-toc-header';
+        const desktopTocTitle = document.createElement('div');
+        desktopTocTitle.id = 'sep-desktop-toc-title';
+        desktopTocTitle.textContent = 'Contents';
+        desktopTocHeader.append(desktopTocTitle, tocToggleBtn);
+        toc.prepend(desktopTocHeader);
 
         // Mobile hamburger button (☰)
         const hamburgerBtn = document.createElement('button');
@@ -972,7 +978,6 @@
             const top = Math.max(10, headerBottom > 0 ? headerBottom + 10 : 10, readerBottom + 10);
             toc.style.setProperty('top', `${top}px`, 'important');
             toc.style.setProperty('max-height', `calc(100vh - ${top + 10}px)`, 'important');
-            tocToggleBtn.style.top = `${top + 14}px`;
             topBtn.style.top = `${top + 44}px`;
         };
 
@@ -1030,6 +1035,7 @@
             toc.style.removeProperty('display');
             toc.style.removeProperty('top');
             toc.style.removeProperty('max-height');
+            document.body.appendChild(tocToggleBtn);
             pageHeader?.style.removeProperty('padding-left');
             pageArticle?.style.removeProperty('margin-left');
             pageArticle?.style.removeProperty('width');
@@ -1053,6 +1059,7 @@
             toc.style.removeProperty('position');
             toc.style.removeProperty('display');
             if (tocOpen) {
+                desktopTocHeader.append(tocToggleBtn);
                 pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
@@ -1069,6 +1076,7 @@
             tocOpen = !tocOpen;
             if (tocOpen) {
                 toc.style.removeProperty('display');
+                desktopTocHeader.append(tocToggleBtn);
                 pageHeader?.style.setProperty('padding-left', '260px', 'important');
                 pageArticle?.style.setProperty('margin-left', '260px', 'important');
                 pageArticle?.style.removeProperty('width');
@@ -1079,6 +1087,7 @@
                 updateTocPosition();
             } else {
                 toc.style.setProperty('display', 'none', 'important');
+                document.body.appendChild(tocToggleBtn);
                 pageHeader?.style.removeProperty('padding-left');
                 pageArticle?.style.setProperty('margin-left', '0', 'important');
                 pageArticle?.style.setProperty('width', '100%', 'important');
