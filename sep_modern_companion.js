@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.24
+// @version      1.1.25
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -152,10 +152,11 @@
                 max-height: 100dvh !important;
                 padding: 0 0 1.25rem !important;
                 border-radius: 0 16px 16px 0 !important;
-                overflow-y: auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                overflow: hidden !important;
                 overscroll-behavior: contain !important;
                 touch-action: pan-y !important;
-                -webkit-overflow-scrolling: touch !important;
                 transform: translateX(-105%) !important;
                 transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1) !important;
             }
@@ -163,7 +164,13 @@
                 transform: translateX(0) !important;
             }
             #toc > ul {
+                flex: 1 1 auto !important;
+                overflow-y: auto !important;
+                min-height: 0 !important;
+                margin: 0 !important;
                 padding: 0.45rem 1rem 5rem !important;
+                -webkit-overflow-scrolling: touch !important;
+                overscroll-behavior: contain !important;
             }
             #toc li {
                 padding: 0 !important;
@@ -180,9 +187,9 @@
                 padding: 0.28rem 0 !important;
             }
             #sep-toc-panel-header {
-                position: sticky;
-                top: 0;
-                z-index: 1;
+                position: relative;
+                z-index: 2;
+                flex: 0 0 3.25rem;
                 display: flex !important;
                 align-items: center;
                 justify-content: space-between;
@@ -1105,20 +1112,6 @@
             fsVisible = false;
             document.body.style.setProperty('overflow', 'hidden', 'important');
             document.documentElement.style.setProperty('overflow', 'hidden', 'important');
-            // Fix item 1 clipping: SEP's <ul> has negative margin that pushes first item above toc's top edge
-            setTimeout(() => {
-                const firstLink = toc.querySelector('a[href^="#"]');
-                if (!firstLink) return;
-                const tocRect = toc.getBoundingClientRect();
-                const linkRect = firstLink.getBoundingClientRect();
-                const headerRect = tocPanelHeader?.getBoundingClientRect();
-                const safeTop = headerRect?.bottom || tocRect.top;
-                if (linkRect.top < safeTop) {
-                    const overflow = safeTop - linkRect.top;
-                    const currentPt = parseFloat(getComputedStyle(toc).paddingTop) || 0;
-                    toc.style.setProperty('padding-top', `${currentPt + overflow + 12}px`, 'important');
-                }
-            }, 350);
         };
         closeMobileToc = () => {
             mobileTocOpen = false;

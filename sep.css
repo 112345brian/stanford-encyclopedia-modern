@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.19
+@version        3.1.20
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -1006,6 +1006,9 @@
             padding: 0 0 1.25rem !important;
             border-radius: 0 16px 16px 0 !important;
             z-index: 1004 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
             transform: translateX(-105%) !important;
             transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1) !important;
             overscroll-behavior: contain !important;
@@ -1067,7 +1070,13 @@
         }
 
         #toc > ul {
+            flex: 1 1 auto !important;
+            overflow-y: auto !important;
+            min-height: 0 !important;
+            margin: 0 !important;
             padding: 0.45rem 1rem 5rem !important;
+            -webkit-overflow-scrolling: touch !important;
+            overscroll-behavior: contain !important;
         }
 
         #toc li {
@@ -1080,9 +1089,9 @@
         }
 
         #sep-toc-panel-header {
-            position: sticky;
-            top: 0;
-            z-index: 1;
+            position: relative;
+            z-index: 2;
+            flex: 0 0 3.25rem;
             display: flex !important;
             align-items: center;
             justify-content: space-between;
