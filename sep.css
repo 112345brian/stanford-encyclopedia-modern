@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.20
+@version        3.1.21
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -959,6 +959,15 @@
 
     /* ---- Mobile / touch devices: bottom-sheet TOC, full-width article ---- */
     @media (max-width: 768px) {
+        html {
+            scroll-padding-top: 4.5rem !important;
+        }
+
+        [id],
+        a[name],
+        :target {
+            scroll-margin-top: 4.5rem !important;
+        }
 
         /* Override the desktop body:has(#toc) layout rules — must match specificity */
         body:has(#toc) #article {

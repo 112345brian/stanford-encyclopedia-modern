@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.26
+// @version      1.1.27
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -99,6 +99,14 @@
 
         /* Mobile layout reset + Wikipedia-matched typography */
         @media (max-width: 768px) {
+            html {
+                scroll-padding-top: 4.5rem !important;
+            }
+            [id],
+            a[name],
+            :target {
+                scroll-margin-top: 4.5rem !important;
+            }
             /* Strip all container padding/margin first */
             body, #container, #content, #article,
             #aueditable, #article-content,
