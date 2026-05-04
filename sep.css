@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           SEP Dark Modern (Wikipedia-matched)
 @namespace      github.com/openstyles/stylus
-@version        3.1.14
+@version        3.1.16
 @description    Dark mode for plato.stanford.edu — identical reading experience to our Wikipedia CSS
 @author         Me
 @updateURL      https://raw.githubusercontent.com/112345brian/stanford-encyclopedia-modern/mobile-toc-fixes/sep.css
@@ -25,6 +25,7 @@
         --sep-accent: #7ba4ff;
         --sep-accent-rgb: 123 164 255;
         --sep-accent-hi: #a3c1ff;
+        --sep-readable-width: 40rem;
     }
 
 
@@ -74,9 +75,9 @@
     }
 
     body:has(#toc) #header {
-        flex: 0 1 48rem !important;
-        width: min(48rem, calc(100% - 20px)) !important;
-        max-width: min(48rem, calc(100% - 20px)) !important;
+        flex: 0 1 var(--sep-readable-width) !important;
+        width: min(var(--sep-readable-width), calc(100% - 20px)) !important;
+        max-width: min(var(--sep-readable-width), calc(100% - 20px)) !important;
         height: 34px !important;
         padding: 0 !important;
         gap: 0.85rem !important;
@@ -84,6 +85,11 @@
         border: 0 !important;
         border-radius: 0 !important;
         box-shadow: none !important;
+    }
+
+    body:has(> #sep-toc-toggle) #header-wrapper {
+        width: 100% !important;
+        margin-left: 0 !important;
     }
 
     body:has(#toc) #search {
@@ -521,7 +527,7 @@
    TYPOGRAPHY — Exact Wikipedia values
    Font: system stack (San Francisco on Mac)
    Size: 16.5px | Weight: 430 | Line-height: 1.82 | Letter-spacing: 0.006em
-   Max-width: 48rem (~70 chars/line)
+   Max-width: 40rem (~60-70 chars/line)
    ========================================================================== */
 
     body,
@@ -542,7 +548,11 @@
         font-weight: 430 !important;
         line-height: 1.82 !important;
         letter-spacing: 0.006em !important;
-        max-width: 48rem !important;
+        width: min(100%, var(--sep-readable-width)) !important;
+        max-width: var(--sep-readable-width) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        box-sizing: border-box !important;
     }
 
     b,

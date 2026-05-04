@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.17
+// @version      1.1.18
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -1101,11 +1101,11 @@
                 pageArticle?.style.setProperty('margin-left', '0', 'important');
                 pageArticle?.style.setProperty('width', '100%', 'important');
                 pageArticle?.style.setProperty('max-width', '100%', 'important');
-                // Keep enough left padding so buttons don't land on prose
-                pageArticle?.style.setProperty('padding-left', '3em', 'important');
+                pageArticle?.style.removeProperty('padding-left');
                 tocToggleBtn.title = 'Show table of contents';
                 tocToggleBtn.textContent = 'Contents';
             }
+            requestAnimationFrame(() => updateReaderBarMetrics());
             window.scrollTo({ top: savedY, behavior: 'instant' });
         };
         tocToggleBtn.addEventListener('click', toggleDesktopToc);
