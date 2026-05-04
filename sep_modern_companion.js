@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.18
+// @version      1.1.19
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -294,7 +294,7 @@
         #sep-mobile-backdrop.visible { opacity: 1; pointer-events: auto; touch-action: none; }
 
         @media (max-width: 768px) {
-            #sep-toc-hamburger { display: none !important; }
+            body > #sep-toc-hamburger { display: none !important; }
             #sep-toc-toggle { display: none !important; }
             #sep-top-btn { display: none !important; }
             #sep-reading-time { display: none !important; }
@@ -1049,6 +1049,7 @@
             pageArticle?.style.removeProperty('margin-left');
             pageArticle?.style.removeProperty('width');
             pageArticle?.style.removeProperty('max-width');
+            document.getElementById('header')?.appendChild(hamburgerBtn);
             backdrop.classList.remove('visible');
             mobileTocOpen = false;
             document.body.style.removeProperty('overflow');
@@ -1065,6 +1066,7 @@
             mobileTocOpen = false;
             document.body.style.removeProperty('overflow');
             document.documentElement.style.removeProperty('overflow');
+            document.body.appendChild(hamburgerBtn);
             toc.style.removeProperty('position');
             toc.style.removeProperty('display');
             if (tocOpen) {
