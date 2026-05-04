@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.27
+// @version      1.1.28
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -451,7 +451,7 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 font-size: 1rem;
-                text-align: center;
+                text-align: left;
                 order: 2;
             }
             #sep-reader-toc-btn {
@@ -999,6 +999,21 @@
     // =============================================
     // 10. TOC SCROLL SPY + TOGGLE
     // =============================================
+    const articleTitleEl = document.querySelector('#aueditable h1, #article-content h1, .pagetitle');
+    const originalHeader = document.getElementById('header-wrapper');
+    const articlePreamble = document.getElementById('preamble');
+    const articleTitle = articleTitleEl
+        ?.textContent?.trim()
+        || document.title.replace(/\s*\(Stanford.*\)$/, '').trim();
+    const normalizeReaderTitlePart = text => text?.replace(/\s+/g, ' ').trim() || '';
+    const formatReaderTitle = heading => {
+        const sectionTitle = normalizeReaderTitlePart(heading);
+        return sectionTitle ? `${articleTitle} > ${sectionTitle}` : articleTitle;
+    };
+    let pendingReaderHeading = '';
+    let updateReaderTitle = heading => {
+        pendingReaderHeading = normalizeReaderTitlePart(heading);
+    };
     let mobileTocOpen = false;
     const mobileQuery = window.matchMedia('(max-width: 768px)');
     const isMobileViewport = () => window.innerWidth <= 768;
@@ -1261,6 +1276,7 @@
             manualTocSection = tocSections.find(section => section.link === link) ?? null;
             manualTocActiveUntil = Date.now() + 1200;
             setActiveTocLink(link);
+            updateReaderTitle(link.textContent);
             if (manualTocSection) {
                 e.preventDefault();
                 const targetTop = manualTocSection.target.getBoundingClientRect().top + window.scrollY;
@@ -1310,6 +1326,7 @@
 
                 if (current) {
                     setActiveTocLink(current.link);
+                    updateReaderTitle(current.link.textContent);
                     const tr = toc.getBoundingClientRect();
                     const lr = current.link.getBoundingClientRect();
                     if ((!isMobileViewport() || mobileTocOpen) &&
@@ -1380,13 +1397,6 @@
     // =============================================
     // 12. READER APP BAR (shows on scroll up)
     // =============================================
-    const articleTitleEl = document.querySelector('#aueditable h1, #article-content h1, .pagetitle');
-    const originalHeader = document.getElementById('header-wrapper');
-    const articlePreamble = document.getElementById('preamble');
-    const articleTitle = articleTitleEl
-        ?.textContent?.trim()
-        || document.title.replace(/\s*\(Stanford.*\)$/, '').trim();
-
     // Borrow the existing search form's action + param name so it routes correctly
     const existingForm = document.querySelector('#search form');
     const fsAction = existingForm?.action || 'https://plato.stanford.edu/search/searcher.py';
@@ -1397,7 +1407,11 @@
 
     const readerTitle = document.createElement('div');
     readerTitle.id = 'sep-reader-title';
-    readerTitle.textContent = articleTitle;
+    readerTitle.textContent = formatReaderTitle(pendingReaderHeading);
+    updateReaderTitle = heading => {
+        pendingReaderHeading = normalizeReaderTitlePart(heading);
+        readerTitle.textContent = formatReaderTitle(pendingReaderHeading);
+    };
 
     const readerTocBtn = document.createElement('button');
     readerTocBtn.id = 'sep-reader-toc-btn';
