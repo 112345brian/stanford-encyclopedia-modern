@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.25
+// @version      1.1.26
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -1129,6 +1129,34 @@
             document.body.style.removeProperty('overflow');
             document.documentElement.style.removeProperty('overflow');
         };
+
+        let tocSwipeStart = null;
+        toc.addEventListener('touchstart', event => {
+            if (!isMobileViewport() || !mobileTocOpen || event.touches.length !== 1) {
+                tocSwipeStart = null;
+                return;
+            }
+            const touch = event.touches[0];
+            tocSwipeStart = { x: touch.clientX, y: touch.clientY };
+        }, { passive: true });
+
+        toc.addEventListener('touchend', event => {
+            if (!tocSwipeStart || !isMobileViewport() || !mobileTocOpen) {
+                tocSwipeStart = null;
+                return;
+            }
+            const touch = event.changedTouches[0];
+            const dx = touch.clientX - tocSwipeStart.x;
+            const dy = touch.clientY - tocSwipeStart.y;
+            const absDx = Math.abs(dx);
+            const absDy = Math.abs(dy);
+            tocSwipeStart = null;
+            if (dx < -48 && absDx > absDy * 1.4) closeMobileToc();
+        }, { passive: true });
+
+        toc.addEventListener('touchcancel', () => {
+            tocSwipeStart = null;
+        }, { passive: true });
 
         // Enter/exit mobile layout mode
         const enterMobileMode = () => {
