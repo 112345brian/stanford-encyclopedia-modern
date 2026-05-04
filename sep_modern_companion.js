@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.22
+// @version      1.1.23
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -337,7 +337,6 @@
                 outline: none;
             }
             #sep-toc-edge-handle.is-hidden,
-            #sep-toc-edge-handle.is-near-top,
             #sep-toc-edge-handle.is-search-open {
                 opacity: 0;
                 pointer-events: none;
@@ -1161,7 +1160,6 @@
             hamburgerBtn.title = 'Show table of contents';
             hamburgerBtn.setAttribute('aria-label', 'Show table of contents');
             hamburgerBtn.setAttribute('aria-expanded', 'false');
-            edgeHandle?.classList.toggle('is-near-top', window.scrollY < 160);
         };
         const exitMobileMode = () => {
             toc.classList.remove('toc-mobile');
@@ -1256,10 +1254,6 @@
 
         updateTocPosition();
         scrollCallbacks.push(updateTocPosition);
-        scrollCallbacks.push(scrollY => {
-            if (!edgeHandle) return;
-            edgeHandle.classList.toggle('is-near-top', isMobileViewport() && scrollY < 160);
-        });
         window.addEventListener('resize', updateTocPosition);
 
         if (isMobileViewport()) enterMobileMode();
