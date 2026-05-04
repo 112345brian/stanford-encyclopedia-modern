@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SEP Modern Companion
 // @namespace    http://tampermonkey.net/
-// @version      1.1.19
+// @version      1.1.20
 // @description  Modernizes the Stanford Encyclopedia of Philosophy reading experience
 // @author       You
 // @match        https://plato.stanford.edu/entries/*
@@ -339,6 +339,8 @@
             padding: 0 0.35rem;
             cursor: pointer;
         }
+        #sep-reader-toc-btn svg { display: none; }
+        .sep-reader-btn-label { display: inline; }
         #sep-reader-toc-btn:hover,
         #sep-reader-toc-btn:focus-visible {
             color: #d6d6d6;
@@ -377,7 +379,9 @@
             #sep-reader-bar {
                 height: 48px;
                 padding: 0 max(0.75rem, env(safe-area-inset-right)) 0 max(0.75rem, env(safe-area-inset-left));
-                gap: 0.65rem;
+                gap: 0.5rem;
+                transform: translateY(0);
+                pointer-events: auto;
             }
             #sep-reader-title {
                 display: block;
@@ -389,12 +393,24 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 font-size: 1rem;
+                text-align: center;
+                order: 2;
             }
             #sep-reader-toc-btn {
                 position: static;
+                order: 1;
+                flex: 0 0 2.25rem;
+                width: 2.25rem;
+                height: 2.25rem;
+                padding: 0;
+                color: #d6d6d6;
+                letter-spacing: 0;
             }
+            #sep-reader-toc-btn svg { display: block; }
+            .sep-reader-btn-label { display: none; }
             #sep-floating-search {
                 position: static;
+                order: 3;
                 flex: 0 0 2rem;
                 width: 2rem;
                 min-width: 2rem;
@@ -404,11 +420,37 @@
                 border-color: transparent !important;
                 background: transparent !important;
             }
+            #sep-reader-bar.mobile-search-open #sep-reader-title {
+                display: none;
+            }
+            #sep-reader-bar.mobile-search-open #sep-reader-toc-btn {
+                display: none;
+            }
+            #sep-reader-bar.mobile-search-open #sep-floating-search {
+                flex: 1 1 auto;
+                width: auto;
+                min-width: 0;
+                justify-content: flex-start;
+                padding: 0 0.65em;
+                border-color: #333 !important;
+                background: #151515 !important;
+            }
             #sep-floating-search input[type="search"] {
                 position: absolute;
                 width: 1px;
                 height: 1px;
                 opacity: 0;
+                pointer-events: none;
+            }
+            #sep-reader-bar.mobile-search-open #sep-floating-search input[type="search"] {
+                position: static;
+                width: auto;
+                height: 100%;
+                opacity: 1;
+                pointer-events: auto;
+            }
+            #sep-reader-bar.mobile-toc-open {
+                transform: translateY(-100%);
                 pointer-events: none;
             }
         }
@@ -1004,6 +1046,7 @@
             hamburgerBtn.setAttribute('aria-label', 'Hide table of contents');
             hamburgerBtn.setAttribute('aria-expanded', 'true');
             readerBar?.classList.remove('visible');
+            readerBar?.classList.add('mobile-toc-open');
             fsVisible = false;
             document.body.style.setProperty('overflow', 'hidden', 'important');
             document.documentElement.style.setProperty('overflow', 'hidden', 'important');
@@ -1013,8 +1056,10 @@
                 if (!firstLink) return;
                 const tocRect = toc.getBoundingClientRect();
                 const linkRect = firstLink.getBoundingClientRect();
-                if (linkRect.top < tocRect.top) {
-                    const overflow = tocRect.top - linkRect.top;
+                const headerRect = tocPanelHeader?.getBoundingClientRect();
+                const safeTop = headerRect?.bottom || tocRect.top;
+                if (linkRect.top < safeTop) {
+                    const overflow = safeTop - linkRect.top;
                     const currentPt = parseFloat(getComputedStyle(toc).paddingTop) || 0;
                     toc.style.setProperty('padding-top', `${currentPt + overflow + 12}px`, 'important');
                 }
@@ -1025,6 +1070,7 @@
             toc.classList.remove('toc-open');
             toc.style.removeProperty('padding-top');
             backdrop.classList.remove('visible');
+            readerBar?.classList.remove('mobile-toc-open');
             hamburgerBtn.classList.remove('toc-is-open');
             hamburgerBtn.textContent = 'Contents';
             hamburgerBtn.title = 'Show table of contents';
@@ -1267,7 +1313,8 @@
     const readerTocBtn = document.createElement('button');
     readerTocBtn.id = 'sep-reader-toc-btn';
     readerTocBtn.type = 'button';
-    readerTocBtn.textContent = 'Contents';
+    readerTocBtn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span class="sep-reader-btn-label">Contents</span>`;
+    readerTocBtn.setAttribute('aria-label', 'Show table of contents');
     readerTocBtn.setAttribute('aria-controls', 'toc');
     readerTocBtn.setAttribute('aria-expanded', 'false');
 
@@ -1291,6 +1338,33 @@
     readerBar.append(readerTitle, floatingSearch, readerTocBtn);
     document.body.appendChild(readerBar);
 
+    floatingSearch.addEventListener('click', event => {
+        if (!isMobileViewport() || readerBar.classList.contains('mobile-search-open')) return;
+        event.preventDefault();
+        readerBar.classList.add('mobile-search-open');
+        requestAnimationFrame(() => fsInput.focus());
+    });
+
+    floatingSearch.addEventListener('submit', event => {
+        if (!isMobileViewport()) return;
+        if (!readerBar.classList.contains('mobile-search-open')) {
+            event.preventDefault();
+            readerBar.classList.add('mobile-search-open');
+            requestAnimationFrame(() => fsInput.focus());
+        }
+    });
+
+    fsInput.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        readerBar.classList.remove('mobile-search-open');
+        fsInput.blur();
+    });
+
+    fsInput.addEventListener('blur', () => {
+        if (!isMobileViewport() || fsInput.value.trim()) return;
+        setTimeout(() => readerBar.classList.remove('mobile-search-open'), 120);
+    });
+
     const updateReaderBarMetrics = () => {
         const content = document.getElementById('aueditable') || document.getElementById('article-content');
         if (!content) return;
@@ -1306,9 +1380,11 @@
             if (mobileTocOpen) closeMobileToc();
             else openMobileToc();
             readerTocBtn.setAttribute('aria-expanded', String(mobileTocOpen));
+            readerTocBtn.setAttribute('aria-label', mobileTocOpen ? 'Hide table of contents' : 'Show table of contents');
         } else {
             toggleDesktopToc();
             readerTocBtn.setAttribute('aria-expanded', String(tocOpen));
+            readerTocBtn.setAttribute('aria-label', tocOpen ? 'Hide table of contents' : 'Show table of contents');
         }
     });
 
