@@ -61,7 +61,7 @@
             padding: 0;
         }
         #sep-top-btn:hover { background: #252525; color: #7ba4ff; border-color: #7ba4ff; }
-        #sep-top-btn.visible { display: none !important; }
+        #sep-top-btn.visible { display: flex !important; }
         #sep-top-btn.reader-hidden { display: none !important; }
 
         /* Reading time badge */
@@ -757,6 +757,10 @@
         }
 
         // Parse each bib entry to extract author-year keys
+        // Track base-year keys that collide (e.g. both 2008a and 2008b map to "Clark 2008")
+        // so we can delete them rather than silently resolve to the wrong entry.
+        const ambiguousBaseKeys = new Set();
+
         for (const el of bibEls) {
             const elText = el.textContent || '';
 
@@ -767,14 +771,40 @@
             const authorLast = bibMatch[1].trim();
             const year = bibMatch[2].trim();
             const key = `${authorLast} ${year}`;
-            bibEntries[key] = { element: el, html: el.innerHTML, text: elText.trim() };
+            const entry = { element: el, html: el.innerHTML, text: elText.trim() };
+            bibEntries[key] = entry;
 
-            // Also store without the letter suffix for fuzzy matching
+            // Also store without the letter suffix for fuzzy matching, but mark as
+            // ambiguous if two lettered entries share the same base year.
             const yearBase = year.replace(/[a-z]$/, '');
             if (yearBase !== year) {
-                bibEntries[`${authorLast} ${yearBase}`] ??= bibEntries[key];
+                const baseKey = `${authorLast} ${yearBase}`;
+                if (bibEntries[baseKey]) {
+                    ambiguousBaseKeys.add(baseKey);
+                } else {
+                    bibEntries[baseKey] = entry;
+                }
+            }
+
+            // Index additional authors (e.g. "Clark, A. and Chalmers, D., 1998")
+            const coAuthorRx = /\band\s+([A-Z\u00C0-\u024F][a-z\u00C0-\u024F''\-]+)/g;
+            let coMatch;
+            while ((coMatch = coAuthorRx.exec(elText)) !== null) {
+                const coLast = coMatch[1].trim();
+                const coKey = `${coLast} ${year}`;
+                bibEntries[coKey] ??= entry;
+                if (yearBase !== year) {
+                    const coBaseKey = `${coLast} ${yearBase}`;
+                    if (bibEntries[coBaseKey]) {
+                        ambiguousBaseKeys.add(coBaseKey);
+                    } else {
+                        bibEntries[coBaseKey] = entry;
+                    }
+                }
             }
         }
+
+        for (const k of ambiguousBaseKeys) delete bibEntries[k];
     }
 
     // Step 2: Find and linkify citations in the article body
@@ -1122,6 +1152,7 @@
         openMobileToc = () => {
             if (!isMobileViewport()) return;
             mobileTocOpen = true;
+            readerBarWasVisible = fsVisible;
             requestAnimationFrame(() => toc.classList.add('toc-open'));
             backdrop.classList.add('visible');
             hamburgerBtn.classList.add('toc-is-open');
@@ -1142,6 +1173,11 @@
             toc.style.removeProperty('padding-top');
             backdrop.classList.remove('visible');
             readerBar?.classList.remove('mobile-toc-open');
+            if (readerBarWasVisible) {
+                readerBar?.classList.add('visible');
+                fsVisible = true;
+                readerBarWasVisible = false;
+            }
             hamburgerBtn.classList.remove('toc-is-open');
             edgeHandle?.classList.remove('is-hidden');
             hamburgerBtn.textContent = 'Contents';
@@ -1296,7 +1332,7 @@
 
         // Switch modes on resize
         mobileQuery.addEventListener('change', e => {
-            if (e.matches && isMobileViewport()) enterMobileMode();
+            if (e.matches) enterMobileMode();
             else exitMobileMode();
         });
 
@@ -1499,6 +1535,7 @@
 
     let fsLastY = window.scrollY;
     let fsVisible = false;
+    let readerBarWasVisible = false;
     let lastManualScrollAt = 0;
     const markManualScroll = () => { lastManualScrollAt = Date.now(); };
 

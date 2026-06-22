@@ -41,6 +41,15 @@ You need two browser extensions: **Stylus** for the CSS and **Tampermonkey** for
 
 Both Stylus and Tampermonkey are available for **Kiwi Browser**, which supports Chrome extensions on Android. Install Kiwi from the Play Store, then install both extensions from the Chrome Web Store inside Kiwi.
 
+## Changelog
+
+### 1.1.29
+- **Fix:** Back-to-top button was permanently hidden — `.visible` CSS rule had `display: none` instead of `display: flex`
+- **Fix:** Reader bar (mobile) stayed hidden after dismissing the TOC — `closeMobileToc` now restores the bar if it was visible when the TOC was opened
+- **Fix:** Citation linker now indexes co-authors — "Clark, A. and Chalmers, D., 1998" now produces keys for both "Clark" and "Chalmers", so in-text citations of either author link correctly
+- **Fix:** Ambiguous year-suffix fallback — when both "Clark 2008a" and "Clark 2008b" exist, a bare "Clark 2008" citation previously always resolved to whichever entry appeared first in the bibliography; it now correctly goes unlinked rather than showing the wrong entry
+- **Fix:** `enterMobileMode` could be skipped at exactly 768px — the `MediaQueryList` change handler had a redundant `isMobileViewport()` double-check that could disagree with the MQL result at the resize boundary
+
 ## Files
 
 | File | Purpose |
